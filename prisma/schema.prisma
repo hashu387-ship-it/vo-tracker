@@ -1,0 +1,31 @@
+// Prisma schema for VO Tracker application
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model VO {
+  id                  Int      @id @default(autoincrement())
+  subject             String
+  submissionType      String   // VO, GenCorr, RFI, Email
+  submissionReference String?
+  responseReference   String?
+  submissionDate      DateTime
+  assessmentValue     Float?
+  proposalValue       Float?
+  approvedAmount      Float?
+  status              String   @default("PendingWithFFC") // PendingWithFFC, PendingWithRSG, PendingWithRSGFFC, ApprovedAwaitingDVO, DVORRIssued
+  vorReference        String?
+  dvoReference        String?
+  dvoIssuedDate       DateTime?
+  remarks             String?
+  actionNotes         String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("variation_orders")
+}
