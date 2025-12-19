@@ -34,11 +34,11 @@ export async function GET(request: NextRequest) {
 
     if (search) {
       where.OR = [
-        { subject: { contains: search, mode: 'insensitive' } },
-        { submissionReference: { contains: search, mode: 'insensitive' } },
-        { responseReference: { contains: search, mode: 'insensitive' } },
-        { vorReference: { contains: search, mode: 'insensitive' } },
-        { dvoReference: { contains: search, mode: 'insensitive' } },
+        { subject: { contains: search } },
+        { submissionReference: { contains: search } },
+        { responseReference: { contains: search } },
+        { vorReference: { contains: search } },
+        { dvoReference: { contains: search } },
       ];
     }
 

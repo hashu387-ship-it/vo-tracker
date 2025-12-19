@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db';
 import { VODetails } from '@/components/vo/vo-details';
+import { SubmissionType, VOStatus } from '@/lib/validations/vo';
 
 interface VOPageProps {
   params: Promise<{ id: string }>;
@@ -26,14 +27,14 @@ export default async function VOPage({ params }: VOPageProps) {
   const voData = {
     id: vo.id,
     subject: vo.subject,
-    submissionType: vo.submissionType,
+    submissionType: vo.submissionType as SubmissionType,
     submissionReference: vo.submissionReference,
     responseReference: vo.responseReference,
     submissionDate: vo.submissionDate.toISOString(),
     assessmentValue: vo.assessmentValue,
     proposalValue: vo.proposalValue,
     approvedAmount: vo.approvedAmount,
-    status: vo.status,
+    status: vo.status as VOStatus,
     vorReference: vo.vorReference,
     dvoReference: vo.dvoReference,
     dvoIssuedDate: vo.dvoIssuedDate?.toISOString() || null,

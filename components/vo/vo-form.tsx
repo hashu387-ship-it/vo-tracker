@@ -55,26 +55,26 @@ export function VOForm({ vo, mode }: VOFormProps) {
     resolver: zodResolver(createVOSchema),
     defaultValues: vo
       ? {
-          subject: vo.subject,
-          submissionType: vo.submissionType as SubmissionType,
-          submissionReference: vo.submissionReference || undefined,
-          responseReference: vo.responseReference || undefined,
-          submissionDate: new Date(vo.submissionDate),
-          assessmentValue: vo.assessmentValue || undefined,
-          proposalValue: vo.proposalValue || undefined,
-          approvedAmount: vo.approvedAmount || undefined,
-          status: vo.status as VOStatus,
-          vorReference: vo.vorReference || undefined,
-          dvoReference: vo.dvoReference || undefined,
-          dvoIssuedDate: vo.dvoIssuedDate ? new Date(vo.dvoIssuedDate) : undefined,
-          remarks: vo.remarks || undefined,
-          actionNotes: vo.actionNotes || undefined,
-        }
+        subject: vo.subject,
+        submissionType: vo.submissionType as SubmissionType,
+        submissionReference: vo.submissionReference || undefined,
+        responseReference: vo.responseReference || undefined,
+        submissionDate: new Date(vo.submissionDate),
+        assessmentValue: vo.assessmentValue || undefined,
+        proposalValue: vo.proposalValue || undefined,
+        approvedAmount: vo.approvedAmount || undefined,
+        status: vo.status as VOStatus,
+        vorReference: vo.vorReference || undefined,
+        dvoReference: vo.dvoReference || undefined,
+        dvoIssuedDate: vo.dvoIssuedDate ? new Date(vo.dvoIssuedDate) : undefined,
+        remarks: vo.remarks || undefined,
+        actionNotes: vo.actionNotes || undefined,
+      }
       : {
-          submissionType: 'VO',
-          status: 'Pending',
-          submissionDate: new Date(),
-        },
+        submissionType: 'VO',
+        status: 'PendingWithFFC',
+        submissionDate: new Date(),
+      },
   });
 
   const submissionDate = watch('submissionDate');
