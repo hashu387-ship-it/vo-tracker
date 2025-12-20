@@ -13,6 +13,14 @@ interface VOStats {
     totalSubmittedValue: number;
     totalApprovedValue: number;
   };
+  statusBreakdown: {
+    status: string;
+    label: string;
+    count: number;
+    amount: number;
+    color: string;
+    gradient: string;
+  }[];
 }
 
 async function fetchVOStats(): Promise<VOStats> {

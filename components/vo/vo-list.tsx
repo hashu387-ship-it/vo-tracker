@@ -2,11 +2,12 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Plus, Download } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { VOTable } from './vo-table';
 import { VOFilters } from './vo-filters';
 import { VOPagination } from './vo-pagination';
+import { ExportDialog } from './export-dialog';
 import { useVOs } from '@/lib/hooks/use-vos';
 import { useToast } from '@/components/ui/use-toast';
 import Link from 'next/link';
@@ -29,7 +30,6 @@ export function VOList({ isAdmin = false }: VOListProps) {
     (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc'
   );
   const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
-  const [isExporting, setIsExporting] = useState(false);
 
   // Debounced search
   const [debouncedSearch, setDebouncedSearch] = useState(search);
@@ -86,47 +86,6 @@ export function VOList({ isAdmin = false }: VOListProps) {
     setPage(1);
   }, []);
 
-  const handleExport = async () => {
-    setIsExporting(true);
-    try {
-      const params = new URLSearchParams();
-      if (debouncedSearch) params.set('search', debouncedSearch);
-      if (status && status !== 'all') params.set('status', status);
-      if (submissionType && submissionType !== 'all') params.set('submissionType', submissionType);
-      if (sortBy) params.set('sortBy', sortBy);
-      if (sortOrder) params.set('sortOrder', sortOrder);
-
-      const response = await fetch(`/api/export?${params.toString()}`);
-
-      if (!response.ok) {
-        throw new Error('Export failed');
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `VO_Export_${new Date().toISOString().split('T')[0]}.xlsx`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-
-      toast({
-        title: 'Export successful',
-        description: 'Your Excel file has been downloaded.',
-      });
-    } catch (error) {
-      toast({
-        title: 'Export failed',
-        description: error instanceof Error ? error.message : 'Failed to export data',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsExporting(false);
-    }
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -139,10 +98,15 @@ export function VOList({ isAdmin = false }: VOListProps) {
         <div className="flex gap-2">
           {isAdmin && (
             <>
-              <Button variant="outline" onClick={handleExport} disabled={isExporting} className="gap-2">
-                <Download className="h-4 w-4" />
-                {isExporting ? 'Exporting...' : 'Export'}
-              </Button>
+              <ExportDialog
+                searchParams={{
+                  search: debouncedSearch,
+                  status: status && status !== 'all' ? status : undefined,
+                  submissionType: submissionType && submissionType !== 'all' ? submissionType : undefined,
+                  sortBy,
+                  sortOrder,
+                }}
+              />
               <Link href="/vos/new">
                 <Button className="gap-2">
                   <Plus className="h-4 w-4" />

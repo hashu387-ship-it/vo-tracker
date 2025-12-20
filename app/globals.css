@@ -158,3 +158,57 @@
 .vo-table-container tr {
   @apply border-b border-border transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted;
 }
+
+/* Print styles for PDF export */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 15mm;
+  }
+
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* Make backgrounds and colors visible in print */
+  * {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  /* Optimize spacing for print */
+  .space-y-8 > * + * {
+    margin-top: 1rem !important;
+  }
+
+  /* Reduce header size for print */
+  .rounded-3xl {
+    border-radius: 0.5rem !important;
+    padding: 1rem !important;
+  }
+
+  /* Compact status cards for print */
+  .grid {
+    gap: 0.5rem !important;
+  }
+
+  /* Ensure table fits on page */
+  .space-y-3 > * + * {
+    margin-top: 0.25rem !important;
+  }
+
+  /* Page breaks */
+  .page-break {
+    page-break-after: always;
+  }
+
+  /* Avoid breaking inside cards */
+  .rounded-xl {
+    page-break-inside: avoid;
+  }
+}
