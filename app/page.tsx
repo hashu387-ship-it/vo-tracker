@@ -55,7 +55,7 @@ export default function LandingPage() {
               <div className="hidden h-16 w-px bg-gradient-to-b from-transparent via-white/30 to-transparent md:block" />
               <div className="flex items-center justify-center opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 py-4 px-8 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
                 {/* Using the real FirstFix logo from public folder */}
-                <img src="/firstfix.png" alt="FirstFix" className="h-12 w-auto brightness-0 invert" />
+                <img src="/firstfix-v2.png" alt="FirstFix" className="h-12 w-auto brightness-0 invert" />
               </div>
             </div>
 
