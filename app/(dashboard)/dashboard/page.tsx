@@ -100,30 +100,40 @@ export default function DashboardPage() {
 
       {/* Contract Amount Display */}
       {!isLoading && stats && (
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-3 md:grid-cols-2">
           {/* Original Contract Amount */}
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 p-6 shadow-xl">
-            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
+          <div className="group relative overflow-hidden rounded-xl border border-rsg-navy/10 bg-white p-4 shadow-sm transition-all hover:shadow-md dark:bg-slate-900 dark:border-white/10">
+            <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+              <div className="h-8 w-8 rounded-full bg-rsg-navy" />
+            </div>
             <div className="relative">
-              <h3 className="text-lg font-semibold text-white mb-2">Original Contract Value</h3>
-              <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-white break-words">
-                {formatCurrency(217501556.12)}
-              </p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Original Contract Value</p>
+              <div className="flex items-baseline gap-1">
+                <span className="text-sm text-slate-400 font-medium">SAR</span>
+                <p className="text-xl md:text-2xl font-bold text-rsg-navy dark:text-white">
+                  {formatCurrency(217501556.12).replace('SAR', '').trim()}
+                </p>
+              </div>
             </div>
           </div>
 
           {/* Revised Contract Amount */}
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 p-6 shadow-xl">
-            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
+          <div className="group relative overflow-hidden rounded-xl border border-emerald-500/20 bg-emerald-50/50 p-4 shadow-sm transition-all hover:shadow-md dark:bg-emerald-900/10 dark:border-emerald-500/30">
+            <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+              <div className="h-8 w-8 rounded-full bg-emerald-600" />
+            </div>
             <div className="relative">
-              <h3 className="text-lg font-semibold text-white mb-2">Revised Contract Value</h3>
-              <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-white break-words">
-                {formatCurrency(
-                  217501556.12 +
-                  (stats.statusBreakdown.find(s => s.status === 'ApprovedAwaitingDVO')?.amount || 0) +
-                  (stats.statusBreakdown.find(s => s.status === 'DVORRIssued')?.amount || 0)
-                )}
-              </p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600/80 mb-1">Revised Contract Value</p>
+              <div className="flex items-baseline gap-1">
+                <span className="text-sm text-emerald-600/70 font-medium">SAR</span>
+                <p className="text-xl md:text-2xl font-bold text-emerald-700 dark:text-emerald-400">
+                  {formatCurrency(
+                    217501556.12 +
+                    (stats.statusBreakdown.find(s => s.status === 'ApprovedAwaitingDVO')?.amount || 0) +
+                    (stats.statusBreakdown.find(s => s.status === 'DVORRIssued')?.amount || 0)
+                  ).replace('SAR', '').trim()}
+                </p>
+              </div>
             </div>
           </div>
         </div>
