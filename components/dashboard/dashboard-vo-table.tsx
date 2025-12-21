@@ -235,129 +235,122 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
                               </span>
                             </div>
 
-                            {/* Logic: Show Assessment if PendingWithRSG or later */}
-                            {['PendingWithRSG', 'PendingWithRSGFFC', 'ApprovedAwaitingDVO', 'DVORRIssued'].includes(vo.status) && (
-                              <div className="flex justify-between items-center p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/15 transition-colors">
-                                <div className="flex flex-col">
-                                  <span className="text-amber-700 dark:text-amber-400 text-xs uppercase tracking-wider font-semibold">Assessment Value</span>
+                            {/* Expanded Content Grid */}
+                            <div className="grid gap-3 p-3 text-sm md:grid-cols-2 bg-slate-50/50 dark:bg-slate-900/50">
+
+                              {/* Financials Compact Card */}
+                              <div className="rounded-xl border border-border/50 bg-background/50 p-3 shadow-sm">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <div className="p-1.5 bg-emerald-500/10 rounded-lg">
+                                    <DollarSign className="h-3.5 w-3.5 text-emerald-600" />
+                                  </div>
+                                  <span className="text-xs font-semibold text-muted-foreground">Financials</span>
                                 </div>
-                                <span className="font-mono text-lg font-bold text-amber-700 dark:text-amber-400">
-                                  <AnimatedNumber value={vo.assessmentValue || 0} />
-                                </span>
-                              </div>
-                            )}
-
-                            {/* Logic: Show Approved Amount ONLY if Approved/DVO status */}
-                            {['ApprovedAwaitingDVO', 'DVORRIssued'].includes(vo.status) && (
-                              <motion.div
-                                initial={{ scale: 0.95, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                className="flex justify-between items-center p-4 rounded-xl bg-gradient-to-r from-emerald-500/20 to-green-500/20 border border-emerald-500/30 shadow-sm"
-                              >
-                                <div className="flex flex-col">
-                                  <span className="text-emerald-700 dark:text-emerald-400 text-xs uppercase tracking-wider font-bold flex items-center gap-1">
-                                    <CheckCircle2 className="h-3 w-3" />
-                                    Approved Amount
-                                  </span>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground/70 mb-0.5">Estimated</p>
+                                    <p className="text-sm font-bold text-foreground">{formatCurrency(vo.assessmentValue || vo.proposalValue)}</p>
+                                  </div>
+                                  {vo.approvedAmount && (
+                                    <div>
+                                      <p className="text-[10px] uppercase tracking-wider text-emerald-600/70 mb-0.5">Approved</p>
+                                      <p className="text-sm font-bold text-emerald-600">{formatCurrency(vo.approvedAmount)}</p>
+                                    </div>
+                                  )}
                                 </div>
-                                <span className="font-mono text-xl font-extrabold text-emerald-700 dark:text-emerald-400">
-                                  <AnimatedNumber value={vo.approvedAmount || 0} />
-                                </span>
-                              </motion.div>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Details Card */}
-                        <div className="neo-card-inset rounded-xl p-4 space-y-3">
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className="p-1.5 rounded-lg bg-blue-500/20 text-blue-600">
-                              <FileText className="h-4 w-4" />
-                            </div>
-                            <h4 className="text-sm font-semibold text-foreground">References</h4>
-                          </div>
-                          <div className="space-y-2 text-sm">
-                            <div className="p-2 rounded-lg bg-background/50 space-y-1">
-                              <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Submission Ref</span>
-                              <p className="font-medium text-foreground truncate">{vo.submissionReference}</p>
-                            </div>
-                            {vo.responseReference && (
-                              <div className="p-2 rounded-lg bg-background/50 space-y-1">
-                                <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Response Ref</span>
-                                <p className="font-medium text-foreground truncate">{vo.responseReference}</p>
                               </div>
-                            )}
-                          </div>
-                        </div>
 
-                        {/* Metadata Card */}
-                        <div className="neo-card-inset rounded-xl p-4 space-y-3">
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className="p-1.5 rounded-lg bg-amber-500/20 text-amber-600">
-                              <Calendar className="h-4 w-4" />
-                            </div>
-                            <h4 className="text-sm font-semibold text-foreground">Metadata</h4>
-                          </div>
-                          <div className="space-y-2 text-sm">
-                            <div className="flex justify-between items-center p-2 rounded-lg bg-background/50">
-                              <span className="text-muted-foreground text-xs">Date</span>
-                              <span className="font-medium">{formatDate(vo.submissionDate)}</span>
-                            </div>
-                            <div className="flex justify-between items-center p-2 rounded-lg bg-background/50">
-                              <span className="text-muted-foreground text-xs">Type</span>
-                              <Badge variant="outline" className="h-5 text-[10px] font-normal">{vo.submissionType}</Badge>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                              {/* References Compact Card */}
+                              <div className="rounded-xl border border-border/50 bg-background/50 p-3 shadow-sm">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <div className="p-1.5 bg-blue-500/10 rounded-lg">
+                                    <FileText className="h-3.5 w-3.5 text-blue-600" />
+                                  </div>
+                                  <span className="text-xs font-semibold text-muted-foreground">References</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 text-xs">
+                                  {vo.submissionReference && (
+                                    <div className="bg-white dark:bg-slate-800 p-1.5 rounded border border-border/50">
+                                      <span className="block text-[9px] text-muted-foreground">Sub Ref</span>
+                                      <span className="font-mono text-xs">{vo.submissionReference}</span>
+                                    </div>
+                                  )}
+                                  {vo.vorReference && (
+                                    <div className="bg-white dark:bg-slate-800 p-1.5 rounded border border-border/50">
+                                      <span className="block text-[9px] text-muted-foreground">VOR Ref</span>
+                                      <span className="font-mono text-xs">{vo.vorReference}</span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
 
-                      {/* Notes / Actions Footer */}
-                      <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                        {vo.remarks && (
-                          <div className="flex-1 p-3 rounded-xl bg-secondary/30 border border-border/50 text-sm">
-                            <div className="flex items-center gap-2 mb-1 text-muted-foreground">
-                              <MessageSquare className="h-3 w-3" />
-                              <span className="text-xs font-medium uppercase tracking-wide">Remarks</span>
-                            </div>
-                            <p className="text-foreground/90 pl-5">{vo.remarks}</p>
-                          </div>
-                        )}
+                              {/* Remarks Section */}
+                              {(vo.remarks || vo.actionNotes) && (
+                                <div className="md:col-span-2 rounded-xl border border-border/50 bg-background/50 p-3 shadow-sm">
+                                  <div className="flex items-start gap-2">
+                                    <div className="mt-0.5 p-1.5 bg-amber-500/10 rounded-lg">
+                                      <AlertCircle className="h-3.5 w-3.5 text-amber-600" />
+                                    </div>
+                                    <div className="space-y-2 flex-1">
+                                      {vo.remarks && (
+                                        <div>
+                                          <p className="text-[10px] uppercase tracking-wider text-muted-foreground/70 mb-0.5">Remarks</p>
+                                          <p className="text-xs text-foreground/90 leading-relaxed">{vo.remarks}</p>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
 
-                        <div className="flex sm:flex-col gap-2 justify-end min-w-[140px]">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="w-full justify-start gap-2 hover:bg-primary/5 hover:text-primary hover:border-primary/20"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              window.location.href = `/vos/${vo.id}`;
-                            }}
-                          >
-                            <FileText className="h-3.5 w-3.5" />
-                            View Details
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="w-full justify-start gap-2 hover:bg-amber-500/10 hover:text-amber-600 hover:border-amber-500/20"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              window.location.href = `/vos/${vo.id}/edit`;
-                            }}
-                          >
-                            <Tag className="h-3.5 w-3.5" />
-                            Edit VO
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
+                            </div>
+                            {/* Notes / Actions Footer */}
+                            <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                              {vo.remarks && (
+                                <div className="flex-1 p-3 rounded-xl bg-secondary/30 border border-border/50 text-sm">
+                                  <div className="flex items-center gap-2 mb-1 text-muted-foreground">
+                                    <MessageSquare className="h-3 w-3" />
+                                    <span className="text-xs font-medium uppercase tracking-wide">Remarks</span>
+                                  </div>
+                                  <p className="text-foreground/90 pl-5">{vo.remarks}</p>
+                                </div>
+                              )}
+
+                              <div className="flex sm:flex-col gap-2 justify-end min-w-[140px]">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="w-full justify-start gap-2 hover:bg-primary/5 hover:text-primary hover:border-primary/20"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    window.location.href = `/vos/${vo.id}`;
+                                  }}
+                                >
+                                  <FileText className="h-3.5 w-3.5" />
+                                  View Details
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="w-full justify-start gap-2 hover:bg-amber-500/10 hover:text-amber-600 hover:border-amber-500/20"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    window.location.href = `/vos/${vo.id}/edit`;
+                                  }}
+                                >
+                                  <Tag className="h-3.5 w-3.5" />
+                                  Edit VO
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
                 )}
-              </AnimatePresence>
-            </motion.div>
-          );
+                      </AnimatePresence>
+                  </motion.div>
+                );
         })}
-      </div>
-    </div >
-  );
-}
+              </div>
+            </div >
+          );
+        }
