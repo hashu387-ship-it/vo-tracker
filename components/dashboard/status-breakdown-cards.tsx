@@ -21,7 +21,7 @@ export function StatusBreakdownCards({ statusBreakdown, selectedStatus, onStatus
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="mb-6 text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+        <h2 className="mb-4 text-xl font-semibold text-slate-900">
           Status Overview
         </h2>
         <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 md:overflow-visible">
@@ -31,66 +31,42 @@ export function StatusBreakdownCards({ statusBreakdown, selectedStatus, onStatus
             return (
               <motion.div
                 key={status.status}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
                 onClick={() => onStatusSelect(isSelected ? null : status.status)}
-                className={`neo-card group relative overflow-hidden rounded-2xl p-5 cursor-pointer transition-all duration-300 min-w-[280px] md:min-w-0 snap-center
-                  ${isSelected ? 'ring-2 ring-primary shadow-lg scale-[1.02]' : 'hover:scale-[1.02]'}
+                className={`relative overflow-hidden rounded-xl p-5 cursor-pointer transition-all duration-200 border min-w-[240px] md:min-w-0 snap-center
+                  ${isSelected
+                    ? 'bg-slate-900 border-slate-900 text-white shadow-md transform scale-[1.02]'
+                    : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-sm text-slate-900'
+                  }
                 `}
               >
-                {/* Gradient Overlay */}
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${status.gradient} 
-                    ${isSelected ? 'opacity-[0.15]' : 'opacity-[0.03] group-hover:opacity-[0.08]'} 
-                    transition-opacity duration-300`}
-                />
+                {/* Status Label */}
+                <div className="mb-4">
+                  <h3 className={`text-sm font-medium ${isSelected ? 'text-slate-200' : 'text-slate-500'}`}>
+                    {status.label}
+                  </h3>
+                </div>
 
-                {/* Accent Border */}
-                <div
-                  className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${status.gradient} opacity-80`}
-                />
-
-                <div className="relative">
-                  {/* Status Label */}
-                  <div className="mb-3">
-                    <h3 className={`text-sm font-medium transition-colors ${isSelected ? 'text-primary' : 'text-muted-foreground group-hover:text-primary'} line-clamp-1`}>
-                      {status.label}
-                    </h3>
+                {/* Count */}
+                <div className="flex items-end justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className={`text-3xl font-bold tracking-tight ${isSelected ? 'text-white' : 'text-slate-900'}`}>
+                      {status.count}
+                    </span>
+                    <TrendingUp className={`h-4 w-4 ${isSelected ? 'text-emerald-400' : 'text-emerald-600'}`} />
                   </div>
+                </div>
 
-                  {/* Count */}
-                  <div className="mb-3">
-                    <div className="flex items-baseline gap-2">
-                      <span className={`text-3xl md:text-4xl font-bold bg-gradient-to-r ${status.gradient} bg-clip-text text-transparent`}>
-                        {status.count}
-                      </span>
-                      <TrendingUp className={`h-4 w-4 md:h-5 md:w-5 text-${status.color}-500 opacity-80`} />
-                    </div>
-                    <p className="text-[10px] md:text-xs text-muted-foreground mt-1">
-                      Active VOs
-                    </p>
+                {/* Amount */}
+                <div className={`pt-3 border-t ${isSelected ? 'border-slate-700' : 'border-slate-100'} mt-3`}>
+                  <div className="flex items-center gap-2">
+                    <Coins className={`h-3.5 w-3.5 ${isSelected ? 'text-slate-400' : 'text-slate-400'}`} />
+                    <span className={`text-sm font-semibold font-mono ${isSelected ? 'text-slate-200' : 'text-slate-700'}`}>
+                      {formatCurrency(status.amount)}
+                    </span>
                   </div>
-
-                  {/* Amount */}
-                  <div className="pt-3 border-t border-border/50">
-                    <div className="flex items-center gap-2">
-                      <Coins className={`h-4 w-4 text-${status.color}-500 opacity-80`} />
-                      <span className="text-sm md:text-base font-semibold text-foreground">
-                        {formatCurrency(status.amount)}
-                      </span>
-                    </div>
-                    <p className="text-[10px] md:text-xs text-muted-foreground mt-1">
-                      Total Value
-                    </p>
-                  </div>
-
-                  {/* Hover Effect Circle */}
-                  <div
-                    className={`absolute -top-10 -right-10 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br ${status.gradient} rounded-full 
-                      ${isSelected ? 'opacity-20' : 'opacity-0 group-hover:opacity-10'} 
-                      blur-3xl transition-opacity duration-500`}
-                  />
                 </div>
               </motion.div>
             );
