@@ -47,12 +47,12 @@ export default function LandingPage() {
           {/* Background Image with Overlay */}
           <div className="absolute inset-0 z-0">
             <img
-              src="/rsg-hero.jpg"
+              src="/rsg-new-hero.png"
               alt="Red Sea Project"
-              className="h-full w-full object-cover object-center scale-105 animate-[pulse-subtle_10s_ease-in-out_infinite]"
+              className="h-full w-full object-cover object-center scale-105 animate-[pulse-subtle_15s_ease-in-out_infinite]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-rsg-navy via-rsg-navy/80 to-rsg-navy/70 mix-blend-multiply" />
-            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20 mixed-blend-overlay" />
+            <div className="absolute inset-0 bg-gradient-to-t from-rsg-navy via-rsg-navy/70 to-rsg-navy/40 mix-blend-multiply" />
+            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10 mixed-blend-overlay" />
           </div>
 
           {/* Abstract Animated Elements */}

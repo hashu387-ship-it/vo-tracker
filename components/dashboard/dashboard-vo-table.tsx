@@ -239,24 +239,35 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
                             <div className="grid gap-3 p-3 text-sm md:grid-cols-2 bg-slate-50/50 dark:bg-slate-900/50">
 
                               {/* Financials Compact Card */}
-                              <div className="rounded-xl border border-border/50 bg-background/50 p-3 shadow-sm">
-                                <div className="flex items-center gap-2 mb-2">
-                                  <div className="p-1.5 bg-emerald-500/10 rounded-lg">
-                                    <DollarSign className="h-3.5 w-3.5 text-emerald-600" />
-                                  </div>
-                                  <span className="text-xs font-semibold text-muted-foreground">Financials</span>
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                  <div>
-                                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground/70 mb-0.5">Estimated</p>
-                                    <p className="text-sm font-bold text-foreground">{formatCurrency(vo.assessmentValue || vo.proposalValue)}</p>
-                                  </div>
-                                  {vo.approvedAmount && (
-                                    <div>
-                                      <p className="text-[10px] uppercase tracking-wider text-emerald-600/70 mb-0.5">Approved</p>
-                                      <p className="text-sm font-bold text-emerald-600">{formatCurrency(vo.approvedAmount)}</p>
+                              <div className="col-span-1 md:col-span-2 rounded-xl border border-border/60 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
+                                <div className="grid grid-cols-2 divide-x divide-border/60">
+                                  {/* Original / Estimated Value */}
+                                  <div className="p-3 bg-slate-50 dark:bg-slate-800/50">
+                                    <p className="text-[10px] uppercase tracking-wider font-bold text-slate-500 mb-1">Original / Estimated</p>
+                                    <div className="flex items-baseline gap-1">
+                                      <span className="text-xs text-slate-400">SAR</span>
+                                      <span className="text-sm md:text-base font-bold text-rsg-navy dark:text-slate-200">
+                                        {formatCurrency(vo.assessmentValue || vo.proposalValue).replace('SAR', '').trim()}
+                                      </span>
                                     </div>
-                                  )}
+                                  </div>
+
+                                  {/* Revised / Approved Value */}
+                                  <div className={`p-3 ${vo.approvedAmount ? 'bg-emerald-50/50 dark:bg-emerald-900/10' : 'bg-slate-50 dark:bg-slate-800/50'}`}>
+                                    <p className={`text-[10px] uppercase tracking-wider font-bold mb-1 ${vo.approvedAmount ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`}>
+                                      {vo.approvedAmount ? 'Revised / Approved' : 'Approved (Pending)'}
+                                    </p>
+                                    {vo.approvedAmount ? (
+                                      <div className="flex items-baseline gap-1">
+                                        <span className="text-xs text-emerald-600/70">SAR</span>
+                                        <span className="text-sm md:text-base font-bold text-emerald-700 dark:text-emerald-400">
+                                          {formatCurrency(vo.approvedAmount).replace('SAR', '').trim()}
+                                        </span>
+                                      </div>
+                                    ) : (
+                                      <span className="text-xs italic text-slate-400">--</span>
+                                    )}
+                                  </div>
                                 </div>
                               </div>
 
