@@ -33,32 +33,31 @@ export function KPICard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay }}
     >
-      <div className="relative overflow-hidden p-6 bg-slate-900 border border-slate-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group">
+      <div className="relative overflow-hidden p-6 bg-white/60 backdrop-blur-xl border border-white/60 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 group">
 
-        {/* Subtle Glass Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {/* Subtle Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
         <div className="flex items-start justify-between relative z-10">
           <div className="space-y-1">
-            <p className="text-sm font-medium text-slate-400 group-hover:text-slate-300 transition-colors">{title}</p>
-            <p className="text-2xl font-bold tracking-tight text-white">{value}</p>
-            {subtitle && <p className="text-xs text-slate-500 mt-1">{subtitle}</p>}
+            <p className="text-sm font-medium text-slate-500 group-hover:text-slate-700 transition-colors">{title}</p>
+            <p className="text-3xl font-bold tracking-tight text-slate-900">{value}</p>
+            {subtitle && <p className="text-xs text-slate-400 mt-1">{subtitle}</p>}
           </div>
           <div
             className={cn(
-              'flex h-10 w-10 items-center justify-center rounded-lg border border-white/5 shadow-inner',
-              bgColor ? bgColor.replace('bg-', 'bg-opacity-10 bg-') : 'bg-slate-800',
+              'flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-sm border border-slate-100',
               bgColor ? bgColor.replace('bg-', 'text-') : 'text-slate-400',
-              'group-hover:scale-110 transition-transform duration-300'
+              'group-hover:scale-110 transition-transform duration-300 group-hover:shadow-md'
             )}
           >
-            <Icon className={cn("h-5 w-5", iconColor)} />
+            <Icon className={cn("h-6 w-6", iconColor)} />
           </div>
         </div>
         {/* Subtle Bottom Accent */}
         <div className={cn(
-          "absolute bottom-0 left-0 h-1 w-full opacity-50 group-hover:opacity-100 transition-all duration-300",
-          bgColor ? bgColor : "bg-slate-700"
+          "absolute bottom-0 left-0 h-1 w-full opacity-60 group-hover:opacity-100 transition-all duration-300",
+          bgColor ? bgColor : "bg-slate-200"
         )} />
       </div>
     </motion.div>

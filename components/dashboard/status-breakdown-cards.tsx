@@ -37,8 +37,8 @@ export function StatusBreakdownCards({ statusBreakdown, selectedStatus, onStatus
                 onClick={() => onStatusSelect(isSelected ? null : status.status)}
                 className={`relative overflow-hidden rounded-xl p-5 cursor-pointer transition-all duration-300 border min-w-[240px] md:min-w-0 snap-center
                   ${isSelected
-                    ? 'bg-slate-900 border-slate-700 shadow-xl scale-[1.02]'
-                    : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-md'
+                    ? 'bg-white ring-2 ring-rsg-gold/50 shadow-lg scale-[1.02] border-rsg-gold/20'
+                    : 'bg-white/60 backdrop-blur-md border-white/60 hover:border-white hover:bg-white/80 hover:shadow-md'
                   }
                 `}
               >
@@ -52,7 +52,7 @@ export function StatusBreakdownCards({ statusBreakdown, selectedStatus, onStatus
 
                 {/* Status Label */}
                 <div className="mb-4">
-                  <h3 className={`text-sm font-medium ${isSelected ? 'text-slate-200' : 'text-slate-600'}`}>
+                  <h3 className={`text-sm font-medium ${isSelected ? 'text-rsg-navy' : 'text-slate-600'}`}>
                     {status.label}
                   </h3>
                 </div>
@@ -60,18 +60,18 @@ export function StatusBreakdownCards({ statusBreakdown, selectedStatus, onStatus
                 {/* Count */}
                 <div className="flex items-end justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <span className={`text-3xl font-bold tracking-tight ${isSelected ? 'text-white' : 'text-slate-900'}`}>
+                    <span className={`text-3xl font-bold tracking-tight ${isSelected ? 'text-rsg-navy' : 'text-slate-900'}`}>
                       {status.count}
                     </span>
-                    <TrendingUp className={`h-4 w-4 ${isSelected ? 'text-emerald-400' : 'text-emerald-600'}`} />
+                    <TrendingUp className={`h-4 w-4 ${isSelected ? 'text-emerald-500' : 'text-emerald-600'}`} />
                   </div>
                 </div>
 
                 {/* Amount */}
-                <div className={`pt-3 border-t ${isSelected ? 'border-white/10' : 'border-slate-100'} mt-3`}>
+                <div className={`pt-3 border-t ${isSelected ? 'border-rsg-gold/10' : 'border-slate-100'} mt-3`}>
                   <div className="flex items-center gap-2">
-                    <Coins className={`h-3.5 w-3.5 ${isSelected ? 'text-slate-400' : 'text-slate-400'}`} />
-                    <span className={`text-sm font-semibold font-mono ${isSelected ? 'text-slate-300' : 'text-slate-700'}`}>
+                    <Coins className={`h-3.5 w-3.5 ${isSelected ? 'text-slate-500' : 'text-slate-400'}`} />
+                    <span className={`text-sm font-semibold font-mono ${isSelected ? 'text-slate-700' : 'text-slate-600'}`}>
                       {formatCurrency(status.amount)}
                     </span>
                   </div>
