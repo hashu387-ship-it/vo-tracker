@@ -109,7 +109,7 @@ export function DashboardVOTable() {
         </h2>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-2">
         {vos.map((vo, index) => {
           const isExpanded = expandedRows.has(vo.id);
           const statusColors = STATUS_COLORS[vo.status] || STATUS_COLORS.PendingWithFFC;
@@ -121,20 +121,20 @@ export function DashboardVOTable() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
               key={vo.id}
-              className={`relative overflow-hidden rounded-xl transition-all duration-300 
+              className={`relative overflow-hidden rounded-lg transition-all duration-300 
                 ${isExpanded
-                  ? 'bg-card shadow-lg ring-2 ring-primary/20'
-                  : 'bg-card/50 hover:bg-card border border-border/50 hover:border-border hover:shadow-md'
+                  ? 'bg-card shadow-lg ring-1 ring-primary/20'
+                  : 'bg-card/50 hover:bg-card border border-border/40 hover:border-border hover:shadow-sm'
                 }`}
             >
               <div
                 onClick={() => toggleRow(vo.id)}
-                className="cursor-pointer py-1 px-2 flex items-center justify-between gap-2 sm:gap-4 group"
+                className="cursor-pointer py-1.5 px-2 flex items-center justify-between gap-2 group"
               >
                 {/* Left Section */}
                 <div className="flex items-center gap-2 flex-1 min-w-0">
-                  <div className={`flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center transition-all duration-300
-                    ${isExpanded ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-105' : 'bg-secondary text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary'}
+                  <div className={`flex-shrink-0 w-5 h-5 rounded flex items-center justify-center transition-all duration-300
+                    ${isExpanded ? 'bg-primary text-primary-foreground shadow-sm scale-105' : 'bg-secondary/80 text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary'}
                   `}>
                     {isExpanded ? (
                       <ChevronDown className="h-3 w-3" />
@@ -145,46 +145,37 @@ export function DashboardVOTable() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       {/* Use S.No from data if possible, but we don't store it explicitly as S.No. Using index is fine as user asked "like this #23" */}
-                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider bg-secondary/50 px-1 py-0.5 rounded border border-border/50 whitespace-nowrap">
+                      <span className="text-[10px] font-medium text-muted-foreground bg-secondary/30 px-1 rounded border border-border/30 whitespace-nowrap">
                         #{index + 1}
                       </span>
-                      <h3 className="text-xs sm:text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors">
+                      <h3 className="text-[11px] sm:text-xs font-medium text-foreground truncate group-hover:text-primary transition-colors leading-tight">
                         {vo.subject}
                       </h3>
-                    </div>
-                    {/* Status Badge in mobile view or additional info */}
-                    <div className="flex items-center gap-2 mt-1">
-                      <p className="text-xs text-muted-foreground truncate max-w-[300px]">
-                        {vo.remarks || vo.actionNotes || 'No additional remarks'}
-                      </p>
                     </div>
                   </div>
                 </div>
 
                 {/* Middle Section: Amount */}
-                <div className="flex flex-col items-end hidden sm:flex">
-                  <span className="text-xs font-medium text-muted-foreground mb-0.5">Proposal</span>
-                  <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">
-                    <DollarSign className="h-3 w-3" />
-                    <span className="text-sm font-bold">{formatCurrency(vo.proposalValue).replace('$', '')}</span>
+                <div className="hidden sm:flex flex-col items-end">
+                  <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 bg-emerald-500/5 px-1.5 py-0.5 rounded">
+                    <span className="text-xs font-semibold">{formatCurrency(vo.proposalValue).replace('$', '')}</span>
                   </div>
                 </div>
 
                 {/* Right Section: Status & Date */}
-                <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                <div className="flex flex-col items-end gap-0.5 flex-shrink-0">
                   <Badge
                     variant="outline"
                     className={`
                       ${statusColors.bg} ${statusColors.text} ${statusColors.border}
-                      border px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium uppercase tracking-wide whitespace-nowrap
+                      border px-1.5 py-0 rounded text-[9px] font-medium uppercase tracking-wider whitespace-nowrap h-4 flex items-center
                     `}
                   >
                     {/* Shorten status text on mobile if needed, though labels are generally short enough */}
-                    {STATUS_LABELS[vo.status]}
+                    {STATUS_LABELS[vo.status]?.replace('Pending with ', 'Pending ')?.replace('Approved & Awaiting', 'Approved')}
                   </Badge>
-                  <div className="flex items-center gap-1.5 text-muted-foreground">
-                    <Calendar className="h-3 w-3" />
-                    <span className="text-[10px] sm:text-xs font-mono">
+                  <div className="flex items-center gap-1 text-muted-foreground/60">
+                    <span className="text-[9px] font-mono">
                       {formatDate(vo.submissionDate)}
                     </span>
                   </div>
