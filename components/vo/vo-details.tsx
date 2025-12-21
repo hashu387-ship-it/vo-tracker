@@ -66,32 +66,33 @@ export function VODetails({ vo, isAdmin }: VODetailsProps) {
       transition={{ duration: 0.3 }}
       className="space-y-6"
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link href="/vos">
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="h-5 w-5" />
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-start gap-4">
+          <Link href="/vos" className="mt-1">
+            <Button variant="ghost" size="icon" className="h-8 w-8 -ml-2">
+              <ArrowLeft className="h-4 w-4" />
             </Button>
           </Link>
-          <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold tracking-tight">VO #{vo.id}</h1>
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-2 mb-1">
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight">VO #{vo.id}</h1>
               <StatusBadge status={vo.status as VOStatus} />
             </div>
-            <p className="text-muted-foreground">{vo.subject}</p>
+            <p className="text-sm text-muted-foreground break-words leading-relaxed pr-2">{vo.subject}</p>
           </div>
         </div>
+
         {isAdmin && (
-          <div className="flex gap-2">
-            <Link href={`/vos/${vo.id}/edit`}>
-              <Button variant="outline" className="gap-2">
+          <div className="grid grid-cols-2 gap-2 w-full sm:w-auto sm:flex">
+            <Link href={`/vos/${vo.id}/edit`} className="w-full sm:w-auto">
+              <Button variant="outline" className="gap-2 w-full sm:w-auto">
                 <Pencil className="h-4 w-4" />
                 Edit
               </Button>
             </Link>
             <Button
               variant="outline"
-              className="gap-2 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+              className="gap-2 text-destructive hover:bg-destructive hover:text-destructive-foreground w-full sm:w-auto"
               onClick={() => setShowDelete(true)}
             >
               <Trash2 className="h-4 w-4" />
