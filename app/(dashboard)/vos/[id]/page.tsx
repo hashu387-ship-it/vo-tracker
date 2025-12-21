@@ -40,6 +40,9 @@ export default async function VOPage({ params }: VOPageProps) {
     dvoIssuedDate: vo.dvoIssuedDate?.toISOString() || null,
     remarks: vo.remarks,
     actionNotes: vo.actionNotes,
+    ffcRsgProposedFile: vo.ffcRsgProposedFile,
+    rsgAssessedFile: vo.rsgAssessedFile,
+    dvoRrApprovedFile: vo.dvoRrApprovedFile,
     createdAt: vo.createdAt.toISOString(),
     updatedAt: vo.updatedAt.toISOString(),
   };
