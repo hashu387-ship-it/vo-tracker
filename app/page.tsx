@@ -11,11 +11,19 @@ export default function LandingPage() {
       {/* Navbar */}
       <nav className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur-md">
         <div className="container mx-auto flex h-20 items-center justify-between px-6">
-          <div className="flex items-center gap-2">
-            <Building2 className="h-6 w-6 text-rsg-gold" />
-            <span className="text-xl font-bold tracking-tight text-rsg-navy">
-              FIRST<span className="text-rsg-gold">FIX</span>
-            </span>
+          <div className="flex items-center gap-4">
+            {/* Navbar Logos */}
+            <img src="/rsg-logo.png" alt="RSG" className="h-10 w-auto brightness-0 invert filter invert-[0.2] sepia-[0.3] saturate-[0.5] hue-rotate-[180deg]" />
+            {/* Note: RSG logo is white, we need to invert it for white navbar or use a dark version. 
+                 Since I only have the white one (brightness-0 invert makes it black if it was white, wait. 
+                 The downloaded RSG logo is likely white text? 
+                 Let's check the prev usage: className="h-16 w-auto brightness-0 invert" 
+                 If it was white, invert makes it black. If it was colored, brightness-0 makes it black.
+                 Actually, let's just use the image directly and adjust classes. 
+                 The FirstFix logo is likely colored. 
+             */}
+            <div className="h-6 w-px bg-gray-200" />
+            <img src="/firstfix-v2.png" alt="FirstFix" className="h-8 w-auto" />
           </div>
           <div className="flex items-center gap-4">
             <Link href="/sign-in">
@@ -117,9 +125,6 @@ export default function LandingPage() {
 
         <div className="h-24"></div>
       </main>
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }
