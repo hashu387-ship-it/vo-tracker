@@ -43,6 +43,9 @@ export default async function EditVOPage({ params }: EditVOPageProps) {
     dvoIssuedDate: vo.dvoIssuedDate?.toISOString() || null,
     remarks: vo.remarks,
     actionNotes: vo.actionNotes,
+    ffcRsgProposedFile: vo.ffcRsgProposedFile,
+    rsgAssessedFile: vo.rsgAssessedFile,
+    dvoRrApprovedFile: vo.dvoRrApprovedFile,
     createdAt: vo.createdAt.toISOString(),
     updatedAt: vo.updatedAt.toISOString(),
   };
