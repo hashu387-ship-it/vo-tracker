@@ -110,38 +110,38 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
       {/* Header */}
       <div className="flex items-center justify-between pb-6">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-800">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-slate-100">
             {filterStatus ? `${STATUS_LABELS[filterStatus]}` : 'Variation Orders'}
           </h2>
-          <p className="text-sm text-slate-500 mt-1 font-medium">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
             Active Project Registry
           </p>
         </div>
-        <div className="bg-white/50 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/60 shadow-sm">
-          <span className="text-xs font-bold text-slate-600 uppercase tracking-widest">
+        <div className="bg-white/50 dark:bg-slate-900/50 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/60 dark:border-white/10 shadow-sm">
+          <span className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">
             {vos.length} Records
           </span>
         </div>
       </div>
 
-      <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/60 bg-white/40 backdrop-blur-3xl ring-1 ring-black/5">
+      <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/60 dark:border-white/10 bg-white/40 dark:bg-slate-900/60 backdrop-blur-3xl ring-1 ring-black/5 dark:ring-white/5">
 
         <div className="relative">
           {/* Table Header (Desktop) - Sticky Frosty Header */}
-          <div className="hidden sm:grid grid-cols-12 gap-6 px-6 py-4 bg-white/60 border-b border-white/50 text-xs font-bold text-slate-500 uppercase tracking-widest backdrop-blur-md sticky top-0 z-20">
+          <div className="hidden sm:grid grid-cols-12 gap-6 px-6 py-4 bg-white/60 dark:bg-slate-900/80 border-b border-white/50 dark:border-white/10 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest backdrop-blur-md sticky top-0 z-20">
             <div className="col-span-1">#</div>
             <div className="col-span-6">Subject</div>
             <div className="col-span-2 text-right">Value</div>
             <div className="col-span-3 text-right">Status</div>
           </div>
 
-          <div className="divide-y divide-slate-200/50">
+          <div className="divide-y divide-slate-200/50 dark:divide-white/5">
             {vos.map((vo, index) => {
               const isExpanded = expandedRows.has(vo.id);
               const statusColors = STATUS_COLORS[vo.status] || STATUS_COLORS.PendingWithFFC;
 
               return (
-                <div key={vo.id} className="group hover:bg-white/60 transition-colors duration-200">
+                <div key={vo.id} className="group hover:bg-white/60 dark:hover:bg-white/5 transition-colors duration-200">
                   {/* Main Row */}
                   <div
                     onClick={() => toggleRow(vo.id)}
@@ -149,50 +149,50 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
                   >
                     {/* Mobile Top Row: ID & Status */}
                     <div className="sm:hidden flex justify-between items-center w-full mb-3">
-                      <span className="text-xs font-mono text-slate-400 font-bold">#{String(index + 1).padStart(2, '0')}</span>
-                      <Badge variant="outline" className={`${statusColors.bg} ${statusColors.text} border-transparent ring-1 ring-inset ring-black/5 rounded-full px-2.5 py-0.5 text-[10px] font-bold backdrop-blur-sm`}>
+                      <span className="text-xs font-mono text-slate-400 dark:text-slate-500 font-bold">#{String(index + 1).padStart(2, '0')}</span>
+                      <Badge variant="outline" className={`${statusColors.bg} ${statusColors.text} border-transparent ring-1 ring-inset ring-black/5 dark:ring-white/10 rounded-full px-2.5 py-0.5 text-[10px] font-bold backdrop-blur-sm`}>
                         {STATUS_LABELS[vo.status]?.replace('Pending with ', 'Pending ')}
                       </Badge>
                     </div>
 
                     {/* ID (Desktop) */}
-                    <div className="hidden sm:block col-span-1 text-sm font-mono text-slate-400 font-bold group-hover:text-slate-600 transition-colors">
+                    <div className="hidden sm:block col-span-1 text-sm font-mono text-slate-400 dark:text-slate-500 font-bold group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors">
                       {String(index + 1).padStart(2, '0')}
                     </div>
 
                     {/* Subject */}
                     <div className="col-span-1 sm:col-span-6">
-                      <h3 className={`text-sm sm:text-[15px] font-semibold text-slate-800 group-hover:text-rsg-navy transition-colors ${isExpanded ? 'whitespace-normal leading-relaxed' : 'truncate'}`}>
+                      <h3 className={`text-sm sm:text-[15px] font-semibold text-slate-800 dark:text-slate-200 group-hover:text-rsg-navy dark:group-hover:text-white transition-colors ${isExpanded ? 'whitespace-normal leading-relaxed' : 'truncate'}`}>
                         {vo.subject}
                       </h3>
                       {/* Mobile Secondary Info */}
-                      <div className="sm:hidden mt-3 flex justify-between items-center bg-slate-50/50 p-3 rounded-lg border border-slate-100">
-                        <span className="text-xs text-slate-500">{formatDate(vo.submissionDate)}</span>
-                        <span className="text-sm font-bold text-slate-700">{formatCurrency(vo.approvedAmount || vo.proposalValue)}</span>
+                      <div className="sm:hidden mt-3 flex justify-between items-center bg-slate-50/50 dark:bg-white/5 p-3 rounded-lg border border-slate-100 dark:border-white/5">
+                        <span className="text-xs text-slate-500 dark:text-slate-400">{formatDate(vo.submissionDate)}</span>
+                        <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{formatCurrency(vo.approvedAmount || vo.proposalValue)}</span>
                       </div>
                     </div>
 
                     {/* Value (Desktop) */}
                     <div className="hidden sm:block col-span-2 text-right">
-                      <div className={`font-mono text-sm font-bold tracking-tight ${vo.approvedAmount ? 'text-emerald-600' : 'text-slate-600'}`}>
+                      <div className={`font-mono text-sm font-bold tracking-tight ${vo.approvedAmount ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-600 dark:text-slate-400'}`}>
                         {formatCurrency(vo.approvedAmount || vo.proposalValue)}
                       </div>
-                      {vo.approvedAmount && <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 border border-emerald-100 px-1.5 py-0.5 rounded ml-2 uppercase tracking-wide">Approved</span>}
+                      {vo.approvedAmount && <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 px-1.5 py-0.5 rounded ml-2 uppercase tracking-wide">Approved</span>}
                     </div>
 
                     {/* Status (Desktop) */}
                     <div className="hidden sm:flex col-span-3 justify-end items-center gap-4">
-                      <span className="text-xs text-slate-400 font-medium">{formatDate(vo.submissionDate)}</span>
+                      <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">{formatDate(vo.submissionDate)}</span>
                       <Badge variant="secondary" className={`${statusColors.bg} ${statusColors.text} rounded-full px-3 py-1 font-bold text-[10px] border-0 backdrop-blur-md bg-opacity-30 uppercase tracking-wider min-w-[110px] justify-center shadow-sm`}>
                         {STATUS_LABELS[vo.status]?.replace('Pending with ', 'Pending ')}
                       </Badge>
-                      <div className={`text-slate-400 transition-all duration-300 ${isExpanded ? 'rotate-180 text-rsg-gold' : 'group-hover:text-slate-600'}`}>
+                      <div className={`text-slate-400 dark:text-slate-500 transition-all duration-300 ${isExpanded ? 'rotate-180 text-rsg-gold' : 'group-hover:text-slate-600 dark:group-hover:text-slate-300'}`}>
                         <ChevronDown className="h-4 w-4" />
                       </div>
                     </div>
                   </div>
 
-                  {/* Expanded Details - Clean Light Slide */}
+                  {/* Expanded Details - Clean Light Slide / Dark Obsidian */}
                   <AnimatePresence>
                     {isExpanded && (
                       <motion.div
@@ -200,7 +200,7 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3, ease: 'circOut' }}
-                        className="overflow-hidden border-t border-slate-100 bg-slate-50/50 shadow-inner"
+                        className="overflow-hidden border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-black/20 shadow-inner"
                       >
                         <div className="px-6 py-6 sm:px-12 sm:py-8 grid gap-8 grid-cols-1 lg:grid-cols-12 text-sm">
                           {/* Details Column */}
@@ -212,11 +212,11 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
                                 const val = vo[refKey];
                                 if (!val) return null;
                                 return (
-                                  <div key={refKey} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                                    <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1.5">
+                                  <div key={refKey} className="bg-white dark:bg-white/5 p-4 rounded-xl border border-slate-200 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow">
+                                    <p className="text-[10px] uppercase tracking-widest text-slate-400 dark:text-slate-500 font-bold mb-1.5">
                                       {refKey.replace('Reference', ' Ref')}
                                     </p>
-                                    <p className="font-mono text-slate-700 font-bold tracking-tight">{val}</p>
+                                    <p className="font-mono text-slate-700 dark:text-slate-200 font-bold tracking-tight">{val}</p>
                                   </div>
                                 );
                               })}
@@ -224,12 +224,12 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
 
                             {/* Remarks */}
                             {vo.remarks && (
-                              <div className="p-5 rounded-xl bg-orange-50 border border-orange-100">
-                                <p className="text-[10px] uppercase tracking-widest text-orange-600/60 font-bold mb-2 flex items-center gap-2">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400" />
+                              <div className="p-5 rounded-xl bg-orange-50 dark:bg-amber-900/10 border border-orange-100 dark:border-amber-500/10">
+                                <p className="text-[10px] uppercase tracking-widest text-orange-600/60 dark:text-amber-500/80 font-bold mb-2 flex items-center gap-2">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400 dark:bg-amber-500" />
                                   Remarks
                                 </p>
-                                <p className="text-slate-700 leading-relaxed max-w-2xl font-medium">{vo.remarks}</p>
+                                <p className="text-slate-700 dark:text-slate-300 leading-relaxed max-w-2xl font-medium">{vo.remarks}</p>
                               </div>
                             )}
                           </div>
@@ -242,7 +242,7 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
                                 e.stopPropagation();
                                 window.location.href = `/vos/${vo.id}/edit`;
                               }}
-                              className="bg-white hover:bg-slate-50 text-slate-600 border-slate-200 h-10 px-6 text-xs font-bold uppercase tracking-widest shadow-sm hover:shadow-md transition-all rounded-lg"
+                              className="bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10 h-10 px-6 text-xs font-bold uppercase tracking-widest shadow-sm hover:shadow-md transition-all rounded-lg"
                             >
                               Edit
                             </Button>
@@ -251,7 +251,7 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
                                 e.stopPropagation();
                                 window.location.href = `/vos/${vo.id}`;
                               }}
-                              className="bg-slate-900 hover:bg-slate-800 text-white h-10 px-6 text-xs font-bold uppercase tracking-widest shadow-lg hover:shadow-xl transition-all rounded-lg"
+                              className="bg-slate-900 dark:bg-rsg-gold hover:bg-slate-800 dark:hover:bg-[#B08D55] text-white h-10 px-6 text-xs font-bold uppercase tracking-widest shadow-lg hover:shadow-xl transition-all rounded-lg dark:text-white"
                             >
                               View Details
                             </Button>
