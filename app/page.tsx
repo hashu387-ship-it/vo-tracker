@@ -37,24 +37,25 @@ export default function LandingPage() {
       <main className="flex-1">
         <div className="relative pt-24 pb-40 bg-rsg-navy overflow-hidden">
           {/* Abstract Background */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute -top-24 -right-24 w-[600px] h-[600px] rounded-full border-[60px] border-white/20 blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-full h-[300px] bg-gradient-to-t from-black/50 to-transparent" />
+          <div className="absolute inset-0 opacity-20 pointer-events-none">
+            <div className="absolute -top-24 -right-24 w-[800px] h-[800px] rounded-full border-[1px] border-white/10 blur-3xl animate-[spin_60s_linear_infinite]" />
+            <div className="absolute bottom-0 left-0 w-full h-[400px] bg-gradient-to-t from-rsg-navy via-rsg-navy/50 to-transparent" />
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-rsg-gold/20 rounded-full blur-[100px] mix-blend-overlay" />
           </div>
 
-          <div className="container relative mx-auto px-6 text-center">
+          <div className="container relative mx-auto px-6 text-center z-10">
             {/* Logos */}
             <div className="mb-16 flex flex-col items-center justify-center gap-8 md:flex-row md:gap-16 animate-in fade-in slide-in-from-bottom-8 duration-700">
-              <div className="flex items-center gap-3 opacity-90 hover:opacity-100 transition-opacity bg-white/5 py-3 px-6 rounded-lg backdrop-blur-sm border border-white/10">
-                <Waves className="h-10 w-10 text-white" />
-                <span className="text-3xl font-serif font-bold text-white tracking-wide">
+              <div className="flex items-center gap-4 opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 py-4 px-8 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
+                <Waves className="h-12 w-12 text-white" />
+                <span className="text-4xl font-serif font-bold text-white tracking-wide">
                   Red Sea
                 </span>
               </div>
-              <div className="hidden h-12 w-px bg-white/20 md:block" />
-              <div className="flex items-center gap-3 opacity-90 hover:opacity-100 transition-opacity bg-white/5 py-3 px-6 rounded-lg backdrop-blur-sm border border-white/10">
-                <Building2 className="h-10 w-10 text-rsg-gold" />
-                <span className="text-3xl font-sans font-black tracking-tighter text-white">
+              <div className="hidden h-16 w-px bg-gradient-to-b from-transparent via-white/30 to-transparent md:block" />
+              <div className="flex items-center gap-4 opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 py-4 px-8 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
+                <Building2 className="h-12 w-12 text-rsg-gold" />
+                <span className="text-4xl font-sans font-black tracking-tighter text-white">
                   FIRST<span className="text-rsg-gold">FIX</span>
                 </span>
               </div>

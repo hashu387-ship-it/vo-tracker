@@ -5,8 +5,8 @@ export function Footer() {
                 <p className="text-center text-[9px] leading-loose text-muted-foreground md:text-left opacity-60">
                     &copy; {new Date().getFullYear()} VO Tracker. All rights reserved.
                 </p>
-                <p className="text-center text-[9px] italic leading-loose text-muted-foreground md:text-right opacity-80">
-                    Designed by <span className="font-medium text-foreground/70">Mohamed Roomy Mohamed Hassan</span>
+                <p className="text-[10px] text-slate-400/40 italic font-light tracking-widest hover:text-slate-400 transition-colors">
+                    Designed by Mohamed Roomy Mohamed Hassan
                 </p>
             </div>
         </footer>

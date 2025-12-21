@@ -160,9 +160,19 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
 
                 {/* Middle Section: Amount */}
                 <div className="hidden sm:flex flex-col items-end">
-                  <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 bg-emerald-500/5 px-1.5 py-0.5 rounded">
-                    <span className="text-xs font-semibold">{formatCurrency(vo.proposalValue).replace('$', '')}</span>
-                  </div>
+                  {['ApprovedAwaitingDVO', 'DVORRIssued'].includes(vo.status) ? (
+                    <div className="flex flex-col items-end">
+                      <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 shadow-sm">
+                        <CheckCircle2 className="h-3 w-3" />
+                        <span className="text-xs font-bold">{formatCurrency(vo.approvedAmount).replace('$', '')}</span>
+                      </div>
+                      <span className="text-[9px] text-muted-foreground/70 uppercase tracking-wider scale-90">Approved</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1 text-muted-foreground/90 bg-secondary/50 px-1.5 py-0.5 rounded">
+                      <span className="text-xs font-semibold">{formatCurrency(vo.proposalValue).replace('$', '')}</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Right Section: Status & Date */}
