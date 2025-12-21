@@ -100,7 +100,7 @@ export default function DashboardPage() {
             <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
             <div className="relative">
               <h3 className="text-lg font-semibold text-white mb-2">Original Contract Value</h3>
-              <p className="text-4xl font-bold text-white">
+              <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-white break-words">
                 {formatCurrency(217501556.12)}
               </p>
             </div>
@@ -111,7 +111,7 @@ export default function DashboardPage() {
             <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
             <div className="relative">
               <h3 className="text-lg font-semibold text-white mb-2">Revised Contract Value</h3>
-              <p className="text-4xl font-bold text-white">
+              <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-white break-words">
                 {formatCurrency(
                   217501556.12 +
                   (stats.statusBreakdown.find(s => s.status === 'ApprovedAwaitingDVO')?.amount || 0) +
