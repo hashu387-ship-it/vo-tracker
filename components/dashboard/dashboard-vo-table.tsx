@@ -113,7 +113,7 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
           <h2 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-slate-100">
             {filterStatus ? `${STATUS_LABELS[filterStatus]}` : 'Variation Orders'}
           </h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">
             Active Project Registry
           </p>
         </div>
