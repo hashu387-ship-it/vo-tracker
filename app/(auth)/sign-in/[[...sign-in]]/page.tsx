@@ -5,24 +5,14 @@ export default function SignInPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
 
-      {/* Logos Section */}
-      <div className="mb-8 flex flex-col items-center gap-6 md:flex-row md:gap-12">
-        {/* Red Sea Logo Placeholder */}
-        <div className="flex items-center gap-2">
-          <Waves className="h-8 w-8 text-blue-600" />
-          <span className="text-2xl font-serif font-bold text-slate-800 tracking-wide">
-            Red Sea
-          </span>
+      {/* Logos */}
+      <div className="mb-12 flex flex-col items-center justify-center gap-8 md:flex-row md:gap-12">
+        <div className="flex items-center justify-center opacity-90 transition-opacity">
+          <img src="/rsg-logo.png" alt="Red Sea Global" className="h-16 w-auto brightness-0 invert" />
         </div>
-
-        <div className="hidden h-12 w-px bg-slate-300 md:block"></div>
-
-        {/* Firstfix Logo Placeholder */}
-        <div className="flex items-center gap-2">
-          <Building2 className="h-8 w-8 text-orange-500" />
-          <span className="text-2xl font-sans font-black tracking-tighter text-slate-900">
-            FIRST<span className="text-orange-500">FIX</span>
-          </span>
+        <div className="hidden h-12 w-px bg-white/20 md:block" />
+        <div className="flex items-center justify-center opacity-90 transition-opacity">
+          <img src="/firstfix-v2.png" alt="FirstFix" className="h-10 w-auto brightness-0 invert" />
         </div>
       </div>
 

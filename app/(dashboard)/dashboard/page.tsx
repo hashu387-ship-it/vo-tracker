@@ -51,14 +51,19 @@ export default function DashboardPage() {
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
 
         <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="h-6 w-6 md:h-8 md:w-8 text-rsg-gold flex-shrink-0" />
-              <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-white leading-tight">
+          <div className="space-y-4">
+            <div className="flex items-center gap-6 mb-2">
+              {/* Logos */}
+              <img src="/rsg-logo.png" alt="RSG" className="h-12 w-auto brightness-0 invert opacity-90" />
+              <div className="h-8 w-px bg-white/20" />
+              <img src="/firstfix-v2.png" alt="FirstFix" className="h-8 w-auto brightness-0 invert opacity-90" />
+            </div>
+            <div>
+              <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-white leading-tight mt-2">
                 R06-HW2 SW Hotel 02<br className="md:hidden" /> First Fix-VO Log
               </h1>
             </div>
-            <p className="text-gray-300 text-sm md:text-lg pl-10">
+            <p className="text-gray-300 text-sm md:text-lg">
               {new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
             </p>
           </div>

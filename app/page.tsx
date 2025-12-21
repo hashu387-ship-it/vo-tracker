@@ -46,15 +46,11 @@ export default function LandingPage() {
           <div className="container relative mx-auto px-6 text-center z-10">
             {/* Logos */}
             <div className="mb-16 flex flex-col items-center justify-center gap-8 md:flex-row md:gap-16 animate-in fade-in slide-in-from-bottom-8 duration-700">
-              <div className="flex items-center gap-4 opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 py-4 px-8 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
-                <Waves className="h-12 w-12 text-white" />
-                <span className="text-4xl font-serif font-bold text-white tracking-wide">
-                  Red Sea
-                </span>
+              <div className="flex items-center justify-center opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 py-4 px-8 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
+                <img src="/rsg-logo.png" alt="Red Sea Global" className="h-16 w-auto brightness-0 invert" />
               </div>
               <div className="hidden h-16 w-px bg-gradient-to-b from-transparent via-white/30 to-transparent md:block" />
               <div className="flex items-center justify-center opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 py-4 px-8 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
-                {/* Using the real FirstFix logo from public folder */}
                 <img src="/firstfix-v2.png" alt="FirstFix" className="h-12 w-auto brightness-0 invert" />
               </div>
             </div>
