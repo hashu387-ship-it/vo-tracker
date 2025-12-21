@@ -167,9 +167,9 @@ function StatusRingCard({ status, label, count, amount, totalCount, isSelected, 
         }
         backdrop-blur-xl
       `}
-      style={{
-        ringColor: isSelected ? colors.ring : undefined,
-      }}
+      style={isSelected ? {
+        '--tw-ring-color': colors.ring,
+      } as React.CSSProperties : undefined}
     >
       {/* Background decoration */}
       <motion.div
