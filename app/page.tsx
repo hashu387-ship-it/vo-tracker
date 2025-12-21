@@ -53,27 +53,18 @@ export default function LandingPage() {
                 </span>
               </div>
               <div className="hidden h-16 w-px bg-gradient-to-b from-transparent via-white/30 to-transparent md:block" />
-              <div className="flex items-center gap-4 opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 py-4 px-8 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
-                <Building2 className="h-12 w-12 text-rsg-gold" />
-                <span className="text-4xl font-sans font-black tracking-tighter text-white">
-                  FIRST<span className="text-rsg-gold">FIX</span>
-                </span>
+              <div className="flex items-center justify-center opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 py-4 px-8 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
+                {/* Using the real FirstFix logo from public folder */}
+                <img src="/firstfix.png" alt="FirstFix" className="h-12 w-auto brightness-0 invert" />
               </div>
             </div>
 
             {/* Main Title */}
             <div className="mb-12 space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
-              <div className="inline-flex items-center border border-rsg-gold/30 bg-rsg-gold/10 px-4 py-1.5 text-sm font-medium text-rsg-gold mb-6 tracking-widest uppercase">
-                <span className="flex h-1.5 w-1.5 rounded-full bg-rsg-gold mr-3 animate-pulse"></span>
-                Official Project Portal
-              </div>
               <h1 className="text-4xl font-light tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
                 <span className="block font-medium mb-2">HW2 Commercial Register</span>
-                <span className="text-rsg-gold font-serif italic">Variation Order Log</span>
+                <span className="text-rsg-gold font-serif italic">Variation Order LOG</span>
               </h1>
-              <p className="mx-auto max-w-2xl text-lg text-gray-300 md:text-xl font-light leading-relaxed">
-                Secure, centralized management system for tracking variations, assessments, and approvals for the Red Sea Project.
-              </p>
             </div>
 
             {/* CTA Buttons */}
