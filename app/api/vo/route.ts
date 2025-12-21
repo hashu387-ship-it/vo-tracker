@@ -105,8 +105,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const data = validationResult.data;
+
+    // Sanitize data: convert empty strings to null for nullable fields
+    const sanitizedData = {
+      ...data,
+      assessmentValue: data.assessmentValue === '' ? null : data.assessmentValue,
+      proposalValue: data.proposalValue === '' ? null : data.proposalValue,
+      approvedAmount: data.approvedAmount === '' ? null : data.approvedAmount,
+      dvoIssuedDate: data.dvoIssuedDate === '' ? null : data.dvoIssuedDate,
+    };
+
     const vo = await prisma.vO.create({
-      data: validationResult.data,
+      data: sanitizedData as any,
     });
 
     return NextResponse.json({ data: vo }, { status: 201 });

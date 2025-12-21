@@ -6,6 +6,8 @@ import ExcelJS from 'exceljs';
 import { format, parseISO, startOfMonth, endOfMonth, eachMonthOfInterval } from 'date-fns';
 import { Prisma } from '@prisma/client';
 
+export const dynamic = 'force-dynamic';
+
 // Export options schema
 interface ExportOptions {
   includeCharts?: boolean;
