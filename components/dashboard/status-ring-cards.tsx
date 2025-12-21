@@ -215,8 +215,8 @@ function StatusRingCard({ status, label, count, amount, totalCount, isSelected, 
         </div>
 
         {/* Content */}
-        <div className="flex-1 min-w-0">
-          <h3 className={`text-sm font-semibold truncate ${isSelected ? colors.text : 'text-foreground'} transition-colors`}>
+        <div className="flex-1">
+          <h3 className="text-sm font-semibold text-foreground transition-colors whitespace-normal break-words">
             {label}
           </h3>
 
@@ -227,7 +227,7 @@ function StatusRingCard({ status, label, count, amount, totalCount, isSelected, 
               </span>
             </div>
 
-            <p className={`text-sm font-mono font-semibold ${isSelected ? 'text-foreground' : 'text-muted-foreground'} truncate`}>
+            <p className="text-sm font-mono font-semibold text-foreground">
               {formatCurrency(amount)}
             </p>
           </div>

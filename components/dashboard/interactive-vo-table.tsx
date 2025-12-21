@@ -146,14 +146,14 @@ function VORow({ vo, index, isExpanded, onToggle }: VORowProps) {
 
         {/* ID (Desktop) */}
         <div className="hidden sm:flex col-span-1 items-center gap-2">
-          <span className="text-sm font-mono text-muted-foreground font-bold group-hover:text-foreground transition-colors">
+          <span className="text-sm font-mono text-muted-foreground font-medium group-hover:text-foreground transition-colors">
             {String(index + 1).padStart(3, '0')}
           </span>
         </div>
 
         {/* Subject */}
         <div className="col-span-1 sm:col-span-5">
-          <h3 className={`text-sm font-semibold text-foreground group-hover:text-primary transition-colors leading-tight ${isExpanded ? '' : 'line-clamp-2'}`}>
+          <h3 className={`text-sm font-medium text-foreground group-hover:text-primary transition-colors leading-tight ${isExpanded ? '' : 'line-clamp-2'}`}>
             {vo.subject}
           </h3>
           {/* Mobile: Date & Value */}
@@ -178,7 +178,7 @@ function VORow({ vo, index, isExpanded, onToggle }: VORowProps) {
 
         {/* Value (Desktop) */}
         <div className="hidden sm:block col-span-2 text-right">
-          <div className={`font-mono text-sm font-bold ${isApproved ? 'text-emerald-600 dark:text-emerald-400' : 'text-foreground'}`}>
+          <div className={`font-mono text-sm font-medium ${isApproved ? 'text-emerald-600 dark:text-emerald-400' : 'text-foreground'}`}>
             {formatCurrency(displayValue)}
           </div>
           {isApproved && (

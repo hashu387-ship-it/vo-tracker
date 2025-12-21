@@ -9,7 +9,7 @@ async function main() {
     console.log('Clearing existing data...');
     await prisma.vO.deleteMany({});
 
-    const dataPath = path.join(__dirname, 'real-data.json');
+    const dataPath = path.join(process.cwd(), 'prisma', 'real-data.json');
     const rawData = fs.readFileSync(dataPath, 'utf-8');
     const realVOs = JSON.parse(rawData);
 
