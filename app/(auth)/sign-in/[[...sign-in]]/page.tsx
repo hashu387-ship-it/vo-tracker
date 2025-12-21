@@ -1,77 +1,89 @@
+```
 import { SignIn } from '@clerk/nextjs';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 export default function Page() {
   return (
-    <div className="flex min-h-screen flex-row relative overflow-hidden bg-rsg-navy">
-      {/* Left Side - Hero Image (Desktop) */}
-      <div className="hidden lg:block w-3/5 h-full relative overflow-hidden">
-        <div className="absolute inset-0 z-10 bg-gradient-to-r from-rsg-navy/40 to-rsg-navy/80 mix-blend-multiply" />
-        <div className="absolute inset-0 z-10 bg-gradient-to-t from-rsg-navy via-transparent to-transparent opacity-80" />
+    <div className="flex min-h-screen flex-col relative overflow-hidden text-white font-sans">
+      
+      {/* Background Image with Overlay (Same as Cover Page) */}
+      <div className="absolute inset-0 z-0">
         <img
           src="/rsg-new-hero.png"
           alt="Red Sea Project"
-          className="h-full w-full object-cover object-center scale-105 transition-transform duration-[20s] hover:scale-110"
+          className="h-full w-full object-cover object-center scale-105 animate-[pulse-subtle_15s_ease-in-out_infinite]"
         />
-        {/* Caption */}
-        <div className="absolute bottom-12 left-12 z-20 text-white max-w-lg">
-          <div className="h-1 w-20 bg-rsg-gold mb-6" />
-          <h1 className="text-4xl font-serif font-bold leading-tight mb-4">
-            Building for a <br />Sustainable Future.
-          </h1>
-          <p className="text-white/80 font-light tracking-wide text-lg">
-            Variation Order Management System
-          </p>
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-rsg-navy via-rsg-navy/70 to-rsg-navy/40 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10 mixed-blend-overlay" />
       </div>
 
-      {/* Right Side - Login Form */}
-      <div className="flex-1 flex flex-col items-center justify-center p-8 lg:p-16 relative bg-white sm:bg-slate-50 lg:bg-white min-h-screen">
+       {/* Abstract Animated Elements */}
+       <div className="absolute inset-0 opacity-30 pointer-events-none z-0">
+         <div className="absolute -top-24 -right-24 w-[300px] h-[300px] md:w-[800px] md:h-[800px] rounded-full border-[1px] border-white/10 blur-3xl animate-[spin_60s_linear_infinite]" />
+       </div>
 
-        {/* Mobile Background (Absolute) */}
-        <div className="absolute inset-0 lg:hidden z-0">
-          <img src="/rsg-new-hero.png" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-rsg-navy/90 mix-blend-multiply" />
+      {/* Nav / Back Button */}
+      <nav className="absolute top-0 left-0 w-full p-6 z-50">
+         <Link href="/">
+            <Button variant="ghost" className="text-white hover:text-rsg-gold hover:bg-white/10 gap-2">
+               <ArrowLeft className="h-4 w-4" />
+               Back to Home
+            </Button>
+         </Link>
+      </nav>
+
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center p-4">
+        
+        {/* Logos (Same as Cover Page) */}
+        <div className="mb-8 flex flex-col items-center justify-center gap-6 md:flex-row md:gap-16 animate-in fade-in slide-in-from-bottom-8 duration-700">
+          <div className="flex items-center justify-center bg-white/5 py-3 px-6 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
+            <img src="/rsg-logo.png" alt="Red Sea Global" className="h-10 md:h-12 w-auto brightness-0 invert" />
+          </div>
+          <div className="hidden h-12 w-px bg-white/30 md:block" />
+          <div className="flex items-center justify-center bg-white/5 py-3 px-6 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
+            <img src="/firstfix-v2.png" alt="FirstFix" className="h-6 md:h-8 w-auto brightness-0 invert" />
+          </div>
         </div>
 
-        <div className="z-10 w-full max-w-[400px] flex flex-col gap-8">
-          {/* Logos */}
-          <div className="flex items-center gap-6 mb-4">
-            <img src="/rsg-logo.png" alt="RSG" className="h-12 w-auto lg:brightness-100 lg:invert-0 brightness-0 invert" />
-            <div className="h-10 w-px bg-slate-300 lg:bg-slate-200" />
-            <img src="/firstfix-v2.png" alt="FirstFix" className="h-8 w-auto lg:brightness-100 lg:invert-0 brightness-0 invert" />
-          </div>
+        {/* Title */}
+        <div className="mb-10 text-center space-y-2 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
+          <h1 className="text-2xl font-light tracking-tight text-white sm:text-3xl">
+             Sign in to <span className="text-rsg-gold font-serif italic">VO Registry</span>
+          </h1>
+          <p className="text-white/60 font-light text-sm">Restricted Access - Internal Commercial Team Only</p>
+        </div>
 
-          <div className="mb-2">
-            <h2 className="text-2xl font-bold text-rsg-navy lg:text-slate-800 text-white mb-2 font-serif">Welcome Back</h2>
-            <p className="text-slate-400 lg:text-slate-500 text-sm">Sign in to access your dashboard</p>
-          </div>
+        {/* Sign In Component */}
+        <div className="animate-in fade-in zoom-in-95 duration-700 delay-200 w-full max-w-[400px]">
+           <SignIn
+             appearance={{
+               layout: { socialButtonsPlacement: "bottom" },
+               elements: {
+                 rootBox: "w-full",
+                 card: "bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl p-6 md:p-8",
+                 headerTitle: "hidden",
+                 headerSubtitle: "hidden",
+                 formButtonPrimary: "bg-rsg-gold hover:bg-[#B08D55] text-white transition-all h-10 shadow-lg font-bold tracking-wide uppercase text-xs w-full",
+                 formFieldInput: "bg-black/20 border-white/10 text-white placeholder:text-white/30 focus:border-rsg-gold focus:ring-rsg-gold/50 rounded-lg",
+                 formFieldLabel: "text-white/70 text-xs uppercase tracking-wider font-semibold",
+                 footerActionLink: "text-rsg-gold hover:text-white transition-colors",
+                 socialButtonsBlockButton: "bg-white text-rsg-navy hover:bg-white/90 border-none transition-colors",
+                 dividerLine: "bg-white/10",
+                 dividerText: "text-white/40",
+                 formFieldAction: "text-rsg-gold hover:text-white"
+               }
+             }}
+           />
+        </div>
 
-          <SignIn
-            appearance={{
-              layout: { socialButtonsPlacement: "bottom" },
-              elements: {
-                rootBox: "w-full",
-                card: "bg-white shadow-none p-0 border-none w-full",
-                headerTitle: "hidden", // We built our own header
-                headerSubtitle: "hidden",
-                formButtonPrimary: "bg-rsg-gold hover:bg-[#B08D55] text-white transition-all h-12 rounded-none uppercase tracking-widest text-xs font-bold shadow-sm",
-                formFieldInput: "rounded-none border-slate-200 focus:border-rsg-gold focus:ring-0 bg-slate-50 h-11",
-                formFieldLabel: "uppercase text-xs font-bold text-slate-500 tracking-wider mb-1.5",
-                footerActionLink: "text-rsg-gold hover:text-rsg-navy font-semibold",
-                socialButtonsBlockButton: "border-slate-200 rounded-none hover:bg-slate-50 h-11 text-slate-600 font-medium",
-                dividerLine: "bg-slate-100",
-                dividerText: "text-slate-400 capitalize"
-              }
-            }}
-          />
-
-          <div className="mt-8 pt-8 border-t border-slate-100 text-center">
-            <p className="text-[10px] text-slate-400 uppercase tracking-widest">
-              Restricted Access System
-            </p>
-          </div>
+        {/* Footer */}
+        <div className="mt-8 text-center text-[10px] text-white/30 tracking-widest uppercase">
+          <p>© 2025 VO Tracker. Red Sea Global Projects.</p>
         </div>
       </div>
     </div>
   );
 }
+```
