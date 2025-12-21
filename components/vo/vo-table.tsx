@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ChevronDown,
-  ChevronUp,
   Eye,
   Pencil,
   Trash2,
@@ -56,13 +55,13 @@ export function VOTable({ vos, isLoading, isAdmin, sortBy, sortOrder, onSort }: 
     try {
       await deleteMutation.mutateAsync(deleteId);
       toast({
-        title: '✓ VO deleted',
+        title: 'VO deleted',
         description: 'The Variation Order has been deleted successfully.',
       });
       setDeleteId(null);
     } catch (error) {
       toast({
-        title: '✗ Error',
+        title: 'Error',
         description: error instanceof Error ? error.message : 'Failed to delete VO',
         variant: 'destructive',
       });
@@ -71,11 +70,11 @@ export function VOTable({ vos, isLoading, isAdmin, sortBy, sortOrder, onSort }: 
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-3">
         {[...Array(5)].map((_, i) => (
           <div
             key={i}
-            className="h-20 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 animate-pulse"
+            className="h-20 rounded-xl bg-muted/50 animate-pulse"
           />
         ))}
       </div>
@@ -84,134 +83,210 @@ export function VOTable({ vos, isLoading, isAdmin, sortBy, sortOrder, onSort }: 
 
   if (vos.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-16 rounded-3xl bg-gradient-to-br from-blue-50 via-white to-amber-50 dark:from-slate-900 dark:via-slate-800 dark:to-blue-950 border-2 border-blue-100 dark:border-blue-900/30">
-        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-amber-500 flex items-center justify-center mb-6 shadow-2xl">
-          <FileText className="h-10 w-10 text-white" />
+      <div className="flex flex-col items-center justify-center p-12 rounded-2xl bg-muted/30 border border-border/50">
+        <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+          <FileText className="h-8 w-8 text-primary" />
         </div>
-        <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-amber-600 bg-clip-text text-transparent">
-          No Variation Orders Found
-        </h3>
-        <p className="text-slate-600 dark:text-slate-400">Start by creating your first VO</p>
+        <h3 className="text-lg font-semibold mb-1">No Variation Orders Found</h3>
+        <p className="text-muted-foreground text-sm">Start by creating your first VO</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {vos.map((vo, index) => {
         const isExpanded = expandedRows.has(vo.id);
 
         return (
           <motion.div
             key={vo.id}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
+            transition={{ delay: index * 0.03 }}
             className="group"
           >
-            {/* Main Row - Neomorphism Card */}
             <div
-              onClick={() => toggleRow(vo.id)}
-              className={`relative cursor-pointer transition-all duration-300 rounded-2xl p-6 ${isExpanded
-                  ? 'bg-gradient-to-br from-blue-50 via-white to-amber-50 dark:from-blue-950 dark:via-slate-900 dark:to-amber-950 shadow-2xl scale-[1.02]'
-                  : 'bg-gradient-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 shadow-lg hover:shadow-xl hover:scale-[1.01]'
-                }`}
-              style={{
-                boxShadow: isExpanded
-                  ? '12px 12px 24px rgba(0, 0, 0, 0.1), -12px -12px 24px rgba(255, 255, 255, 0.9), inset 2px 2px 4px rgba(255, 255, 255, 0.3)'
-                  : '8px 8px 16px rgba(0, 0, 0, 0.08), -8px -8px 16px rgba(255, 255, 255, 0.8)',
-              }}
+              className={`
+                relative rounded-xl border transition-all duration-300 overflow-hidden
+                ${isExpanded
+                  ? 'bg-card border-primary/20 shadow-lg'
+                  : 'bg-card/50 border-border/50 hover:border-border hover:bg-card hover:shadow-md'
+                }
+              `}
             >
-              <div className="flex items-center justify-between">
-                {/* Left Side - VO Info */}
-                <div className="flex items-center gap-6 flex-1">
-                  {/* Expand Icon */}
-                  <div
-                    className={`flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300 ${isExpanded
-                        ? 'bg-gradient-to-br from-blue-500 to-amber-500 shadow-lg'
-                        : 'bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 group-hover:from-blue-400 group-hover:to-amber-400'
-                      }`}
-                  >
-                    {isExpanded ? (
-                      <ChevronUp className="h-6 w-6 text-white" />
-                    ) : (
-                      <ChevronDown className="h-6 w-6 text-slate-600 dark:text-slate-300 group-hover:text-white transition-colors" />
+              {/* Color accent bar based on status */}
+              <div
+                className={`
+                  absolute left-0 top-0 bottom-0 w-1 transition-all
+                  ${vo.status === 'PendingWithFFC' ? 'bg-orange-500' : ''}
+                  ${vo.status === 'PendingWithRSG' ? 'bg-amber-500' : ''}
+                  ${vo.status === 'PendingWithRSGFFC' ? 'bg-yellow-500' : ''}
+                  ${vo.status === 'ApprovedAwaitingDVO' ? 'bg-cyan-500' : ''}
+                  ${vo.status === 'DVORRIssued' ? 'bg-emerald-500' : ''}
+                `}
+              />
+
+              {/* Main Row */}
+              <div
+                onClick={() => toggleRow(vo.id)}
+                className="cursor-pointer p-4 pl-5"
+              >
+                {/* Mobile Layout */}
+                <div className="sm:hidden space-y-3">
+                  {/* Top: ID + Status */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-muted-foreground">#{vo.id}</span>
+                    <StatusBadge status={vo.status} size="sm" />
+                  </div>
+
+                  {/* Subject - Normal weight, not bold */}
+                  <h3 className="text-sm font-medium text-foreground leading-snug pr-8">
+                    {vo.subject}
+                  </h3>
+
+                  {/* Meta info */}
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <div className="flex items-center gap-3">
+                      <span className="flex items-center gap-1">
+                        <Tag className="h-3 w-3" />
+                        {submissionTypeConfig[vo.submissionType]?.label || vo.submissionType}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Calendar className="h-3 w-3" />
+                        {formatDate(vo.submissionDate)}
+                      </span>
+                    </div>
+                    {vo.proposalValue && (
+                      <span className="font-medium text-foreground">
+                        {formatCurrency(vo.proposalValue)}
+                      </span>
                     )}
                   </div>
 
-                  {/* VO Subject */}
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                        #{vo.id}
-                      </span>
-                      <StatusBadge status={vo.status} />
-                    </div>
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                      {vo.subject}
-                    </h3>
-                    <div className="flex items-center gap-4 text-sm text-slate-600 dark:text-slate-400">
-                      <span className="flex items-center gap-1">
-                        <Tag className="h-4 w-4" />
-                        {submissionTypeConfig[vo.submissionType]?.label || vo.submissionType}
-                      </span>
-                      {vo.submissionDate && (
-                        <span className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          {formatDate(vo.submissionDate)}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Value Badge */}
-                  {vo.proposalValue && (
-                    <div className="hidden lg:flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950 dark:to-teal-950 border-2 border-emerald-200 dark:border-emerald-800">
-                      <DollarSign className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                      <div>
-                        <div className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
-                          Proposal Value
-                        </div>
-                        <div className="text-lg font-bold text-emerald-700 dark:text-emerald-300">
-                          {formatCurrency(vo.proposalValue)}
-                        </div>
-                      </div>
+                  {/* Actions */}
+                  {isAdmin && (
+                    <div className="flex items-center gap-2 pt-2 border-t border-border/50">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/vos/${vo.id}`);
+                        }}
+                        className="flex-1 h-8 text-xs gap-1.5"
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                        View
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/vos/${vo.id}/edit`);
+                        }}
+                        className="flex-1 h-8 text-xs gap-1.5"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                        Edit
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setDeleteId(vo.id);
+                        }}
+                        className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
                     </div>
                   )}
                 </div>
 
-                {/* Right Side - Actions */}
-                {isAdmin && (
-                  <div
-                    className="flex items-center gap-2 ml-4"
-                    onClick={(e) => e.stopPropagation()}
+                {/* Desktop Layout */}
+                <div className="hidden sm:flex items-center gap-4">
+                  {/* Expand Icon */}
+                  <motion.div
+                    animate={{ rotate: isExpanded ? 180 : 0 }}
+                    className="text-muted-foreground group-hover:text-foreground transition-colors"
                   >
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => router.push(`/vos/${vo.id}`)}
-                      className="h-10 w-10 p-0 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400"
-                    >
-                      <Eye className="h-5 w-5" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => router.push(`/vos/${vo.id}/edit`)}
-                      className="h-10 w-10 p-0 rounded-xl hover:bg-amber-100 dark:hover:bg-amber-900/30 hover:text-amber-600 dark:hover:text-amber-400"
-                    >
-                      <Pencil className="h-5 w-5" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setDeleteId(vo.id)}
-                      className="h-10 w-10 p-0 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-600 dark:hover:text-red-400"
-                    >
-                      <Trash2 className="h-5 w-5" />
-                    </Button>
+                    <ChevronDown className="h-5 w-5" />
+                  </motion.div>
+
+                  {/* Main Content */}
+                  <div className="flex-1 min-w-0 grid grid-cols-12 gap-4 items-center">
+                    {/* ID */}
+                    <div className="col-span-1">
+                      <span className="text-sm font-mono text-muted-foreground">#{vo.id}</span>
+                    </div>
+
+                    {/* Subject + Type - Normal weight */}
+                    <div className="col-span-5">
+                      <h3 className="text-sm font-medium text-foreground truncate group-hover:text-primary transition-colors">
+                        {vo.subject}
+                      </h3>
+                      <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
+                        <Tag className="h-3 w-3" />
+                        <span>{submissionTypeConfig[vo.submissionType]?.label || vo.submissionType}</span>
+                      </div>
+                    </div>
+
+                    {/* Date */}
+                    <div className="col-span-2 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-1.5">
+                        <Calendar className="h-3.5 w-3.5" />
+                        {formatDate(vo.submissionDate)}
+                      </div>
+                    </div>
+
+                    {/* Value */}
+                    <div className="col-span-2 text-right">
+                      {vo.proposalValue && (
+                        <span className="text-sm font-medium text-foreground">
+                          {formatCurrency(vo.proposalValue)}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Status */}
+                    <div className="col-span-2 flex justify-end">
+                      <StatusBadge status={vo.status} size="sm" />
+                    </div>
                   </div>
-                )}
+
+                  {/* Actions */}
+                  {isAdmin && (
+                    <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => router.push(`/vos/${vo.id}`)}
+                        className="h-8 w-8 p-0 hover:bg-primary/10 hover:text-primary"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => router.push(`/vos/${vo.id}/edit`)}
+                        className="h-8 w-8 p-0 hover:bg-amber-500/10 hover:text-amber-600"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setDeleteId(vo.id)}
+                        className="h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Expanded Details */}
@@ -221,177 +296,113 @@ export function VOTable({ vos, isLoading, isAdmin, sortBy, sortOrder, onSort }: 
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="mt-6 pt-6 border-t-2 border-gradient-to-r from-blue-200 via-slate-200 to-amber-200 dark:from-blue-800 dark:via-slate-700 dark:to-amber-800"
+                    transition={{ duration: 0.2 }}
+                    className="border-t border-border/50"
                   >
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {/* Financial Information */}
-                      <div className="p-5 rounded-xl bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-950/50 dark:to-slate-800/50 border border-emerald-200 dark:border-emerald-800/50">
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="p-2 rounded-lg bg-emerald-500">
-                            <DollarSign className="h-5 w-5 text-white" />
+                    <div className="p-4 pl-5 bg-muted/30">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {/* Financial Information */}
+                        <div className="p-4 rounded-lg bg-background border border-border/50">
+                          <div className="flex items-center gap-2 mb-3">
+                            <DollarSign className="h-4 w-4 text-emerald-600" />
+                            <h4 className="text-sm font-medium">Financial Details</h4>
                           </div>
-                          <h4 className="font-bold text-emerald-900 dark:text-emerald-100">
-                            Financial Details
-                          </h4>
-                        </div>
-                        <div className="space-y-3">
-                          {vo.assessmentValue !== null && (
-                            <div>
-                              <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">
-                                Assessment Value
-                              </div>
-                              <div className="text-lg font-bold text-emerald-700 dark:text-emerald-300">
-                                {formatCurrency(vo.assessmentValue)}
-                              </div>
-                            </div>
-                          )}
-                          {vo.proposalValue !== null && (
-                            <div>
-                              <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">
-                                Proposal Value
-                              </div>
-                              <div className="text-lg font-bold text-emerald-700 dark:text-emerald-300">
-                                {formatCurrency(vo.proposalValue)}
-                              </div>
-                            </div>
-                          )}
-                          {vo.approvedAmount !== null && (
-                            <div>
-                              <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">
-                                Approved Amount
-                              </div>
-                              <div className="text-lg font-bold text-emerald-700 dark:text-emerald-300">
-                                {formatCurrency(vo.approvedAmount)}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Reference Information */}
-                      <div className="p-5 rounded-xl bg-gradient-to-br from-blue-50 to-white dark:from-blue-950/50 dark:to-slate-800/50 border border-blue-200 dark:border-blue-800/50">
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="p-2 rounded-lg bg-blue-500">
-                            <FileText className="h-5 w-5 text-white" />
-                          </div>
-                          <h4 className="font-bold text-blue-900 dark:text-blue-100">
-                            References
-                          </h4>
-                        </div>
-                        <div className="space-y-3">
-                          {vo.submissionReference && (
-                            <div>
-                              <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">
-                                Submission Ref
-                              </div>
-                              <div className="text-sm font-semibold text-blue-700 dark:text-blue-300">
-                                {vo.submissionReference}
-                              </div>
-                            </div>
-                          )}
-                          {vo.responseReference && (
-                            <div>
-                              <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">
-                                Response Ref
-                              </div>
-                              <div className="text-sm font-semibold text-blue-700 dark:text-blue-300">
-                                {vo.responseReference}
-                              </div>
-                            </div>
-                          )}
-                          {vo.vorReference && (
-                            <div>
-                              <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">
-                                VOR Ref
-                              </div>
-                              <div className="text-sm font-semibold text-blue-700 dark:text-blue-300">
-                                {vo.vorReference}
-                              </div>
-                            </div>
-                          )}
-                          {vo.dvoReference && (
-                            <div>
-                              <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">
-                                DVO Ref
-                              </div>
-                              <div className="text-sm font-semibold text-blue-700 dark:text-blue-300">
-                                {vo.dvoReference}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Dates & Status */}
-                      <div className="p-5 rounded-xl bg-gradient-to-br from-amber-50 to-white dark:from-amber-950/50 dark:to-slate-800/50 border border-amber-200 dark:border-amber-800/50">
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="p-2 rounded-lg bg-amber-500">
-                            <Clock className="h-5 w-5 text-white" />
-                          </div>
-                          <h4 className="font-bold text-amber-900 dark:text-amber-100">
-                            Timeline
-                          </h4>
-                        </div>
-                        <div className="space-y-3">
-                          {vo.submissionDate && (
-                            <div>
-                              <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">
-                                Submission Date
-                              </div>
-                              <div className="text-sm font-semibold text-amber-700 dark:text-amber-300">
-                                {formatDate(vo.submissionDate)}
-                              </div>
-                            </div>
-                          )}
-                          {vo.dvoIssuedDate && (
-                            <div>
-                              <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">
-                                DVO Issued Date
-                              </div>
-                              <div className="text-sm font-semibold text-amber-700 dark:text-amber-300">
-                                {formatDate(vo.dvoIssuedDate)}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Remarks */}
-                      {(vo.remarks || vo.actionNotes) && (
-                        <div className="md:col-span-2 lg:col-span-3 p-5 rounded-xl bg-gradient-to-br from-purple-50 to-white dark:from-purple-950/50 dark:to-slate-800/50 border border-purple-200 dark:border-purple-800/50">
-                          <div className="flex items-center gap-2 mb-4">
-                            <div className="p-2 rounded-lg bg-purple-500">
-                              <MessageSquare className="h-5 w-5 text-white" />
-                            </div>
-                            <h4 className="font-bold text-purple-900 dark:text-purple-100">
-                              Notes & Remarks
-                            </h4>
-                          </div>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {vo.remarks && (
-                              <div>
-                                <div className="text-xs text-slate-600 dark:text-slate-400 mb-2">
-                                  Remarks
-                                </div>
-                                <div className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-                                  {vo.remarks}
-                                </div>
+                          <div className="space-y-2 text-sm">
+                            {vo.proposalValue !== null && (
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">Proposal</span>
+                                <span className="font-medium">{formatCurrency(vo.proposalValue)}</span>
                               </div>
                             )}
-                            {vo.actionNotes && (
-                              <div>
-                                <div className="text-xs text-slate-600 dark:text-slate-400 mb-2">
-                                  Action Notes
-                                </div>
-                                <div className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-                                  {vo.actionNotes}
-                                </div>
+                            {vo.assessmentValue !== null && (
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">Assessment</span>
+                                <span className="font-medium">{formatCurrency(vo.assessmentValue)}</span>
+                              </div>
+                            )}
+                            {vo.approvedAmount !== null && (
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">Approved</span>
+                                <span className="font-medium text-emerald-600">{formatCurrency(vo.approvedAmount)}</span>
                               </div>
                             )}
                           </div>
                         </div>
-                      )}
+
+                        {/* Reference Information */}
+                        <div className="p-4 rounded-lg bg-background border border-border/50">
+                          <div className="flex items-center gap-2 mb-3">
+                            <FileText className="h-4 w-4 text-primary" />
+                            <h4 className="text-sm font-medium">References</h4>
+                          </div>
+                          <div className="space-y-2 text-sm">
+                            {vo.submissionReference && (
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">Submission</span>
+                                <span className="font-mono text-xs">{vo.submissionReference}</span>
+                              </div>
+                            )}
+                            {vo.vorReference && (
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">VOR</span>
+                                <span className="font-mono text-xs">{vo.vorReference}</span>
+                              </div>
+                            )}
+                            {vo.dvoReference && (
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">DVO</span>
+                                <span className="font-mono text-xs">{vo.dvoReference}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Timeline */}
+                        <div className="p-4 rounded-lg bg-background border border-border/50">
+                          <div className="flex items-center gap-2 mb-3">
+                            <Clock className="h-4 w-4 text-amber-600" />
+                            <h4 className="text-sm font-medium">Timeline</h4>
+                          </div>
+                          <div className="space-y-2 text-sm">
+                            {vo.submissionDate && (
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">Submitted</span>
+                                <span>{formatDate(vo.submissionDate)}</span>
+                              </div>
+                            )}
+                            {vo.dvoIssuedDate && (
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">DVO Issued</span>
+                                <span>{formatDate(vo.dvoIssuedDate)}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Remarks */}
+                        {(vo.remarks || vo.actionNotes) && (
+                          <div className="md:col-span-3 p-4 rounded-lg bg-background border border-border/50">
+                            <div className="flex items-center gap-2 mb-3">
+                              <MessageSquare className="h-4 w-4 text-purple-600" />
+                              <h4 className="text-sm font-medium">Notes & Remarks</h4>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                              {vo.remarks && (
+                                <div>
+                                  <span className="text-muted-foreground text-xs block mb-1">Remarks</span>
+                                  <p className="text-foreground leading-relaxed">{vo.remarks}</p>
+                                </div>
+                              )}
+                              {vo.actionNotes && (
+                                <div>
+                                  <span className="text-muted-foreground text-xs block mb-1">Action Notes</span>
+                                  <p className="text-foreground leading-relaxed">{vo.actionNotes}</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </motion.div>
                 )}
