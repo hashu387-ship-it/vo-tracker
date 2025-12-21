@@ -116,9 +116,9 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
         </h2>
       </div>
 
-      <div className="bg-white border border-slate-200 shadow-sm rounded-none overflow-hidden">
+      <div className="bg-white border border-slate-200 shadow-sm rounded-xl overflow-hidden">
         {/* Table Header (Desktop) */}
-        <div className="hidden sm:grid grid-cols-12 gap-4 px-3 py-2 bg-slate-50/80 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+        <div className="hidden sm:grid grid-cols-12 gap-6 px-6 py-4 bg-slate-50/50 border-b border-slate-200 text-xs font-semibold text-rsg-navy/80 uppercase tracking-widest">
           <div className="col-span-1">#</div>
           <div className="col-span-6">Subject</div>
           <div className="col-span-2 text-right">Value</div>
@@ -131,33 +131,33 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
             const statusColors = STATUS_COLORS[vo.status] || STATUS_COLORS.PendingWithFFC;
 
             return (
-              <div key={vo.id} className="group transition-colors duration-200 hover:bg-slate-50/40 bg-white">
+              <div key={vo.id} className="group transition-all duration-200 hover:bg-slate-50/80 bg-white">
                 {/* Main Row */}
                 <div
                   onClick={() => toggleRow(vo.id)}
-                  className="cursor-pointer px-3 py-2 grid grid-cols-1 sm:grid-cols-12 gap-4 items-center min-h-[40px]"
+                  className="cursor-pointer px-6 py-4 grid grid-cols-1 sm:grid-cols-12 gap-6 items-center min-h-[60px]"
                 >
                   {/* Mobile Top Row: ID & Status */}
-                  <div className="sm:hidden flex justify-between items-center w-full mb-1">
-                    <span className="text-[10px] font-mono text-slate-400">#{index + 1}</span>
-                    <Badge variant="outline" className={`${statusColors.bg} ${statusColors.text} border-none rounded-none px-1.5 py-0 text-[9px] h-5`}>
+                  <div className="sm:hidden flex justify-between items-center w-full mb-2">
+                    <span className="text-xs font-mono text-slate-400">#{String(index + 1).padStart(2, '0')}</span>
+                    <Badge variant="outline" className={`${statusColors.bg} ${statusColors.text} border-none rounded-full px-2.5 py-0.5 text-[10px] font-semibold shadow-sm`}>
                       {STATUS_LABELS[vo.status]?.replace('Pending with ', 'Pending ')}
                     </Badge>
                   </div>
 
                   {/* ID (Desktop) */}
-                  <div className="hidden sm:block col-span-1 text-xs font-mono text-slate-400">
+                  <div className="hidden sm:block col-span-1 text-sm font-mono text-slate-400 font-medium">
                     {String(index + 1).padStart(2, '0')}
                   </div>
 
                   {/* Subject */}
                   <div className="col-span-1 sm:col-span-6">
-                    <h3 className={`text-xs sm:text-sm font-medium text-rsg-navy group-hover:text-rsg-gold transition-colors ${isExpanded ? 'whitespace-normal leading-relaxed' : 'truncate'}`}>
+                    <h3 className={`text-sm font-medium text-rsg-navy group-hover:text-rsg-gold transition-colors ${isExpanded ? 'whitespace-normal leading-relaxed' : 'truncate'}`}>
                       {vo.subject}
                     </h3>
-                    <div className="sm:hidden mt-1 flex justify-between items-center">
-                      <span className="text-[10px] text-slate-500 font-mono">{formatDate(vo.submissionDate)}</span>
-                      <div className="font-mono text-xs font-bold text-rsg-navy">
+                    <div className="sm:hidden mt-2 flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-slate-100">
+                      <span className="text-xs text-slate-500 font-medium">{formatDate(vo.submissionDate)}</span>
+                      <div className="font-mono text-sm font-bold text-rsg-navy">
                         {formatCurrency(vo.approvedAmount || vo.proposalValue)}
                       </div>
                     </div>
@@ -165,18 +165,21 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
 
                   {/* Value (Desktop) */}
                   <div className="hidden sm:block col-span-2 text-right">
-                    <div className={`font-mono text-xs font-semibold ${vo.approvedAmount ? 'text-emerald-700' : 'text-slate-600'}`}>
+                    <div className={`font-mono text-sm font-bold ${vo.approvedAmount ? 'text-emerald-700' : 'text-slate-700'}`}>
                       {formatCurrency(vo.approvedAmount || vo.proposalValue)}
                     </div>
+                    {vo.approvedAmount && <span className="text-[10px] text-emerald-600/80 font-medium uppercase tracking-wide">Approved</span>}
                   </div>
 
                   {/* Status (Desktop) */}
-                  <div className="hidden sm:flex col-span-3 justify-end items-center gap-3">
-                    <span className="text-[10px] text-slate-400 font-mono">{formatDate(vo.submissionDate)}</span>
-                    <Badge variant="secondary" className={`${statusColors.bg} ${statusColors.text} rounded-sm px-1.5 py-0 font-medium uppercase text-[9px] tracking-wide border-0 h-5`}>
+                  <div className="hidden sm:flex col-span-3 justify-end items-center gap-4">
+                    <span className="text-xs text-slate-400 font-medium">{formatDate(vo.submissionDate)}</span>
+                    <Badge variant="secondary" className={`${statusColors.bg} ${statusColors.text} rounded-full px-3 py-1 font-semibold uppercase text-[10px] tracking-wide border-0 shadow-sm min-w-[100px] justify-center`}>
                       {STATUS_LABELS[vo.status]?.replace('Pending with ', 'Pending ')}
                     </Badge>
-                    {isExpanded ? <ChevronDown className="h-3 w-3 text-rsg-gold" /> : <ChevronRight className="h-3 w-3 text-slate-300" />}
+                    <div className={`p-1.5 rounded-full transition-colors ${isExpanded ? 'bg-rsg-gold/10 text-rsg-gold' : 'text-slate-300 group-hover:text-slate-400'}`}>
+                      {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                    </div>
                   </div>
                 </div>
 
@@ -188,63 +191,61 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="overflow-hidden bg-slate-50/30 border-t border-slate-100/50 shadow-inner"
+                      className="overflow-hidden bg-slate-50/50 border-t border-slate-100"
                     >
-                      <div className="p-3 sm:px-12 sm:py-4 grid gap-4 grid-cols-1 lg:grid-cols-12 text-xs">
+                      <div className="p-6 sm:px-12 sm:py-8 grid gap-8 grid-cols-1 lg:grid-cols-12 text-sm bg-gradient-to-b from-slate-50/50 to-white">
                         {/* Details Column */}
-                        <div className="lg:col-span-8 space-y-3">
+                        <div className="lg:col-span-8 space-y-6">
                           {/* References Grid */}
-                          <div className="flex flex-wrap gap-4 sm:gap-8 p-3 bg-white border border-slate-100 rounded-lg shadow-sm">
+                          <div className="flex flex-wrap gap-6 sm:gap-12 p-5 bg-white border border-slate-200/60 rounded-xl shadow-sm hover:shadow-md transition-shadow">
                             {vo.submissionReference && (
                               <div>
-                                <p className="text-[9px] uppercase tracking-wider text-slate-400 mb-0.5">Ref No</p>
-                                <p className="font-mono text-rsg-navy">{vo.submissionReference}</p>
+                                <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1.5">Ref No</p>
+                                <p className="font-mono text-rsg-navy font-semibold text-base">{vo.submissionReference}</p>
                               </div>
                             )}
                             {vo.vorReference && (
                               <div>
-                                <p className="text-[9px] uppercase tracking-wider text-slate-400 mb-0.5">VOR Ref</p>
-                                <p className="font-mono text-rsg-navy">{vo.vorReference}</p>
+                                <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1.5">VOR Ref</p>
+                                <p className="font-mono text-rsg-navy font-semibold text-base">{vo.vorReference}</p>
                               </div>
                             )}
                             {vo.dvoReference && (
                               <div>
-                                <p className="text-[9px] uppercase tracking-wider text-slate-400 mb-0.5">DVO Ref</p>
-                                <p className="font-mono text-rsg-navy">{vo.dvoReference}</p>
+                                <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1.5">DVO Ref</p>
+                                <p className="font-mono text-rsg-navy font-semibold text-base">{vo.dvoReference}</p>
                               </div>
                             )}
                           </div>
 
                           {/* Notes */}
                           {(vo.remarks) && (
-                            <div className="pl-1 border-l-2 border-rsg-gold/20">
-                              <p className="text-[9px] uppercase tracking-wider text-slate-400 mb-1">Remarks</p>
-                              <p className="text-slate-600 leading-relaxed font-light">{vo.remarks}</p>
+                            <div className="pl-4 border-l-2 border-rsg-gold/30">
+                              <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-2">Remarks</p>
+                              <p className="text-slate-600 leading-relaxed font-light text-base">{vo.remarks}</p>
                             </div>
                           )}
                         </div>
 
                         {/* Actions Column */}
-                        <div className="lg:col-span-4 flex items-center justify-end gap-2">
+                        <div className="lg:col-span-4 flex items-center justify-end gap-3">
                           <Button
-                            size="sm"
                             onClick={(e) => {
                               e.stopPropagation();
                               window.location.href = `/vos/${vo.id}/edit`;
                             }}
-                            className="bg-white border border-rsg-gold/50 text-rsg-gold hover:bg-rsg-gold hover:text-white transition-colors h-8 px-4 text-[10px] uppercase tracking-widest font-semibold shadow-sm"
+                            className="bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-rsg-navy hover:border-slate-300 transition-all h-10 px-6 text-xs uppercase tracking-widest font-bold shadow-sm rounded-lg"
                           >
-                            Edit
+                            Edit Record
                           </Button>
                           <Button
-                            size="sm"
                             onClick={(e) => {
                               e.stopPropagation();
                               window.location.href = `/vos/${vo.id}`;
                             }}
-                            className="bg-rsg-navy text-white hover:bg-slate-800 transition-colors h-8 px-4 text-[10px] uppercase tracking-widest font-semibold shadow-sm"
+                            className="bg-rsg-navy text-white hover:bg-rsg-navy/90 hover:shadow-md transition-all h-10 px-6 text-xs uppercase tracking-widest font-bold shadow-sm rounded-lg"
                           >
-                            View Full
+                            View Full Details
                           </Button>
                         </div>
                       </div>
