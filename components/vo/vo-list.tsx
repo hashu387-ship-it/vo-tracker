@@ -90,32 +90,22 @@ export function VOList({ isAdmin = false }: VOListProps) {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Variation Orders</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl font-bold tracking-tight">Variation Orders</h1>
+          <p className="text-muted-foreground text-sm">
             Manage and track all variation orders for your project
           </p>
         </div>
-        <div className="flex gap-2">
-          {isAdmin && (
-            <>
-              <ExportDialog
-                searchParams={{
-                  search: debouncedSearch,
-                  status: status && status !== 'all' ? status : undefined,
-                  submissionType: submissionType && submissionType !== 'all' ? submissionType : undefined,
-                  sortBy,
-                  sortOrder,
-                }}
-              />
-              <Link href="/vos/new">
-                <Button className="gap-2">
-                  <Plus className="h-4 w-4" />
-                  New VO
-                </Button>
-              </Link>
-            </>
-          )}
-        </div>
+        {isAdmin && (
+          <ExportDialog
+            searchParams={{
+              search: debouncedSearch,
+              status: status && status !== 'all' ? status : undefined,
+              submissionType: submissionType && submissionType !== 'all' ? submissionType : undefined,
+              sortBy,
+              sortOrder,
+            }}
+          />
+        )}
       </div>
 
       <VOFilters
