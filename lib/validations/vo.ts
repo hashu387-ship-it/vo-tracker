@@ -13,18 +13,18 @@ export const VOStatusEnum = z.enum([
 export type VOStatus = z.infer<typeof VOStatusEnum>;
 
 export const createVOSchema = z.object({
-  subject: z.string().min(1, 'Subject is required').max(500, 'Subject is too long'),
-  submissionType: SubmissionTypeEnum,
+  subject: z.string().default('New Variation Order'),
+  submissionType: SubmissionTypeEnum.default('VO'),
   submissionReference: z.string().max(100).nullable().optional(),
   responseReference: z.string().max(100).nullable().optional(),
-  submissionDate: z.coerce.date(),
-  assessmentValue: z.coerce.number().min(0).nullable().optional(),
-  proposalValue: z.coerce.number().min(0).nullable().optional(),
-  approvedAmount: z.coerce.number().min(0).nullable().optional(),
+  submissionDate: z.coerce.date().default(() => new Date()),
+  assessmentValue: z.coerce.number().min(0).nullable().optional().or(z.literal('')),
+  proposalValue: z.coerce.number().min(0).nullable().optional().or(z.literal('')),
+  approvedAmount: z.coerce.number().min(0).nullable().optional().or(z.literal('')),
   status: VOStatusEnum.default('PendingWithFFC'),
   vorReference: z.string().max(100).nullable().optional(),
   dvoReference: z.string().max(100).nullable().optional(),
-  dvoIssuedDate: z.coerce.date().nullable().optional(),
+  dvoIssuedDate: z.coerce.date().nullable().optional().or(z.literal('')),
   remarks: z.string().max(2000).nullable().optional(),
   actionNotes: z.string().max(2000).nullable().optional(),
 });

@@ -2,81 +2,79 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    /* Modern Light Theme (Linear-inspired) */
-    --background: 0 0% 100%;
-    --foreground: 240 10% 4%;
-    /* Zinc 950 */
+:root {
+  /* Premium Light Theme (Violet/Slate) */
+  --background: 240 10% 98%;
+  /* Slightly cooler white */
+  --foreground: 240 10% 3.9%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 4%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 4%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
 
-    --primary: 240 5.9% 10%;
-    /* Zinc 900 */
-    --primary-foreground: 0 0% 98%;
+  /* Primary: Vibrant Violet/Indigo */
+  --primary: 252 59% 48%;
+  /* #6366F1 / Indigo-500 */
+  --primary-foreground: 0 0% 98%;
 
-    --secondary: 240 4.8% 95.9%;
-    /* Zinc 100 */
-    --secondary-foreground: 240 5.9% 10%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
 
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    /* Zinc 500 */
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
 
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+  --accent: 252 59% 96%;
+  /* Very light indigo */
+  --accent-foreground: 252 59% 48%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
 
-    --border: 240 5.9% 90%;
-    /* Zinc 200 */
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 252 59% 48%;
 
-    --radius: 0.5rem;
-    /* Corner radius reduction for cleaner look */
-  }
-
-  .dark {
-    /* Modern Dark Theme (Linear-inspired) */
-    --background: 240 10% 4%;
-    /* Zinc 950 base */
-    --foreground: 0 0% 98%;
-
-    --card: 240 10% 6%;
-    /* Slightly lighter than bg */
-    --card-foreground: 0 0% 98%;
-
-    --popover: 240 10% 4%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-
-    --secondary: 240 3.7% 15.9%;
-    /* Zinc 800 */
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    /* Zinc 400 */
-
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-  }
+  --radius: 0.75rem;
+  /* More rounded for modern feel */
 }
+
+.dark {
+  /* Premium Dark Theme (Deep Blue/Slate) */
+  --background: 222 47% 11%;
+  /* #0f172a - Slate 900 */
+  --foreground: 210 40% 98%;
+
+  --card: 222 47% 10%;
+  /* Slightly darker than bg */
+  --card-foreground: 210 40% 98%;
+
+  --popover: 222 47% 11%;
+  --popover-foreground: 210 40% 98%;
+
+  /* Primary: Lighter Indigo for dark mode */
+  --primary: 252 59% 60%;
+  /* #818cf8 */
+  --primary-foreground: 222 47% 11%;
+
+  --secondary: 217 32% 17%;
+  --secondary-foreground: 210 40% 98%;
+
+  --muted: 217 32% 17%;
+  --muted-foreground: 215 20.2% 65.1%;
+
+  --accent: 217 32% 17%;
+  --accent-foreground: 210 40% 98%;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 217 32% 17%;
+  --input: 217 32% 17%;
+  --ring: 252 59% 60%;
+}
+
 
 @layer base {
   * {
@@ -117,6 +115,14 @@
     z-index: 50;
     opacity: 0.03;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  .neo-card {
+    @apply bg-gradient-to-br from-card to-secondary/50 border border-border/50 shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+
+  .neo-card-inset {
+    @apply bg-secondary/50 shadow-inner border border-border/10;
   }
 }
 
@@ -182,7 +188,7 @@
   }
 
   /* Optimize spacing for print */
-  .space-y-8 > * + * {
+  .space-y-8>*+* {
     margin-top: 1rem !important;
   }
 
@@ -198,7 +204,7 @@
   }
 
   /* Ensure table fits on page */
-  .space-y-3 > * + * {
+  .space-y-3>*+* {
     margin-top: 0.25rem !important;
   }
 

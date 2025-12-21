@@ -1,49 +1,51 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronRight, DollarSign, FileText, Calendar, Tag, MessageSquare, User } from 'lucide-react';
+import { motion, AnimatePresence, useSpring, useTransform } from 'framer-motion';
+import { ChevronDown, ChevronRight, DollarSign, FileText, Calendar, Tag, MessageSquare, User, CheckCircle2 } from 'lucide-react';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useEffect } from 'react';
 import { useVOs } from '@/lib/hooks/use-vos';
 import { Skeleton } from '@/components/ui/skeleton';
+import { AnimatedNumber } from '@/components/ui/animated-number';
 
 const STATUS_COLORS: Record<string, { bg: string; text: string; border: string; gradient: string; lightBg: string }> = {
   PendingWithFFC: {
-    bg: 'bg-orange-50 dark:bg-orange-950',
+    bg: 'bg-orange-50/50 dark:bg-orange-950/30',
     text: 'text-orange-700 dark:text-orange-300',
-    border: 'border-orange-200 dark:border-orange-800',
+    border: 'border-orange-200/50 dark:border-orange-800/50',
     gradient: 'from-orange-500 to-orange-600',
     lightBg: 'from-orange-50/50 to-orange-100/30 dark:from-orange-950/30 dark:to-orange-900/20',
   },
   PendingWithRSG: {
-    bg: 'bg-amber-50 dark:bg-amber-950',
+    bg: 'bg-amber-50/50 dark:bg-amber-950/30',
     text: 'text-amber-700 dark:text-amber-300',
-    border: 'border-amber-200 dark:border-amber-800',
+    border: 'border-amber-200/50 dark:border-amber-800/50',
     gradient: 'from-amber-500 to-amber-600',
     lightBg: 'from-amber-50/50 to-amber-100/30 dark:from-amber-950/30 dark:to-amber-900/20',
   },
   PendingWithRSGFFC: {
-    bg: 'bg-yellow-50 dark:bg-yellow-950',
+    bg: 'bg-yellow-50/50 dark:bg-yellow-950/30',
     text: 'text-yellow-700 dark:text-yellow-300',
-    border: 'border-yellow-200 dark:border-yellow-800',
+    border: 'border-yellow-200/50 dark:border-yellow-800/50',
     gradient: 'from-yellow-400 to-yellow-500',
     lightBg: 'from-yellow-50/50 to-yellow-100/30 dark:from-yellow-950/30 dark:to-yellow-900/20',
   },
   ApprovedAwaitingDVO: {
-    bg: 'bg-cyan-50 dark:bg-cyan-950',
+    bg: 'bg-cyan-50/50 dark:bg-cyan-950/30',
     text: 'text-cyan-700 dark:text-cyan-300',
-    border: 'border-cyan-200 dark:border-cyan-800',
+    border: 'border-cyan-200/50 dark:border-cyan-800/50',
     gradient: 'from-cyan-500 to-cyan-600',
     lightBg: 'from-cyan-50/50 to-cyan-100/30 dark:from-cyan-950/30 dark:to-cyan-900/20',
   },
   DVORRIssued: {
-    bg: 'bg-green-50 dark:bg-green-950',
-    text: 'text-green-700 dark:text-green-300',
-    border: 'border-green-200 dark:border-green-800',
-    gradient: 'from-green-500 to-green-600',
-    lightBg: 'from-green-50/50 to-green-100/30 dark:from-green-950/30 dark:to-green-900/20',
+    bg: 'bg-emerald-50/50 dark:bg-emerald-950/30',
+    text: 'text-emerald-700 dark:text-emerald-300',
+    border: 'border-emerald-200/50 dark:border-emerald-800/50',
+    gradient: 'from-emerald-500 to-emerald-600',
+    lightBg: 'from-emerald-50/50 to-emerald-100/30 dark:from-emerald-950/30 dark:to-emerald-900/20',
   },
 };
 
@@ -85,226 +87,252 @@ export function DashboardVOTable() {
 
   if (vos.length === 0) {
     return (
-      <div className="rounded-2xl bg-gradient-to-br from-blue-50 via-white to-amber-50 dark:from-blue-950 dark:via-slate-900 dark:to-amber-950 p-12 text-center shadow-lg">
-        <FileText className="mx-auto h-16 w-16 text-slate-400 mb-4" />
-        <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-2">
+      <div className="rounded-2xl bg-gradient-to-br from-primary/5 via-card to-secondary/10 p-12 text-center border border-border/50">
+        <div className="mx-auto h-20 w-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 animate-pulse-subtle">
+          <FileText className="h-10 w-10 text-primary" />
+        </div>
+        <h3 className="text-xl font-bold text-foreground mb-2">
           No Variation Orders Found
         </h3>
-        <p className="text-slate-500 dark:text-slate-400">
-          Create your first VO to get started
+        <p className="text-muted-foreground max-w-sm mx-auto">
+          Start by creating your first variation order to track its progress.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6">
-        Recent Variation Orders
-      </h2>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+          Recent Orders
+        </h2>
+      </div>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {vos.map((vo, index) => {
           const isExpanded = expandedRows.has(vo.id);
           const statusColors = STATUS_COLORS[vo.status] || STATUS_COLORS.PendingWithFFC;
 
           return (
             <motion.div
-              key={vo.id}
               layout
-              className={`relative overflow-hidden rounded-lg transition-all duration-300 bg-white dark:bg-slate-800 ${isExpanded
-                  ? 'shadow-lg border-2 border-blue-200 dark:border-blue-800'
-                  : 'shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md'
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              key={vo.id}
+              className={`relative overflow-hidden rounded-xl transition-all duration-300 
+                ${isExpanded
+                  ? 'bg-card shadow-lg ring-2 ring-primary/20'
+                  : 'bg-card/50 hover:bg-card border border-border/50 hover:border-border hover:shadow-md'
                 }`}
             >
-              {/* Collapsed View - Name, Amount, Status */}
               <div
                 onClick={() => toggleRow(vo.id)}
-                className="cursor-pointer p-3 flex items-center justify-between gap-4"
+                className="cursor-pointer p-4 flex items-center justify-between gap-4 group"
               >
-                {/* Left Section: VO Name with Serial */}
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center shadow-md">
+                {/* Left Section */}
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300
+                    ${isExpanded ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-110' : 'bg-secondary text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary'}
+                  `}>
                     {isExpanded ? (
-                      <ChevronDown className="h-4 w-4 text-white" />
+                      <ChevronDown className="h-5 w-5" />
                     ) : (
-                      <ChevronRight className="h-4 w-4 text-white" />
+                      <ChevronRight className="h-5 w-5" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-base font-semibold text-slate-700 dark:text-slate-300">
-                        {index + 1}.
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider bg-secondary/50 px-2 py-0.5 rounded-md border border-border/50">
+                        #{vo.id}
                       </span>
-                      <h3 className="text-base font-medium text-slate-900 dark:text-slate-100 truncate">
+                      <h3 className="text-base font-semibold text-foreground truncate group-hover:text-primary transition-colors">
                         {vo.subject}
                       </h3>
                     </div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                      Serial #{vo.id}
-                    </p>
-                    {/* Comments/Details Section */}
-                    {(vo.remarks || vo.actionNotes) && (
-                      <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 truncate">
-                        {vo.remarks || vo.actionNotes}
+                    {/* Status Badge in mobile view or additional info */}
+                    <div className="flex items-center gap-2 mt-1">
+                      <p className="text-xs text-muted-foreground truncate max-w-[300px]">
+                        {vo.remarks || vo.actionNotes || 'No additional remarks'}
                       </p>
-                    )}
+                    </div>
                   </div>
                 </div>
 
                 {/* Middle Section: Amount */}
-                <div className="flex flex-col items-end">
-                  <p className="text-xs text-slate-500 dark:text-slate-400">Proposal</p>
-                  <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
-                    {formatCurrency(vo.proposalValue)}
-                  </p>
+                <div className="flex flex-col items-end hidden sm:flex">
+                  <span className="text-xs font-medium text-muted-foreground mb-0.5">Proposal</span>
+                  <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">
+                    <DollarSign className="h-3 w-3" />
+                    <span className="text-sm font-bold">{formatCurrency(vo.proposalValue).replace('$', '')}</span>
+                  </div>
                 </div>
 
                 {/* Right Section: Status */}
-                <div className="flex-shrink-0">
+                <div className="flex-shrink-0 pl-2">
                   <Badge
-                    className={`${statusColors.bg} ${statusColors.text} border px-4 py-1.5 text-sm font-medium rounded-full`}
+                    className={`${statusColors.bg} ${statusColors.text} border-0 ring-1 ring-inset ${statusColors.border} px-3 py-1 text-xs font-semibold rounded-lg shadow-sm`}
                   >
                     {STATUS_LABELS[vo.status] || vo.status}
                   </Badge>
                 </div>
               </div>
 
-              {/* Expanded View - Full Details */}
+              {/* Expanded View */}
               <AnimatePresence>
                 {isExpanded && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
                     className="overflow-hidden"
                   >
-                    <div className="px-6 pb-6 pt-2 space-y-6 border-t border-slate-200 dark:border-slate-700">
-                      {/* Details Grid */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {/* Financial Details */}
-                        <div className="rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950 dark:to-teal-950 p-4 shadow-inner">
-                          <div className="flex items-center gap-2 mb-3">
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center">
-                              <DollarSign className="h-4 w-4 text-white" />
-                            </div>
-                            <h4 className="font-semibold text-emerald-900 dark:text-emerald-100">Financial</h4>
+                    <div className="px-4 pb-4 pt-0 space-y-4">
+                      <div className="h-px w-full bg-gradient-to-r from-transparent via-border to-transparent mb-4" />
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {/* Financial Card - Dynamic Display */}
+                        <div className="neo-card-inset rounded-xl p-4 space-y-3 relative overflow-hidden group">
+                          <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <DollarSign className="h-24 w-24 -rotate-12 transform" />
                           </div>
-                          <div className="space-y-2 text-sm">
-                            <div className="flex justify-between">
-                              <span className="text-slate-600 dark:text-slate-400">Assessment:</span>
-                              <span className="font-semibold text-slate-900 dark:text-slate-100">
-                                {formatCurrency(vo.assessmentValue)}
-                              </span>
+
+                          <div className="flex items-center gap-2 mb-4 relative z-10">
+                            <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 text-emerald-600 shadow-sm">
+                              <DollarSign className="h-5 w-5" />
                             </div>
-                            <div className="flex justify-between">
-                              <span className="text-slate-600 dark:text-slate-400">Proposal:</span>
-                              <span className="font-semibold text-slate-900 dark:text-slate-100">
-                                {formatCurrency(vo.proposalValue)}
-                              </span>
-                            </div>
-                            {(vo.approvedAmount || 0) > 0 && (
-                              <div className="flex justify-between pt-2 border-t border-emerald-200 dark:border-emerald-800">
-                                <span className="text-slate-600 dark:text-slate-400">Approved:</span>
-                                <span className="font-bold text-emerald-700 dark:text-emerald-300">
-                                  {formatCurrency(vo.approvedAmount)}
+                            <h4 className="text-base font-bold text-foreground">Financial Overview</h4>
+                          </div>
+
+                          <div className="space-y-3 relative z-10">
+                            {/* Logic: Show Proposal Value for ALL statuses (as baseline) */}
+                            <div className="flex justify-between items-center p-3 rounded-xl bg-background/40 border border-border/30 hover:bg-background/60 transition-colors">
+                              <div className="flex flex-col">
+                                <span className="text-muted-foreground text-xs uppercase tracking-wider font-semibold">
+                                  {vo.status === 'PendingWithFFC' ? 'Estimated Value' : 'Proposal Value'}
                                 </span>
                               </div>
+                              <span className="font-mono text-lg font-bold text-foreground">
+                                <AnimatedNumber value={vo.proposalValue || 0} />
+                              </span>
+                            </div>
+
+                            {/* Logic: Show Assessment if PendingWithRSG or later */}
+                            {['PendingWithRSG', 'PendingWithRSGFFC', 'ApprovedAwaitingDVO', 'DVORRIssued'].includes(vo.status) && (
+                              <div className="flex justify-between items-center p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/15 transition-colors">
+                                <div className="flex flex-col">
+                                  <span className="text-amber-700 dark:text-amber-400 text-xs uppercase tracking-wider font-semibold">Assessment Value</span>
+                                </div>
+                                <span className="font-mono text-lg font-bold text-amber-700 dark:text-amber-400">
+                                  <AnimatedNumber value={vo.assessmentValue || 0} />
+                                </span>
+                              </div>
+                            )}
+
+                            {/* Logic: Show Approved Amount ONLY if Approved/DVO status */}
+                            {['ApprovedAwaitingDVO', 'DVORRIssued'].includes(vo.status) && (
+                              <motion.div
+                                initial={{ scale: 0.95, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="flex justify-between items-center p-4 rounded-xl bg-gradient-to-r from-emerald-500/20 to-green-500/20 border border-emerald-500/30 shadow-sm"
+                              >
+                                <div className="flex flex-col">
+                                  <span className="text-emerald-700 dark:text-emerald-400 text-xs uppercase tracking-wider font-bold flex items-center gap-1">
+                                    <CheckCircle2 className="h-3 w-3" />
+                                    Approved Amount
+                                  </span>
+                                </div>
+                                <span className="font-mono text-xl font-extrabold text-emerald-700 dark:text-emerald-400">
+                                  <AnimatedNumber value={vo.approvedAmount || 0} />
+                                </span>
+                              </motion.div>
                             )}
                           </div>
                         </div>
 
-                        {/* References */}
-                        <div className="rounded-xl bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950 dark:to-cyan-950 p-4 shadow-inner">
-                          <div className="flex items-center gap-2 mb-3">
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
-                              <FileText className="h-4 w-4 text-white" />
+                        {/* Details Card */}
+                        <div className="neo-card-inset rounded-xl p-4 space-y-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="p-1.5 rounded-lg bg-blue-500/20 text-blue-600">
+                              <FileText className="h-4 w-4" />
                             </div>
-                            <h4 className="font-semibold text-blue-900 dark:text-blue-100">References</h4>
+                            <h4 className="text-sm font-semibold text-foreground">References</h4>
                           </div>
                           <div className="space-y-2 text-sm">
-                            <div>
-                              <span className="text-slate-600 dark:text-slate-400 block text-xs">Submission:</span>
-                              <span className="font-semibold text-slate-900 dark:text-slate-100">
-                                {vo.submissionReference}
-                              </span>
+                            <div className="p-2 rounded-lg bg-background/50 space-y-1">
+                              <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Submission Ref</span>
+                              <p className="font-medium text-foreground truncate">{vo.submissionReference}</p>
                             </div>
                             {vo.responseReference && (
-                              <div>
-                                <span className="text-slate-600 dark:text-slate-400 block text-xs">Response:</span>
-                                <span className="font-semibold text-slate-900 dark:text-slate-100">
-                                  {vo.responseReference}
-                                </span>
+                              <div className="p-2 rounded-lg bg-background/50 space-y-1">
+                                <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Response Ref</span>
+                                <p className="font-medium text-foreground truncate">{vo.responseReference}</p>
                               </div>
                             )}
                           </div>
                         </div>
 
-                        {/* Timeline & Type */}
-                        <div className="rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950 dark:to-orange-950 p-4 shadow-inner">
-                          <div className="flex items-center gap-2 mb-3">
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
-                              <Calendar className="h-4 w-4 text-white" />
+                        {/* Metadata Card */}
+                        <div className="neo-card-inset rounded-xl p-4 space-y-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="p-1.5 rounded-lg bg-amber-500/20 text-amber-600">
+                              <Calendar className="h-4 w-4" />
                             </div>
-                            <h4 className="font-semibold text-amber-900 dark:text-amber-100">Details</h4>
+                            <h4 className="text-sm font-semibold text-foreground">Metadata</h4>
                           </div>
                           <div className="space-y-2 text-sm">
-                            <div>
-                              <span className="text-slate-600 dark:text-slate-400 block text-xs">Submitted:</span>
-                              <span className="font-semibold text-slate-900 dark:text-slate-100">
-                                {formatDate(vo.submissionDate)}
-                              </span>
+                            <div className="flex justify-between items-center p-2 rounded-lg bg-background/50">
+                              <span className="text-muted-foreground text-xs">Date</span>
+                              <span className="font-medium">{formatDate(vo.submissionDate)}</span>
                             </div>
-                            <div>
-                              <span className="text-slate-600 dark:text-slate-400 block text-xs">Type:</span>
-                              <Badge variant="outline" className="mt-1">
-                                {vo.submissionType}
-                              </Badge>
+                            <div className="flex justify-between items-center p-2 rounded-lg bg-background/50">
+                              <span className="text-muted-foreground text-xs">Type</span>
+                              <Badge variant="outline" className="h-5 text-[10px] font-normal">{vo.submissionType}</Badge>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                      {/* Notes Section */}
-                      {vo.remarks && (
-                        <div className="rounded-xl bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950 dark:to-pink-950 p-4 shadow-inner">
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                              <MessageSquare className="h-4 w-4 text-white" />
+                      {/* Notes / Actions Footer */}
+                      <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                        {vo.remarks && (
+                          <div className="flex-1 p-3 rounded-xl bg-secondary/30 border border-border/50 text-sm">
+                            <div className="flex items-center gap-2 mb-1 text-muted-foreground">
+                              <MessageSquare className="h-3 w-3" />
+                              <span className="text-xs font-medium uppercase tracking-wide">Remarks</span>
                             </div>
-                            <h4 className="font-semibold text-purple-900 dark:text-purple-100">Remarks</h4>
+                            <p className="text-foreground/90 pl-5">{vo.remarks}</p>
                           </div>
-                          <p className="text-sm text-slate-700 dark:text-slate-300 pl-10">
-                            {vo.remarks}
-                          </p>
-                        </div>
-                      )}
+                        )}
 
-                      {/* Action Buttons */}
-                      <div className="flex gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex-1 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 dark:hover:bg-blue-950"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            window.location.href = `/vos/${vo.id}`;
-                          }}
-                        >
-                          View Full Details
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex-1 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 dark:hover:bg-amber-950"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            window.location.href = `/vos/${vo.id}/edit`;
-                          }}
-                        >
-                          Edit VO
-                        </Button>
+                        <div className="flex sm:flex-col gap-2 justify-end min-w-[140px]">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full justify-start gap-2 hover:bg-primary/5 hover:text-primary hover:border-primary/20"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.location.href = `/vos/${vo.id}`;
+                            }}
+                          >
+                            <FileText className="h-3.5 w-3.5" />
+                            View Details
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full justify-start gap-2 hover:bg-amber-500/10 hover:text-amber-600 hover:border-amber-500/20"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.location.href = `/vos/${vo.id}/edit`;
+                            }}
+                          >
+                            <Tag className="h-3.5 w-3.5" />
+                            Edit VO
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </motion.div>

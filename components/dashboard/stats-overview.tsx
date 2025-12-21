@@ -30,7 +30,7 @@ export function StatsOverview() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="mb-4 text-lg font-semibold">VO Status Overview</h2>
+        <h2 className="mb-4 text-xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">VO Status Overview</h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           <KPICard
             title="Total Submitted VO"
@@ -84,7 +84,7 @@ export function StatsOverview() {
       </div>
 
       <div>
-        <h2 className="mb-4 text-lg font-semibold">Financial Summary</h2>
+        <h2 className="mb-4 text-xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">Financial Summary</h2>
         <div className="grid gap-4 md:grid-cols-2">
           <KPICard
             title="Total Submitted Value"

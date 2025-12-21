@@ -33,26 +33,28 @@ export function KPICard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay }}
     >
-      <div className="neo-card relative overflow-hidden p-6">
+      <div className="neo-card relative overflow-hidden p-6 group">
         <div className="flex items-start justify-between">
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-muted-foreground">{title}</p>
-            <p className="text-3xl font-bold tracking-tight">{value}</p>
+          <div className="space-y-2 relative z-10">
+            <p className="text-sm font-medium text-muted-foreground transition-colors group-hover:text-primary/80">{title}</p>
+            <p className="text-3xl font-bold tracking-tight text-foreground transition-all group-hover:scale-105 origin-left">{value}</p>
             {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
           </div>
           <div
             className={cn(
-              'flex h-12 w-12 items-center justify-center rounded-xl neo-card-inset',
-              bgColor ? bgColor : '',
-              bgColor ? 'text-white' : iconColor
+              'flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-300 shadow-md',
+              bgColor ? bgColor : 'bg-secondary',
+              bgColor ? 'text-white' : iconColor,
+              'group-hover:scale-110 group-hover:shadow-lg'
             )}
           >
             <Icon className="h-6 w-6" />
           </div>
         </div>
         <div className={cn(
-          "absolute bottom-0 left-0 h-1.5 w-full rounded-b-lg",
-          bgColor ? bgColor : "bg-gradient-to-r from-primary/40 to-primary/10"
+          "absolute bottom-0 left-0 h-1 w-full rounded-b-lg transition-all duration-500",
+          bgColor ? bgColor : "bg-gradient-to-r from-primary to-primary/50",
+          "opacity-50 group-hover:opacity-100 group-hover:h-1.5"
         )} />
       </div>
     </motion.div>

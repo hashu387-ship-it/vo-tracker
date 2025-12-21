@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { CalendarIcon, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -123,7 +123,7 @@ export function VOForm({ vo, mode }: VOFormProps) {
           <CardContent className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="subject">
-                Subject <span className="text-destructive">*</span>
+                Subject
               </Label>
               <Input
                 id="subject"
@@ -139,7 +139,7 @@ export function VOForm({ vo, mode }: VOFormProps) {
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-2">
                 <Label>
-                  Submission Type <span className="text-destructive">*</span>
+                  Submission Type
                 </Label>
                 <Select
                   value={submissionType}
@@ -160,7 +160,7 @@ export function VOForm({ vo, mode }: VOFormProps) {
 
               <div className="space-y-2">
                 <Label>
-                  Status <span className="text-destructive">*</span>
+                  Status
                 </Label>
                 <Select
                   value={status}
@@ -202,7 +202,7 @@ export function VOForm({ vo, mode }: VOFormProps) {
 
             <div className="space-y-2">
               <Label>
-                Submission Date <span className="text-destructive">*</span>
+                Submission Date
               </Label>
               <Popover>
                 <PopoverTrigger asChild>
@@ -236,38 +236,70 @@ export function VOForm({ vo, mode }: VOFormProps) {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid gap-6 md:grid-cols-3">
-              <div className="space-y-2">
-                <Label htmlFor="assessmentValue">Assessment Value</Label>
-                <Input
-                  id="assessmentValue"
-                  type="number"
-                  step="0.01"
-                  {...register('assessmentValue', { valueAsNumber: true })}
-                  placeholder="0.00"
-                />
-              </div>
+              <AnimatePresence mode="popLayout">
+                {/* Proposal Value - Always Visible for most, but label changes */}
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="space-y-2"
+                >
+                  <Label htmlFor="proposalValue">
+                    {status === 'PendingWithFFC' ? 'Estimated Value' : 'Proposal Value'}
+                  </Label>
+                  <Input
+                    id="proposalValue"
+                    type="number"
+                    step="0.01"
+                    {...register('proposalValue', { valueAsNumber: true })}
+                    placeholder="0.00"
+                  />
+                </motion.div>
 
-              <div className="space-y-2">
-                <Label htmlFor="proposalValue">Proposal Value</Label>
-                <Input
-                  id="proposalValue"
-                  type="number"
-                  step="0.01"
-                  {...register('proposalValue', { valueAsNumber: true })}
-                  placeholder="0.00"
-                />
-              </div>
+                {/* Assessment Value - Hidden for PendingWithFFC & PendingWithRSG */}
+                {['PendingWithRSGFFC', 'ApprovedAwaitingDVO', 'DVORRIssued'].includes(status) && (
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="space-y-2"
+                  >
+                    <Label htmlFor="assessmentValue">Assessment Value</Label>
+                    <Input
+                      id="assessmentValue"
+                      type="number"
+                      step="0.01"
+                      {...register('assessmentValue', { valueAsNumber: true })}
+                      placeholder="0.00"
+                    />
+                  </motion.div>
+                )}
 
-              <div className="space-y-2">
-                <Label htmlFor="approvedAmount">Approved Amount</Label>
-                <Input
-                  id="approvedAmount"
-                  type="number"
-                  step="0.01"
-                  {...register('approvedAmount', { valueAsNumber: true })}
-                  placeholder="0.00"
-                />
-              </div>
+                {/* Approved Amount - Visible ONLY for Approved/DVO statuses */}
+                {['ApprovedAwaitingDVO', 'DVORRIssued'].includes(status) && (
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="space-y-2"
+                  >
+                    <Label htmlFor="approvedAmount">
+                      Approved Amount
+                    </Label>
+                    <Input
+                      id="approvedAmount"
+                      type="number"
+                      step="0.01"
+                      {...register('approvedAmount', { valueAsNumber: true })}
+                      placeholder="0.00"
+                      className="border-emerald-500/50 focus-visible:ring-emerald-500/50"
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </CardContent>
         </Card>
@@ -287,41 +319,61 @@ export function VOForm({ vo, mode }: VOFormProps) {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="dvoReference">DVO Reference</Label>
-                <Input
-                  id="dvoReference"
-                  {...register('dvoReference')}
-                  placeholder="e.g., DVO-001"
-                />
-              </div>
+              {/* DVO Reference - Only for Approved/DVO statuses */}
+              <AnimatePresence>
+                {['ApprovedAwaitingDVO', 'DVORRIssued'].includes(status) && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="space-y-2"
+                  >
+                    <Label htmlFor="dvoReference">DVO Reference</Label>
+                    <Input
+                      id="dvoReference"
+                      {...register('dvoReference')}
+                      placeholder="e.g., DVO-001"
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
-            <div className="space-y-2">
-              <Label>DVO Issued Date</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      'w-full justify-start text-left font-normal md:w-[280px]',
-                      !dvoIssuedDate && 'text-muted-foreground'
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {dvoIssuedDate ? format(dvoIssuedDate, 'PPP') : 'Select date'}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={dvoIssuedDate || undefined}
-                    onSelect={(date) => setValue('dvoIssuedDate', date || null)}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
+            {/* DVO Issued Date - Only for DVO RR Issued */}
+            <AnimatePresence>
+              {status === 'DVORRIssued' && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="space-y-2"
+                >
+                  <Label>DVO Issued Date</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          'w-full justify-start text-left font-normal md:w-[280px]',
+                          !dvoIssuedDate && 'text-muted-foreground'
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {dvoIssuedDate ? format(dvoIssuedDate, 'PPP') : 'Select date'}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={dvoIssuedDate || undefined}
+                        onSelect={(date) => setValue('dvoIssuedDate', date || null)}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </CardContent>
         </Card>
 
@@ -363,7 +415,7 @@ export function VOForm({ vo, mode }: VOFormProps) {
             {mode === 'create' ? 'Create VO' : 'Save Changes'}
           </Button>
         </div>
-      </form>
-    </motion.div>
+      </form >
+    </motion.div >
   );
 }

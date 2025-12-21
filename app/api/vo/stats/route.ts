@@ -14,7 +14,7 @@ export async function GET() {
       pendingWithRSGFFC,
       approvedAwaitingDVO,
       dvoRRIssued,
-      financials,
+      // Aggregates
       pendingWithFFCFinancials,
       pendingWithRSGFinancials,
       pendingWithRSGFFCFinancials,
@@ -27,12 +27,8 @@ export async function GET() {
       prisma.vO.count({ where: { status: 'PendingWithRSGFFC' } }),
       prisma.vO.count({ where: { status: 'ApprovedAwaitingDVO' } }),
       prisma.vO.count({ where: { status: 'DVORRIssued' } }),
-      prisma.vO.aggregate({
-        _sum: {
-          proposalValue: true,
-          approvedAmount: true,
-        },
-      }),
+
+      // Financials per status
       prisma.vO.aggregate({
         where: { status: 'PendingWithFFC' },
         _sum: { proposalValue: true },
@@ -55,6 +51,20 @@ export async function GET() {
       }),
     ]);
 
+    // Calculate smart total:
+    // For Pending statuses: Use Proposal Value
+    // For Approved statuses: Use Approved Amount
+    const totalSubmittedValue =
+      (pendingWithFFCFinancials._sum.proposalValue || 0) +
+      (pendingWithRSGFinancials._sum.proposalValue || 0) +
+      (pendingWithRSGFFCFinancials._sum.proposalValue || 0) +
+      (approvedAwaitingDVOFinancials._sum.approvedAmount || 0) +
+      (dvoRRIssuedFinancials._sum.approvedAmount || 0);
+
+    const totalApprovedValue =
+      (approvedAwaitingDVOFinancials._sum.approvedAmount || 0) +
+      (dvoRRIssuedFinancials._sum.approvedAmount || 0);
+
     return NextResponse.json({
       data: {
         counts: {
@@ -66,8 +76,8 @@ export async function GET() {
           dvoRRIssued,
         },
         financials: {
-          totalSubmittedValue: financials._sum.proposalValue || 0,
-          totalApprovedValue: financials._sum.approvedAmount || 0,
+          totalSubmittedValue,
+          totalApprovedValue,
         },
         statusBreakdown: [
           {
@@ -121,3 +131,4 @@ export async function GET() {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+

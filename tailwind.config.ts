@@ -73,6 +73,14 @@ const config: Config = {
           '0%': { transform: 'translateY(10px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
+        'scale-in': {
+          '0%': { transform: 'scale(0.95)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        'pulse-subtle': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.8' },
+        },
         blob: {
           '0%': {
             transform: 'translate(0px, 0px) scale(1)',
@@ -101,6 +109,8 @@ const config: Config = {
         'accordion-up': 'accordion-up 0.2s ease-out',
         fadeIn: 'fadeIn 0.5s ease-out forwards',
         slideUp: 'slideUp 0.5s ease-out forwards',
+        scaleIn: 'scale-in 0.2s ease-out forwards',
+        'pulse-subtle': 'pulse-subtle 2s ease-in-out infinite',
         blob: 'blob 7s infinite',
         shimmer: 'shimmer 8s linear infinite',
       },
