@@ -49,41 +49,43 @@ export default function DashboardPage() {
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/20 rounded-full blur-3xl" />
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl" />
 
-        <div className="relative flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <Sparkles className="h-8 w-8 text-amber-300" />
-              <h1 className="text-4xl font-bold text-white">R06-HW2 SW Hotel 02-First Fix-VO Log</h1>
+        <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="h-6 w-6 md:h-8 md:w-8 text-amber-300 flex-shrink-0" />
+              <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-white leading-tight">
+                R06-HW2 SW Hotel 02<br className="md:hidden" /> First Fix-VO Log
+              </h1>
             </div>
-            <p className="text-blue-100 text-lg">
+            <p className="text-blue-100 text-sm md:text-lg">
               {new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
             </p>
           </div>
-          <div className="flex gap-3 print:hidden">
+          <div className="flex flex-wrap gap-2 md:gap-3 print:hidden w-full md:w-auto">
             <Button
-              size="lg"
+              size="sm"
               onClick={handlePrint}
-              className="gap-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white hover:from-purple-600 hover:to-indigo-600 shadow-lg hover:shadow-xl transition-all duration-300"
+              className="flex-1 md:flex-none gap-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white hover:from-purple-600 hover:to-indigo-600 shadow-lg hover:shadow-xl transition-all duration-300 md:h-11 md:text-base"
             >
-              <Printer className="h-5 w-5" />
-              Print PDF
+              <Printer className="h-4 w-4" />
+              <span className="whitespace-nowrap">Print</span>
             </Button>
             <Button
-              size="lg"
+              size="sm"
               onClick={handleExport}
               disabled={isExporting}
-              className="gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all duration-300"
+              className="flex-1 md:flex-none gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all duration-300 md:h-11 md:text-base"
             >
-              <Download className="h-5 w-5" />
-              {isExporting ? 'Exporting...' : 'Export Excel'}
+              <Download className="h-4 w-4" />
+              <span className="whitespace-nowrap">{isExporting ? '...' : 'Export'}</span>
             </Button>
-            <Link href="/vos/new">
+            <Link href="/vos/new" className="flex-1 md:flex-none">
               <Button
-                size="lg"
-                className="gap-2 bg-white text-blue-600 hover:bg-blue-50 shadow-lg hover:shadow-xl transition-all duration-300"
+                size="sm"
+                className="w-full gap-2 bg-white text-blue-600 hover:bg-blue-50 shadow-lg hover:shadow-xl transition-all duration-300 md:h-11 md:text-base"
               >
-                <Plus className="h-5 w-5" />
-                New VO
+                <Plus className="h-4 w-4" />
+                <span className="whitespace-nowrap">New VO</span>
               </Button>
             </Link>
           </div>
