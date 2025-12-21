@@ -27,6 +27,11 @@ export const createVOSchema = z.object({
   dvoIssuedDate: z.coerce.date().nullable().optional().or(z.literal('')),
   remarks: z.string().max(2000).nullable().optional(),
   actionNotes: z.string().max(2000).nullable().optional(),
+
+  // File attachments for different approval stages
+  ffcRsgProposedFile: z.string().nullable().optional(),
+  rsgAssessedFile: z.string().nullable().optional(),
+  dvoRrApprovedFile: z.string().nullable().optional(),
 });
 
 export const updateVOSchema = createVOSchema.partial();
