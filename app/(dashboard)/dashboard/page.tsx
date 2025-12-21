@@ -13,6 +13,7 @@ import { formatCurrency } from '@/lib/utils';
 export default function DashboardPage() {
   const { data: stats, isLoading } = useVOStats();
   const [isExporting, setIsExporting] = useState(false);
+  const [filterStatus, setFilterStatus] = useState<string | null>(null);
 
   const handleExport = async () => {
     try {
@@ -131,12 +132,16 @@ export default function DashboardPage() {
           ))}
         </div>
       ) : stats?.statusBreakdown ? (
-        <StatusBreakdownCards statusBreakdown={stats.statusBreakdown} />
+        <StatusBreakdownCards
+          statusBreakdown={stats.statusBreakdown}
+          selectedStatus={filterStatus}
+          onStatusSelect={setFilterStatus}
+        />
       ) : null}
 
       {/* VO Table */}
       <div>
-        <DashboardVOTable />
+        <DashboardVOTable filterStatus={filterStatus} />
       </div>
     </div>
   );

@@ -57,7 +57,7 @@ const STATUS_LABELS: Record<string, string> = {
   DVORRIssued: 'DVO RR Issued',
 };
 
-export function DashboardVOTable() {
+export function DashboardVOTable({ filterStatus }: { filterStatus: string | null }) {
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
   const { data, isLoading } = useVOs({});
 
@@ -83,7 +83,10 @@ export function DashboardVOTable() {
     );
   }
 
-  const vos = data?.data || [];
+  const allDOs = data?.data || [];
+  const vos = filterStatus
+    ? allDOs.filter(vo => vo.status === filterStatus)
+    : allDOs;
 
   if (vos.length === 0) {
     return (
@@ -92,10 +95,10 @@ export function DashboardVOTable() {
           <FileText className="h-10 w-10 text-primary" />
         </div>
         <h3 className="text-xl font-bold text-foreground mb-2">
-          No Variation Orders Found
+          {filterStatus ? `No ${STATUS_LABELS[filterStatus]} VOs Found` : 'No Variation Orders Found'}
         </h3>
         <p className="text-muted-foreground max-w-sm mx-auto">
-          Start by creating your first variation order to track its progress.
+          {filterStatus ? 'Try selecting a different status or clear the filter.' : 'Start by creating your first variation order to track its progress.'}
         </p>
       </div>
     );
@@ -105,7 +108,7 @@ export function DashboardVOTable() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-          All Variation Orders
+          {filterStatus ? `${STATUS_LABELS[filterStatus]} (${vos.length})` : `All Variation Orders (${vos.length})`}
         </h2>
       </div>
 
