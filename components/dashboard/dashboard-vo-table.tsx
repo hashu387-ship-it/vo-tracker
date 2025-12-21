@@ -129,25 +129,25 @@ export function DashboardVOTable() {
             >
               <div
                 onClick={() => toggleRow(vo.id)}
-                className="cursor-pointer p-4 flex items-center justify-between gap-4 group"
+                className="cursor-pointer p-3 flex items-center justify-between gap-4 group"
               >
                 {/* Left Section */}
                 <div className="flex items-center gap-4 flex-1 min-w-0">
-                  <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300
-                    ${isExpanded ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-110' : 'bg-secondary text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary'}
+                  <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300
+                    ${isExpanded ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-105' : 'bg-secondary text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary'}
                   `}>
                     {isExpanded ? (
-                      <ChevronDown className="h-5 w-5" />
+                      <ChevronDown className="h-4 w-4" />
                     ) : (
-                      <ChevronRight className="h-5 w-5" />
+                      <ChevronRight className="h-4 w-4" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider bg-secondary/50 px-2 py-0.5 rounded-md border border-border/50">
-                        #{vo.id}
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider bg-secondary/50 px-1.5 py-0.5 rounded-md border border-border/50 whitespace-nowrap">
+                        #{index + 1}
                       </span>
-                      <h3 className="text-base font-semibold text-foreground truncate group-hover:text-primary transition-colors">
+                      <h3 className="text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors">
                         {vo.subject}
                       </h3>
                     </div>
@@ -169,13 +169,24 @@ export function DashboardVOTable() {
                   </div>
                 </div>
 
-                {/* Right Section: Status */}
-                <div className="flex-shrink-0 pl-2">
+                {/* Right Section: Status & Date */}
+                <div className="flex flex-col items-end gap-1 flex-shrink-0">
                   <Badge
-                    className={`${statusColors.bg} ${statusColors.text} border-0 ring-1 ring-inset ${statusColors.border} px-3 py-1 text-xs font-semibold rounded-lg shadow-sm`}
+                    variant="outline"
+                    className={`
+                      ${statusColors.bg} ${statusColors.text} ${statusColors.border}
+                      border px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium uppercase tracking-wide whitespace-nowrap
+                    `}
                   >
-                    {STATUS_LABELS[vo.status] || vo.status}
+                    {/* Shorten status text on mobile if needed, though labels are generally short enough */}
+                    {STATUS_LABELS[vo.status]}
                   </Badge>
+                  <div className="flex items-center gap-1.5 text-muted-foreground">
+                    <Calendar className="h-3 w-3" />
+                    <span className="text-[10px] sm:text-xs font-mono">
+                      {formatDate(vo.submissionDate)}
+                    </span>
+                  </div>
                 </div>
               </div>
 
