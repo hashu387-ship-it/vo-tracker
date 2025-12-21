@@ -3,6 +3,8 @@ import { prisma } from '@/lib/db';
 import { requireAuth } from '@/lib/auth';
 import ExcelJS from 'exceljs';
 
+export const dynamic = 'force-dynamic';
+
 // Red Sea Global Theme Colors
 const THEME_COLORS = {
   primary: {

@@ -106,262 +106,155 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-          {filterStatus ? `${STATUS_LABELS[filterStatus]} (${vos.length})` : `All Variation Orders (${vos.length})`}
+      {/* Header */}
+      <div className="flex items-center justify-between pb-4 border-b border-rsg-gold/20">
+        <h2 className="text-2xl font-serif text-rsg-navy font-bold tracking-tight">
+          {filterStatus ? `${STATUS_LABELS[filterStatus]}` : 'Variation Orders Log'}
+          <span className="ml-3 text-sm font-sans font-normal text-slate-400">
+            {vos.length} Records
+          </span>
         </h2>
       </div>
 
-      <div className="space-y-2">
-        {vos.map((vo, index) => {
-          const isExpanded = expandedRows.has(vo.id);
-          const statusColors = STATUS_COLORS[vo.status] || STATUS_COLORS.PendingWithFFC;
+      <div className="bg-white rounded-none border border-slate-200 shadow-sm overflow-hidden">
+        {/* Table Header (Desktop) */}
+        <div className="hidden sm:grid grid-cols-12 gap-4 p-4 bg-slate-50 border-b border-slate-200 text-xs font-semibold text-rsg-navy uppercase tracking-wider">
+          <div className="col-span-1">#</div>
+          <div className="col-span-6">Subject</div>
+          <div className="col-span-2 text-right">Value</div>
+          <div className="col-span-3 text-right">Status</div>
+        </div>
 
-          return (
-            <motion.div
-              layout
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-              key={vo.id}
-              className={`relative overflow-hidden rounded-lg transition-all duration-300 
-                ${isExpanded
-                  ? 'bg-card shadow-lg ring-1 ring-primary/20'
-                  : 'bg-card/50 hover:bg-card border border-border/40 hover:border-border hover:shadow-sm'
-                }`}
-            >
-              <div
-                onClick={() => toggleRow(vo.id)}
-                className="cursor-pointer py-1.5 px-2 flex items-center justify-between gap-2 group"
-              >
-                {/* Left Section */}
-                <div className="flex items-center gap-2 flex-1 min-w-0">
-                  <div className={`flex-shrink-0 w-5 h-5 rounded flex items-center justify-center transition-all duration-300
-                    ${isExpanded ? 'bg-primary text-primary-foreground shadow-sm scale-105' : 'bg-secondary/80 text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary'}
-                  `}>
-                    {isExpanded ? (
-                      <ChevronDown className="h-3 w-3" />
-                    ) : (
-                      <ChevronRight className="h-3 w-3" />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      {/* Use S.No from data if possible, but we don't store it explicitly as S.No. Using index is fine as user asked "like this #23" */}
-                      <span className="text-[10px] font-medium text-muted-foreground bg-secondary/30 px-1 rounded border border-border/30 whitespace-nowrap">
-                        #{index + 1}
-                      </span>
-                      <h3 className="text-[11px] sm:text-xs font-medium text-foreground truncate group-hover:text-primary transition-colors leading-tight">
-                        {vo.subject}
-                      </h3>
-                    </div>
-                  </div>
-                </div>
+        <div className="divide-y divide-slate-100">
+          {vos.map((vo, index) => {
+            const isExpanded = expandedRows.has(vo.id);
+            const statusColors = STATUS_COLORS[vo.status] || STATUS_COLORS.PendingWithFFC;
 
-                {/* Middle Section: Amount */}
-                <div className="hidden sm:flex flex-col items-end">
-                  {['ApprovedAwaitingDVO', 'DVORRIssued'].includes(vo.status) ? (
-                    <div className="flex flex-col items-end">
-                      <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 shadow-sm">
-                        <CheckCircle2 className="h-3 w-3" />
-                        <span className="text-xs font-bold">{formatCurrency(vo.approvedAmount).replace('$', '')}</span>
+            return (
+              <div key={vo.id} className="group transition-colors duration-200 hover:bg-slate-50/50">
+                {/* Main Row */}
+                <div
+                  onClick={() => toggleRow(vo.id)}
+                  className="cursor-pointer p-4 grid grid-cols-1 sm:grid-cols-12 gap-4 items-center"
+                >
+                  {/* Mobile Top Row: ID & Status */}
+                  <div className="sm:hidden flex justify-between items-center w-full mb-2">
+                    <span className="text-xs font-mono text-slate-400">#{index + 1}</span>
+                    <Badge variant="outline" className={`${statusColors.bg} ${statusColors.text} border-none rounded-none px-2`}>
+                      {STATUS_LABELS[vo.status]?.replace('Pending with ', 'Pending ')}
+                    </Badge>
+                  </div>
+
+                  {/* ID (Desktop) */}
+                  <div className="hidden sm:block col-span-1 text-sm font-mono text-slate-400">
+                    {String(index + 1).padStart(2, '0')}
+                  </div>
+
+                  {/* Subject */}
+                  <div className="col-span-1 sm:col-span-6">
+                    <h3 className={`text-sm sm:text-base font-medium text-rsg-navy group-hover:text-rsg-gold transition-colors ${isExpanded ? 'whitespace-normal' : 'truncate'}`}>
+                      {vo.subject}
+                    </h3>
+                    <div className="sm:hidden mt-2 flex justify-between items-center">
+                      <span className="text-xs text-slate-500 font-mono">{formatDate(vo.submissionDate)}</span>
+                      <div className="font-mono text-sm font-bold text-rsg-navy">
+                        {formatCurrency(vo.approvedAmount || vo.proposalValue)}
                       </div>
-                      <span className="text-[9px] text-muted-foreground/70 uppercase tracking-wider scale-90">Approved</span>
                     </div>
-                  ) : (
-                    <div className="flex items-center gap-1 text-muted-foreground/90 bg-secondary/50 px-1.5 py-0.5 rounded">
-                      <span className="text-xs font-semibold">{formatCurrency(vo.proposalValue).replace('$', '')}</span>
-                    </div>
-                  )}
-                </div>
+                  </div>
 
-                {/* Right Section: Status & Date */}
-                <div className="flex flex-col items-end gap-0.5 flex-shrink-0">
-                  <Badge
-                    variant="outline"
-                    className={`
-                      ${statusColors.bg} ${statusColors.text} ${statusColors.border}
-                      border px-1.5 py-0 rounded text-[9px] font-medium uppercase tracking-wider whitespace-nowrap h-4 flex items-center
-                    `}
-                  >
-                    {/* Shorten status text on mobile if needed, though labels are generally short enough */}
-                    {STATUS_LABELS[vo.status]?.replace('Pending with ', 'Pending ')?.replace('Approved & Awaiting', 'Approved')}
-                  </Badge>
-                  <div className="flex items-center gap-1 text-muted-foreground/60">
-                    <span className="text-[9px] font-mono">
-                      {formatDate(vo.submissionDate)}
-                    </span>
+                  {/* Value (Desktop) */}
+                  <div className="hidden sm:block col-span-2 text-right">
+                    <div className={`font-mono text-sm font-semibold ${vo.approvedAmount ? 'text-emerald-700' : 'text-slate-600'}`}>
+                      {formatCurrency(vo.approvedAmount || vo.proposalValue)}
+                    </div>
+                    {vo.approvedAmount && <span className="text-[10px] text-emerald-600/70 uppercase">Approved</span>}
+                  </div>
+
+                  {/* Status (Desktop) */}
+                  <div className="hidden sm:flex col-span-3 justify-end items-center gap-4">
+                    <span className="text-xs text-slate-400 font-mono">{formatDate(vo.submissionDate)}</span>
+                    <Badge variant="secondary" className={`${statusColors.bg} ${statusColors.text} rounded-sm px-2 py-0.5 font-normal uppercase text-[10px] tracking-wider border-0`}>
+                      {STATUS_LABELS[vo.status]?.replace('Pending with ', 'Pending ')}
+                    </Badge>
+                    {isExpanded ? <ChevronDown className="h-4 w-4 text-rsg-gold" /> : <ChevronRight className="h-4 w-4 text-slate-300" />}
                   </div>
                 </div>
+
+                {/* Expanded Details */}
+                <AnimatePresence>
+                  {isExpanded && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden bg-slate-50/50 border-t border-slate-100"
+                    >
+                      <div className="p-4 sm:p-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-12">
+                        {/* Details Column */}
+                        <div className="sm:col-span-1 lg:col-span-8 space-y-6">
+                          {/* References Grid */}
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            {vo.submissionReference && (
+                              <div>
+                                <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Ref No</p>
+                                <p className="text-xs font-mono text-rsg-navy">{vo.submissionReference}</p>
+                              </div>
+                            )}
+                            {vo.vorReference && (
+                              <div>
+                                <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">VOR Ref</p>
+                                <p className="text-xs font-mono text-rsg-navy">{vo.vorReference}</p>
+                              </div>
+                            )}
+                            {vo.dvoReference && (
+                              <div>
+                                <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">DVO Ref</p>
+                                <p className="text-xs font-mono text-rsg-navy">{vo.dvoReference}</p>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Notes */}
+                          {(vo.remarks) && (
+                            <div className="pt-4 border-t border-slate-200/50">
+                              <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-2">Remarks</p>
+                              <p className="text-sm text-slate-600 leading-relaxed font-light">{vo.remarks}</p>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Actions Column */}
+                        <div className="sm:col-span-1 lg:col-span-4 flex flex-col justify-end gap-3">
+                          <Button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.location.href = `/vos/${vo.id}/edit`;
+                            }}
+                            className="w-full bg-white border border-rsg-gold text-rsg-gold hover:bg-rsg-gold hover:text-white transition-colors rounded-none h-10 uppercase tracking-widest text-xs font-semibold"
+                          >
+                            Edit Record
+                          </Button>
+                          <Button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.location.href = `/vos/${vo.id}`;
+                            }}
+                            className="w-full bg-rsg-navy text-white hover:bg-slate-800 transition-colors rounded-none h-10 uppercase tracking-widest text-xs font-semibold"
+                          >
+                            View Details
+                          </Button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-
-              {/* Expanded View */}
-              <AnimatePresence>
-                {isExpanded && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="overflow-hidden"
-                  >
-                    <div className="px-4 pb-4 pt-0 space-y-4">
-                      <div className="h-px w-full bg-gradient-to-r from-transparent via-border to-transparent mb-4" />
-
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {/* Financial Card - Dynamic Display */}
-                        <div className="neo-card-inset rounded-xl p-4 space-y-3 relative overflow-hidden group">
-                          <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-                            <DollarSign className="h-24 w-24 -rotate-12 transform" />
-                          </div>
-
-                          <div className="flex items-center gap-2 mb-4 relative z-10">
-                            <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 text-emerald-600 shadow-sm">
-                              <DollarSign className="h-5 w-5" />
-                            </div>
-                            <h4 className="text-base font-bold text-foreground">Financial Overview</h4>
-                          </div>
-
-                          <div className="space-y-3 relative z-10">
-                            {/* Logic: Show Proposal Value for ALL statuses (as baseline) */}
-                            <div className="flex justify-between items-center p-3 rounded-xl bg-background/40 border border-border/30 hover:bg-background/60 transition-colors">
-                              <div className="flex flex-col">
-                                <span className="text-muted-foreground text-xs uppercase tracking-wider font-semibold">
-                                  {vo.status === 'PendingWithFFC' ? 'Estimated Value' : 'Proposal Value'}
-                                </span>
-                              </div>
-                              <span className="font-mono text-lg font-bold text-foreground">
-                                <AnimatedNumber value={vo.proposalValue || 0} />
-                              </span>
-                            </div>
-
-                            {/* Expanded Content Grid */}
-                            <div className="grid gap-3 p-3 text-sm md:grid-cols-2 bg-slate-50/50 dark:bg-slate-900/50">
-
-                              {/* Financials Compact Card */}
-                              <div className="col-span-1 md:col-span-2 rounded-xl border border-border/60 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
-                                <div className="grid grid-cols-2 divide-x divide-border/60">
-                                  {/* Original / Estimated Value */}
-                                  <div className="p-3 bg-slate-50 dark:bg-slate-800/50">
-                                    <p className="text-[10px] uppercase tracking-wider font-bold text-slate-500 mb-1">Original / Estimated</p>
-                                    <div className="flex items-baseline gap-1">
-                                      <span className="text-xs text-slate-400">SAR</span>
-                                      <span className="text-sm md:text-base font-bold text-rsg-navy dark:text-slate-200">
-                                        {formatCurrency(vo.assessmentValue || vo.proposalValue).replace('SAR', '').trim()}
-                                      </span>
-                                    </div>
-                                  </div>
-
-                                  {/* Revised / Approved Value */}
-                                  <div className={`p-3 ${vo.approvedAmount ? 'bg-emerald-50/50 dark:bg-emerald-900/10' : 'bg-slate-50 dark:bg-slate-800/50'}`}>
-                                    <p className={`text-[10px] uppercase tracking-wider font-bold mb-1 ${vo.approvedAmount ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`}>
-                                      {vo.approvedAmount ? 'Revised / Approved' : 'Approved (Pending)'}
-                                    </p>
-                                    {vo.approvedAmount ? (
-                                      <div className="flex items-baseline gap-1">
-                                        <span className="text-xs text-emerald-600/70">SAR</span>
-                                        <span className="text-sm md:text-base font-bold text-emerald-700 dark:text-emerald-400">
-                                          {formatCurrency(vo.approvedAmount).replace('SAR', '').trim()}
-                                        </span>
-                                      </div>
-                                    ) : (
-                                      <span className="text-xs italic text-slate-400">--</span>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* References Compact Card */}
-                              <div className="rounded-xl border border-border/50 bg-background/50 p-3 shadow-sm">
-                                <div className="flex items-center gap-2 mb-2">
-                                  <div className="p-1.5 bg-blue-500/10 rounded-lg">
-                                    <FileText className="h-3.5 w-3.5 text-blue-600" />
-                                  </div>
-                                  <span className="text-xs font-semibold text-muted-foreground">References</span>
-                                </div>
-                                <div className="grid grid-cols-2 gap-2 text-xs">
-                                  {vo.submissionReference && (
-                                    <div className="bg-white dark:bg-slate-800 p-1.5 rounded border border-border/50">
-                                      <span className="block text-[9px] text-muted-foreground">Sub Ref</span>
-                                      <span className="font-mono text-xs">{vo.submissionReference}</span>
-                                    </div>
-                                  )}
-                                  {vo.vorReference && (
-                                    <div className="bg-white dark:bg-slate-800 p-1.5 rounded border border-border/50">
-                                      <span className="block text-[9px] text-muted-foreground">VOR Ref</span>
-                                      <span className="font-mono text-xs">{vo.vorReference}</span>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-
-                              {/* Remarks Section */}
-                              {(vo.remarks || vo.actionNotes) && (
-                                <div className="md:col-span-2 rounded-xl border border-border/50 bg-background/50 p-3 shadow-sm">
-                                  <div className="flex items-start gap-2">
-                                    <div className="mt-0.5 p-1.5 bg-amber-500/10 rounded-lg">
-                                      <AlertCircle className="h-3.5 w-3.5 text-amber-600" />
-                                    </div>
-                                    <div className="space-y-2 flex-1">
-                                      {vo.remarks && (
-                                        <div>
-                                          <p className="text-[10px] uppercase tracking-wider text-muted-foreground/70 mb-0.5">Remarks</p>
-                                          <p className="text-xs text-foreground/90 leading-relaxed">{vo.remarks}</p>
-                                        </div>
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-
-                            </div>
-                            {/* Notes / Actions Footer */}
-                            <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                              {vo.remarks && (
-                                <div className="flex-1 p-3 rounded-xl bg-secondary/30 border border-border/50 text-sm">
-                                  <div className="flex items-center gap-2 mb-1 text-muted-foreground">
-                                    <MessageSquare className="h-3 w-3" />
-                                    <span className="text-xs font-medium uppercase tracking-wide">Remarks</span>
-                                  </div>
-                                  <p className="text-foreground/90 pl-5">{vo.remarks}</p>
-                                </div>
-                              )}
-
-                              <div className="flex sm:flex-col gap-2 justify-end min-w-[140px]">
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className="w-full justify-start gap-2 hover:bg-primary/5 hover:text-primary hover:border-primary/20"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    window.location.href = `/vos/${vo.id}`;
-                                  }}
-                                >
-                                  <FileText className="h-3.5 w-3.5" />
-                                  View Details
-                                </Button>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className="w-full justify-start gap-2 hover:bg-amber-500/10 hover:text-amber-600 hover:border-amber-500/20"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    window.location.href = `/vos/${vo.id}/edit`;
-                                  }}
-                                >
-                                  <Tag className="h-3.5 w-3.5" />
-                                  Edit VO
-                                </Button>
-                              </div>
-                            </div>
-                          </div>
-                        </motion.div>
-                )}
-                      </AnimatePresence>
-                  </motion.div>
-                );
-        })}
-              </div>
-            </div >
-          );
-        }
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
