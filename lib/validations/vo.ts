@@ -38,7 +38,7 @@ export const voQuerySchema = z.object({
   sortBy: z.enum(['submissionDate', 'createdAt', 'proposalValue', 'approvedAmount']).optional(),
   sortOrder: z.enum(['asc', 'desc']).optional(),
   page: z.coerce.number().int().positive().optional().default(1),
-  limit: z.coerce.number().int().positive().max(100).optional().default(20),
+  limit: z.coerce.number().int().positive().max(1000).optional().default(1000),
 });
 
 export type CreateVOInput = z.infer<typeof createVOSchema>;
