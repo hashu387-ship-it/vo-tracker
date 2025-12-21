@@ -21,7 +21,7 @@ export function StatusBreakdownCards({ statusBreakdown, selectedStatus, onStatus
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="mb-4 text-xl font-semibold text-slate-900">
+        <h2 className="mb-4 text-xl font-semibold text-slate-800">
           Status Overview
         </h2>
         <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 md:overflow-visible">
@@ -35,16 +35,24 @@ export function StatusBreakdownCards({ statusBreakdown, selectedStatus, onStatus
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
                 onClick={() => onStatusSelect(isSelected ? null : status.status)}
-                className={`relative overflow-hidden rounded-xl p-5 cursor-pointer transition-all duration-200 border min-w-[240px] md:min-w-0 snap-center
+                className={`relative overflow-hidden rounded-xl p-5 cursor-pointer transition-all duration-300 border min-w-[240px] md:min-w-0 snap-center
                   ${isSelected
-                    ? 'bg-slate-900 border-slate-900 text-white shadow-md transform scale-[1.02]'
-                    : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-sm text-slate-900'
+                    ? 'bg-slate-900 border-slate-700 shadow-xl scale-[1.02]'
+                    : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-md'
                   }
                 `}
               >
+                {/* For unselected state, keep it light for contrast or go full dark? 
+                    User asked for "dash board table attached style" which is dark. 
+                    Mixing light cards and dark table is okay (Linear does it), but full dark might be safer.
+                    Let's keep cards light by default to avoid overwhelming darkness, but make the *Selected* state match the Dark Table.
+                    Wait, if the table is dark, maybe the cards should be dark glass too?
+                    Let's try a hybrid: Light cards by default, but "Dark Glass" when selected (matching table).
+                */}
+
                 {/* Status Label */}
                 <div className="mb-4">
-                  <h3 className={`text-sm font-medium ${isSelected ? 'text-slate-200' : 'text-slate-500'}`}>
+                  <h3 className={`text-sm font-medium ${isSelected ? 'text-slate-200' : 'text-slate-600'}`}>
                     {status.label}
                   </h3>
                 </div>
@@ -60,10 +68,10 @@ export function StatusBreakdownCards({ statusBreakdown, selectedStatus, onStatus
                 </div>
 
                 {/* Amount */}
-                <div className={`pt-3 border-t ${isSelected ? 'border-slate-700' : 'border-slate-100'} mt-3`}>
+                <div className={`pt-3 border-t ${isSelected ? 'border-white/10' : 'border-slate-100'} mt-3`}>
                   <div className="flex items-center gap-2">
                     <Coins className={`h-3.5 w-3.5 ${isSelected ? 'text-slate-400' : 'text-slate-400'}`} />
-                    <span className={`text-sm font-semibold font-mono ${isSelected ? 'text-slate-200' : 'text-slate-700'}`}>
+                    <span className={`text-sm font-semibold font-mono ${isSelected ? 'text-slate-300' : 'text-slate-700'}`}>
                       {formatCurrency(status.amount)}
                     </span>
                   </div>

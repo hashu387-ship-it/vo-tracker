@@ -110,154 +110,160 @@ export function DashboardVOTable({ filterStatus }: { filterStatus: string | null
       {/* Header */}
       <div className="flex items-center justify-between pb-4">
         <div>
-          <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-800">
             {filterStatus ? `${STATUS_LABELS[filterStatus]}` : 'Variation Orders'}
           </h2>
-          <p className="text-sm text-slate-500 mt-1">
-            Manage and track all variation orders across the project lifecycle.
-          </p>
         </div>
-        <div className="bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
-          <span className="text-xs font-medium text-slate-600">
-            {vos.length} Records Found
+        <div className="bg-slate-900/5 px-4 py-1.5 rounded-full border border-slate-900/10">
+          <span className="text-xs font-bold text-slate-600 uppercase tracking-widest">
+            {vos.length} Records
           </span>
         </div>
       </div>
 
-      <div className="bg-white border border-slate-200 shadow-sm rounded-lg overflow-hidden">
-        {/* Table Header (Desktop) - Clean & Minimal */}
-        <div className="hidden sm:grid grid-cols-12 gap-6 px-6 py-3 bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-widest">
-          <div className="col-span-1">#</div>
-          <div className="col-span-6">Subject</div>
-          <div className="col-span-2 text-right">Value</div>
-          <div className="col-span-3 text-right">Status</div>
-        </div>
+      <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-800/20 bg-slate-900">
+        {/* Dark Glass Background Layers */}
+        <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-xl" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-800/50 to-slate-950/90 pointer-events-none" />
 
-        <div className="divide-y divide-slate-100">
-          {vos.map((vo, index) => {
-            const isExpanded = expandedRows.has(vo.id);
-            const statusColors = STATUS_COLORS[vo.status] || STATUS_COLORS.PendingWithFFC;
+        <div className="relative">
+          {/* Table Header (Desktop) - Dark Glass Header */}
+          <div className="hidden sm:grid grid-cols-12 gap-6 px-6 py-4 bg-white/5 border-b border-white/10 text-xs font-bold text-slate-300 uppercase tracking-widest backdrop-blur-md">
+            <div className="col-span-1">#</div>
+            <div className="col-span-6">Subject</div>
+            <div className="col-span-2 text-right">Value</div>
+            <div className="col-span-3 text-right">Status</div>
+          </div>
 
-            return (
-              <div key={vo.id} className="group hover:bg-slate-50 transition-colors duration-150 ease-in-out bg-white">
-                {/* Main Row */}
-                <div
-                  onClick={() => toggleRow(vo.id)}
-                  className="cursor-pointer px-6 py-4 grid grid-cols-1 sm:grid-cols-12 gap-6 items-center min-h-[64px]"
-                >
-                  {/* Mobile Top Row: ID & Status */}
-                  <div className="sm:hidden flex justify-between items-center w-full mb-2">
-                    <span className="text-xs font-mono text-slate-400 font-medium">#{String(index + 1).padStart(2, '0')}</span>
-                    <Badge variant="outline" className={`${statusColors.bg} ${statusColors.text} border-transparent rounded-full px-2 py-0.5 text-[10px] font-semibold`}>
-                      {STATUS_LABELS[vo.status]?.replace('Pending with ', 'Pending ')}
-                    </Badge>
-                  </div>
+          <div className="divide-y divide-white/5">
+            {vos.map((vo, index) => {
+              const isExpanded = expandedRows.has(vo.id);
+              const statusColors = STATUS_COLORS[vo.status] || STATUS_COLORS.PendingWithFFC;
 
-                  {/* ID (Desktop) */}
-                  <div className="hidden sm:block col-span-1 text-sm font-mono text-slate-400 font-medium">
-                    {String(index + 1).padStart(2, '0')}
-                  </div>
+              return (
+                <div key={vo.id} className="group hover:bg-white/5 transition-colors duration-200">
+                  {/* Main Row */}
+                  <div
+                    onClick={() => toggleRow(vo.id)}
+                    className="cursor-pointer px-6 py-5 grid grid-cols-1 sm:grid-cols-12 gap-6 items-center min-h-[70px]"
+                  >
+                    {/* Mobile Top Row: ID & Status */}
+                    <div className="sm:hidden flex justify-between items-center w-full mb-3">
+                      <span className="text-xs font-mono text-slate-500 font-bold">#{String(index + 1).padStart(2, '0')}</span>
+                      <Badge variant="outline" className={`${statusColors.bg} ${statusColors.text} border-transparent ring-1 ring-inset ring-white/10 rounded-full px-2.5 py-0.5 text-[10px] font-bold backdrop-blur-sm`}>
+                        {STATUS_LABELS[vo.status]?.replace('Pending with ', 'Pending ')}
+                      </Badge>
+                    </div>
 
-                  {/* Subject */}
-                  <div className="col-span-1 sm:col-span-6">
-                    <h3 className={`text-sm font-medium text-slate-900 group-hover:text-rsg-navy transition-colors ${isExpanded ? 'whitespace-normal leading-relaxed' : 'truncate'}`}>
-                      {vo.subject}
-                    </h3>
-                    {/* Mobile Secondary Info */}
-                    <div className="sm:hidden mt-2 flex justify-between items-center">
-                      <span className="text-xs text-slate-500">{formatDate(vo.submissionDate)}</span>
-                      <span className="text-sm font-medium text-slate-900">{formatCurrency(vo.approvedAmount || vo.proposalValue)}</span>
+                    {/* ID (Desktop) */}
+                    <div className="hidden sm:block col-span-1 text-sm font-mono text-slate-500 font-bold group-hover:text-slate-400 transition-colors">
+                      {String(index + 1).padStart(2, '0')}
+                    </div>
+
+                    {/* Subject */}
+                    <div className="col-span-1 sm:col-span-6">
+                      <h3 className={`text-sm sm:text-[15px] font-medium text-slate-200 group-hover:text-white transition-colors ${isExpanded ? 'whitespace-normal leading-relaxed' : 'truncate'}`}>
+                        {vo.subject}
+                      </h3>
+                      {/* Mobile Secondary Info */}
+                      <div className="sm:hidden mt-3 flex justify-between items-center bg-white/5 p-3 rounded-lg border border-white/5">
+                        <span className="text-xs text-slate-400">{formatDate(vo.submissionDate)}</span>
+                        <span className="text-sm font-bold text-slate-200">{formatCurrency(vo.approvedAmount || vo.proposalValue)}</span>
+                      </div>
+                    </div>
+
+                    {/* Value (Desktop) */}
+                    <div className="hidden sm:block col-span-2 text-right">
+                      <div className={`font-mono text-sm font-bold tracking-tight ${vo.approvedAmount ? 'text-emerald-400' : 'text-slate-400'}`}>
+                        {formatCurrency(vo.approvedAmount || vo.proposalValue)}
+                      </div>
+                      {vo.approvedAmount && <span className="text-[10px] text-emerald-300 font-bold bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded ml-2 uppercase tracking-wide">Approved</span>}
+                    </div>
+
+                    {/* Status (Desktop) */}
+                    <div className="hidden sm:flex col-span-3 justify-end items-center gap-4">
+                      <span className="text-xs text-slate-500 font-medium">{formatDate(vo.submissionDate)}</span>
+                      <Badge variant="secondary" className={`${statusColors.bg} ${statusColors.text} rounded-full px-3 py-1 font-bold text-[10px] border-0 backdrop-blur-md bg-opacity-20 uppercase tracking-wider min-w-[110px] justify-center`}>
+                        {STATUS_LABELS[vo.status]?.replace('Pending with ', 'Pending ')}
+                      </Badge>
+                      <div className={`text-slate-500 transition-all duration-300 ${isExpanded ? 'rotate-180 text-rsg-gold' : 'group-hover:text-slate-300'}`}>
+                        <ChevronDown className="h-4 w-4" />
+                      </div>
                     </div>
                   </div>
 
-                  {/* Value (Desktop) */}
-                  <div className="hidden sm:block col-span-2 text-right">
-                    <div className={`font-mono text-sm font-medium ${vo.approvedAmount ? 'text-emerald-700' : 'text-slate-700'}`}>
-                      {formatCurrency(vo.approvedAmount || vo.proposalValue)}
-                    </div>
-                    {vo.approvedAmount && <span className="text-[10px] text-emerald-600 font-medium bg-emerald-50 px-1.5 py-0.5 rounded">Approved</span>}
-                  </div>
+                  {/* Expanded Details - Dark Glass Slide */}
+                  <AnimatePresence>
+                    {isExpanded && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: 'circOut' }}
+                        className="overflow-hidden border-t border-white/5 bg-black/20"
+                      >
+                        <div className="px-6 py-6 sm:px-12 sm:py-8 grid gap-8 grid-cols-1 lg:grid-cols-12 text-sm">
+                          {/* Details Column */}
+                          <div className="lg:col-span-8 space-y-6">
+                            {/* References Grid */}
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                              {['submissionReference', 'vorReference', 'dvoReference'].map((refKey) => {
+                                // @ts-ignore
+                                const val = vo[refKey];
+                                if (!val) return null;
+                                return (
+                                  <div key={refKey} className="bg-white/5 p-4 rounded-xl border border-white/5 hover:bg-white/10 transition-colors">
+                                    <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1.5">
+                                      {refKey.replace('Reference', ' Ref')}
+                                    </p>
+                                    <p className="font-mono text-slate-200 font-bold tracking-tight">{val}</p>
+                                  </div>
+                                );
+                              })}
+                            </div>
 
-                  {/* Status (Desktop) */}
-                  <div className="hidden sm:flex col-span-3 justify-end items-center gap-4">
-                    <span className="text-xs text-slate-400">{formatDate(vo.submissionDate)}</span>
-                    <Badge variant="secondary" className={`${statusColors.bg} ${statusColors.text} rounded-full px-3 py-1 font-medium text-[11px] border-0 min-w-[120px] justify-center text-center`}>
-                      {STATUS_LABELS[vo.status]?.replace('Pending with ', 'Pending ')}
-                    </Badge>
-                    <div className={`text-slate-300 transition-transform duration-200 ${isExpanded ? 'rotate-180 text-slate-500' : 'group-hover:text-slate-400'}`}>
-                      <ChevronDown className="h-4 w-4" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Expanded Details - Simple Slide */}
-                <AnimatePresence>
-                  {isExpanded && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="overflow-hidden border-t border-slate-100 bg-slate-50/50"
-                    >
-                      <div className="px-6 py-6 sm:px-16 sm:py-8 grid gap-8 grid-cols-1 lg:grid-cols-12 text-sm">
-                        {/* Details Column */}
-                        <div className="lg:col-span-8 space-y-6">
-                          {/* References Grid */}
-                          <div className="flex flex-wrap gap-8">
-                            {['submissionReference', 'vorReference', 'dvoReference'].map((refKey) => {
-                              // @ts-ignore
-                              const val = vo[refKey];
-                              if (!val) return null;
-                              return (
-                                <div key={refKey}>
-                                  <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">
-                                    {refKey.replace('Reference', ' Ref')}
-                                  </p>
-                                  <p className="font-mono text-slate-700 font-medium">{val}</p>
-                                </div>
-                              );
-                            })}
+                            {/* Remarks */}
+                            {vo.remarks && (
+                              <div className="p-5 rounded-xl bg-amber-500/5 border border-amber-500/10">
+                                <p className="text-[10px] uppercase tracking-widest text-amber-500/80 font-bold mb-2 flex items-center gap-2">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                                  Remarks
+                                </p>
+                                <p className="text-slate-300 leading-relaxed max-w-2xl">{vo.remarks}</p>
+                              </div>
+                            )}
                           </div>
 
-                          {/* Remarks */}
-                          {vo.remarks && (
-                            <div className="mt-4 pt-4 border-t border-slate-200/60">
-                              <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-2">Remarks</p>
-                              <p className="text-slate-600 leading-relaxed max-w-2xl">{vo.remarks}</p>
-                            </div>
-                          )}
+                          {/* Actions Column */}
+                          <div className="lg:col-span-4 flex items-center justify-end gap-3 self-center lg:self-start">
+                            <Button
+                              variant="outline"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.location.href = `/vos/${vo.id}/edit`;
+                              }}
+                              className="bg-white/5 hover:bg-white/10 text-slate-300 border-white/10 h-10 px-6 text-xs font-bold uppercase tracking-widest shadow-lg"
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.location.href = `/vos/${vo.id}`;
+                              }}
+                              className="bg-rsg-gold hover:bg-[#B08D55] text-white h-10 px-6 text-xs font-bold uppercase tracking-widest shadow-lg border border-white/5"
+                            >
+                              View Details
+                            </Button>
+                          </div>
                         </div>
-
-                        {/* Actions Column */}
-                        <div className="lg:col-span-4 flex items-center justify-end gap-3 self-center lg:self-start">
-                          <Button
-                            variant="outline"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              window.location.href = `/vos/${vo.id}/edit`;
-                            }}
-                            className="bg-white hover:bg-slate-50 text-slate-700 border-slate-200 h-9 px-4 text-xs font-semibold"
-                          >
-                            Edit
-                          </Button>
-                          <Button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              window.location.href = `/vos/${vo.id}`;
-                            }}
-                            className="bg-rsg-navy hover:bg-rsg-navy/90 text-white h-9 px-4 text-xs font-semibold shadow-sm"
-                          >
-                            View Details
-                          </Button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            );
-          })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

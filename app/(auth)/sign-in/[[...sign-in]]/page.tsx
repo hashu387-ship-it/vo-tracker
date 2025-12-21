@@ -78,8 +78,13 @@ export default function Page() {
         </div>
 
         {/* Footer */}
-        <div className="mt-8 text-center text-[10px] text-white/30 tracking-widest uppercase">
-          <p>© 2025 VO Tracker. Red Sea Global Projects.</p>
+        <div className="mt-8 text-center space-y-2">
+          <p className="text-[10px] text-white/30 tracking-widest uppercase">
+            © 2025 VO Tracker | Red Sea Global Project
+          </p>
+          <p className="text-[9px] text-white/20 tracking-widest uppercase font-light">
+            Added by Mohamed Roomy Mohamed Hassan
+          </p>
         </div>
       </div>
     </div>

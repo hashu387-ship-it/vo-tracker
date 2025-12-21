@@ -33,34 +33,32 @@ export function KPICard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay }}
     >
-      <div className="relative overflow-hidden p-6 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
-        <div className="flex items-start justify-between">
-          <div className="space-y-1 relative z-10">
-            <p className="text-sm font-medium text-slate-500">{title}</p>
-            <p className="text-2xl font-bold tracking-tight text-slate-900">{value}</p>
-            {subtitle && <p className="text-xs text-slate-400 mt-1">{subtitle}</p>}
+      <div className="relative overflow-hidden p-6 bg-slate-900 border border-slate-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group">
+
+        {/* Subtle Glass Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+        <div className="flex items-start justify-between relative z-10">
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-slate-400 group-hover:text-slate-300 transition-colors">{title}</p>
+            <p className="text-2xl font-bold tracking-tight text-white">{value}</p>
+            {subtitle && <p className="text-xs text-slate-500 mt-1">{subtitle}</p>}
           </div>
           <div
             className={cn(
-              'flex h-10 w-10 items-center justify-center rounded-lg',
-              bgColor ? bgColor.replace('bg-', 'bg-opacity-10 bg-') : 'bg-slate-100',
-              bgColor ? bgColor.replace('bg-', 'text-') : 'text-slate-600',
+              'flex h-10 w-10 items-center justify-center rounded-lg border border-white/5 shadow-inner',
+              bgColor ? bgColor.replace('bg-', 'bg-opacity-10 bg-') : 'bg-slate-800',
+              bgColor ? bgColor.replace('bg-', 'text-') : 'text-slate-400',
+              'group-hover:scale-110 transition-transform duration-300'
             )}
           >
-            {/* Note: Logic above is a bit brittle if bgColor is complicated. 
-                Let's simplify: if iconColor is passed, use that for text, and a light bg. 
-                The passed props are: iconColor="text-blue-600", bgColor="bg-blue-500"
-                I want: bg-blue-50 text-blue-600.
-                Actually, let's just trust the passed iconColor and use a standard light gray bg if we want minimal.
-                Or better, use the passed color for the icon, and a very light tint for the Background.
-            */}
             <Icon className={cn("h-5 w-5", iconColor)} />
           </div>
         </div>
         {/* Subtle Bottom Accent */}
         <div className={cn(
-          "absolute bottom-0 left-0 h-1 w-full opacity-60",
-          bgColor ? bgColor : "bg-slate-200"
+          "absolute bottom-0 left-0 h-1 w-full opacity-50 group-hover:opacity-100 transition-all duration-300",
+          bgColor ? bgColor : "bg-slate-700"
         )} />
       </div>
     </motion.div>
