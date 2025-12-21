@@ -1,7 +1,7 @@
 'use client';
 
 import { formatCurrency } from '@/lib/utils';
-import { TrendingUp, DollarSign } from 'lucide-react';
+import { TrendingUp, Coins } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface StatusBreakdownCardsProps {
@@ -75,7 +75,7 @@ export function StatusBreakdownCards({ statusBreakdown, selectedStatus, onStatus
                   {/* Amount */}
                   <div className="pt-3 border-t border-border/50">
                     <div className="flex items-center gap-2">
-                      <DollarSign className={`h-4 w-4 text-${status.color}-500 opacity-80`} />
+                      <Coins className={`h-4 w-4 text-${status.color}-500 opacity-80`} />
                       <span className="text-sm md:text-base font-semibold text-foreground">
                         {formatCurrency(status.amount)}
                       </span>

@@ -5,7 +5,7 @@ import {
   Clock,
   CheckCircle,
   FileCheck,
-  DollarSign,
+  Coins,
 } from 'lucide-react';
 import { KPICard } from './kpi-card';
 import { useVOStats } from '@/lib/hooks/use-vo-stats';
@@ -90,7 +90,7 @@ export function StatsOverview() {
             title="Total Submitted Value"
             value={formatCurrency(stats.financials.totalSubmittedValue)}
             subtitle="Sum of all proposal values"
-            icon={DollarSign}
+            icon={Coins}
             iconColor="text-emerald-600"
             delay={0.6}
           />
@@ -98,7 +98,7 @@ export function StatsOverview() {
             title="Total Approved Value"
             value={formatCurrency(stats.financials.totalApprovedValue)}
             subtitle="Sum of all approved amounts"
-            icon={DollarSign}
+            icon={Coins}
             iconColor="text-green-600"
             delay={0.7}
           />
