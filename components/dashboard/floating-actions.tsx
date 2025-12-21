@@ -8,11 +8,15 @@ import {
   Printer,
   X,
   FileText,
-  Sparkles,
-  Zap,
   ChevronUp
 } from 'lucide-react';
 import Link from 'next/link';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 interface FloatingActionsProps {
   onExport: () => void;
@@ -171,38 +175,42 @@ export function QuickActionsBar({ onExport, onPrint, isExporting }: QuickActions
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-wrap items-center gap-2 print:hidden"
     >
-      <motion.button
-        whileHover={{ scale: 1.02, y: -1 }}
-        whileTap={{ scale: 0.98 }}
-        onClick={onPrint}
-        className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-muted/50 hover:bg-muted text-foreground text-sm font-medium border border-border/50 hover:border-border transition-all shadow-sm hover:shadow-md"
-      >
-        <Printer className="h-4 w-4" />
-        <span>Print</span>
-      </motion.button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <motion.button
+            whileHover={{ scale: 1.02, y: -1 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={onPrint}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-muted/50 hover:bg-muted text-foreground text-sm font-medium border border-border/50 hover:border-border transition-all shadow-sm hover:shadow-md"
+          >
+            <Printer className="h-4 w-4" />
+            <span>Print</span>
+          </motion.button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Print Dashboard</p>
+        </TooltipContent>
+      </Tooltip>
 
-      <motion.button
-        whileHover={{ scale: 1.02, y: -1 }}
-        whileTap={{ scale: 0.98 }}
-        onClick={onExport}
-        disabled={isExporting}
-        className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <Download className="h-4 w-4" />
-        <span>{isExporting ? 'Exporting...' : 'Export'}</span>
-      </motion.button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <motion.button
+            whileHover={{ scale: 1.02, y: -1 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={onExport}
+            disabled={isExporting}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Download className="h-4 w-4" />
+            <span>{isExporting ? 'Exporting...' : 'Export'}</span>
+          </motion.button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Export to Excel</p>
+        </TooltipContent>
+      </Tooltip>
 
-      <Link href="/vos/new">
-        <motion.button
-          whileHover={{ scale: 1.02, y: -1 }}
-          whileTap={{ scale: 0.98 }}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-semibold transition-all shadow-lg hover:shadow-xl"
-        >
-          <Plus className="h-4 w-4" />
-          <span>New VO</span>
-          <Zap className="h-3.5 w-3.5 text-amber-300" />
-        </motion.button>
-      </Link>
+      {/* New VO button removed as per request to avoid redundancy */}
     </motion.div>
   );
 }
