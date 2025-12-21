@@ -86,12 +86,12 @@ interface VORowProps {
     subject: string;
     status: string;
     submissionDate: string;
-    proposalValue: number;
+    proposalValue: number | null;
     approvedAmount: number | null;
-    submissionReference?: string;
-    vorReference?: string;
-    dvoReference?: string;
-    remarks?: string;
+    submissionReference?: string | null;
+    vorReference?: string | null;
+    dvoReference?: string | null;
+    remarks?: string | null;
   };
   index: number;
   isExpanded: boolean;
@@ -101,7 +101,7 @@ interface VORowProps {
 function VORow({ vo, index, isExpanded, onToggle }: VORowProps) {
   const [isHovered, setIsHovered] = useState(false);
   const statusConfig = STATUS_CONFIG[vo.status] || STATUS_CONFIG.PendingWithFFC;
-  const displayValue = vo.approvedAmount || vo.proposalValue;
+  const displayValue = vo.approvedAmount || vo.proposalValue || 0;
   const isApproved = vo.approvedAmount !== null && vo.approvedAmount > 0;
 
   return (
