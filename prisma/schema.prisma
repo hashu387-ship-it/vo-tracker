@@ -24,6 +24,12 @@ model VO {
   dvoIssuedDate       DateTime?
   remarks             String?
   actionNotes         String?
+
+  // File attachments for different approval stages
+  ffcRsgProposedFile  String?  // Excel file for FFC/RSG Proposed (pending statuses)
+  rsgAssessedFile     String?  // Excel file for RSG Assessed (approved)
+  dvoRrApprovedFile   String?  // Excel file for DVO RR Approved (final)
+
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 

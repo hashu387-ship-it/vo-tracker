@@ -14,11 +14,16 @@ import {
   Tag,
   MessageSquare,
   Clock,
+  Download,
+  FileSpreadsheet,
+  Upload as UploadIcon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { StatusBadge } from './status-badge';
 import { DeleteVODialog } from './delete-vo-dialog';
+import { UploadFileDialog } from './upload-file-dialog';
 import { VO, useDeleteVO } from '@/lib/hooks/use-vos';
+import { useQueryClient } from '@tanstack/react-query';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { submissionTypeConfig } from '@/lib/validations/vo';
 import { useToast } from '@/components/ui/use-toast';
@@ -35,9 +40,15 @@ interface VOTableProps {
 export function VOTable({ vos, isLoading, isAdmin, sortBy, sortOrder, onSort }: VOTableProps) {
   const router = useRouter();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
   const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [uploadVoId, setUploadVoId] = useState<number | null>(null);
   const deleteMutation = useDeleteVO();
+
+  const handleUploadSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['vos'] });
+  };
 
   const toggleRow = (id: number) => {
     const newExpanded = new Set(expandedRows);
@@ -402,6 +413,106 @@ export function VOTable({ vos, isLoading, isAdmin, sortBy, sortOrder, onSort }: 
                             </div>
                           </div>
                         )}
+
+                        {/* File Attachments */}
+                        <div className="md:col-span-3 p-4 rounded-lg bg-background border border-border/50">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <FileSpreadsheet className="h-4 w-4 text-blue-600" />
+                              <h4 className="text-sm font-medium">File Attachments</h4>
+                            </div>
+                            {isAdmin && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setUploadVoId(vo.id);
+                                }}
+                                className="h-8 text-xs gap-1.5"
+                              >
+                                <UploadIcon className="h-3.5 w-3.5" />
+                                Upload File
+                              </Button>
+                            )}
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            {/* FFC/RSG Proposed */}
+                            <div className="p-3 rounded-lg bg-muted/50 border border-border/30">
+                              <div className="flex items-start justify-between mb-2">
+                                <span className="text-xs font-medium text-muted-foreground">FFC/RSG Proposed</span>
+                                {vo.ffcRsgProposedFile && (
+                                  <a
+                                    href={vo.ffcRsgProposedFile}
+                                    download
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="text-blue-600 hover:text-blue-700"
+                                  >
+                                    <Download className="h-3.5 w-3.5" />
+                                  </a>
+                                )}
+                              </div>
+                              {vo.ffcRsgProposedFile ? (
+                                <div className="flex items-center gap-2 text-xs text-foreground">
+                                  <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600" />
+                                  <span className="truncate">Uploaded</span>
+                                </div>
+                              ) : (
+                                <span className="text-xs text-muted-foreground">No file uploaded</span>
+                              )}
+                            </div>
+
+                            {/* RSG Assessed */}
+                            <div className="p-3 rounded-lg bg-muted/50 border border-border/30">
+                              <div className="flex items-start justify-between mb-2">
+                                <span className="text-xs font-medium text-muted-foreground">RSG Assessed</span>
+                                {vo.rsgAssessedFile && (
+                                  <a
+                                    href={vo.rsgAssessedFile}
+                                    download
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="text-blue-600 hover:text-blue-700"
+                                  >
+                                    <Download className="h-3.5 w-3.5" />
+                                  </a>
+                                )}
+                              </div>
+                              {vo.rsgAssessedFile ? (
+                                <div className="flex items-center gap-2 text-xs text-foreground">
+                                  <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600" />
+                                  <span className="truncate">Uploaded</span>
+                                </div>
+                              ) : (
+                                <span className="text-xs text-muted-foreground">No file uploaded</span>
+                              )}
+                            </div>
+
+                            {/* DVO RR Approved */}
+                            <div className="p-3 rounded-lg bg-muted/50 border border-border/30">
+                              <div className="flex items-start justify-between mb-2">
+                                <span className="text-xs font-medium text-muted-foreground">DVO RR Approved</span>
+                                {vo.dvoRrApprovedFile && (
+                                  <a
+                                    href={vo.dvoRrApprovedFile}
+                                    download
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="text-blue-600 hover:text-blue-700"
+                                  >
+                                    <Download className="h-3.5 w-3.5" />
+                                  </a>
+                                )}
+                              </div>
+                              {vo.dvoRrApprovedFile ? (
+                                <div className="flex items-center gap-2 text-xs text-foreground">
+                                  <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600" />
+                                  <span className="truncate">Uploaded</span>
+                                </div>
+                              ) : (
+                                <span className="text-xs text-muted-foreground">No file uploaded</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </motion.div>
@@ -417,6 +528,13 @@ export function VOTable({ vos, isLoading, isAdmin, sortBy, sortOrder, onSort }: 
         onOpenChange={(open) => !open && setDeleteId(null)}
         onConfirm={handleDelete}
         isLoading={deleteMutation.isPending}
+      />
+
+      <UploadFileDialog
+        open={uploadVoId !== null}
+        onOpenChange={(open) => !open && setUploadVoId(null)}
+        voId={uploadVoId || 0}
+        onUploadSuccess={handleUploadSuccess}
       />
     </div>
   );
