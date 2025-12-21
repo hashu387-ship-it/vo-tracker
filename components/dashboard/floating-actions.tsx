@@ -8,6 +8,7 @@ import {
   Printer,
   X,
   FileText,
+  Sparkles,
   ChevronUp
 } from 'lucide-react';
 import Link from 'next/link';
