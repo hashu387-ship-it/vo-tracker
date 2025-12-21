@@ -43,7 +43,7 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <main className="flex-1">
-        <div className="relative pt-24 pb-40 overflow-hidden min-h-screen flex flex-col justify-center">
+        <div className="relative pt-12 pb-24 md:pt-24 md:pb-40 overflow-hidden min-h-[calc(100vh-80px)] flex flex-col justify-center">
           {/* Background Image with Overlay */}
           <div className="absolute inset-0 z-0">
             <img
@@ -57,27 +57,27 @@ export default function LandingPage() {
 
           {/* Abstract Animated Elements */}
           <div className="absolute inset-0 opacity-30 pointer-events-none z-0">
-            <div className="absolute -top-24 -right-24 w-[800px] h-[800px] rounded-full border-[1px] border-white/10 blur-3xl animate-[spin_60s_linear_infinite]" />
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-rsg-gold/20 rounded-full blur-[100px] mix-blend-overlay" />
+            <div className="absolute -top-24 -right-24 w-[300px] h-[300px] md:w-[800px] md:h-[800px] rounded-full border-[1px] border-white/10 blur-3xl animate-[spin_60s_linear_infinite]" />
+            <div className="absolute top-1/4 left-1/4 w-48 h-48 md:w-96 md:h-96 bg-rsg-gold/20 rounded-full blur-[60px] md:blur-[100px] mix-blend-overlay" />
           </div>
 
-          <div className="container relative mx-auto px-6 text-center z-10">
+          <div className="container relative mx-auto px-4 md:px-6 text-center z-10">
             {/* Logos */}
-            <div className="mb-16 flex flex-col items-center justify-center gap-8 md:flex-row md:gap-16 animate-in fade-in slide-in-from-bottom-8 duration-700">
-              <div className="flex items-center justify-center opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 py-4 px-8 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
-                <img src="/rsg-logo.png" alt="Red Sea Global" className="h-16 w-auto brightness-0 invert" />
+            <div className="mb-10 md:mb-16 flex flex-col items-center justify-center gap-6 md:flex-row md:gap-16 animate-in fade-in slide-in-from-bottom-8 duration-700">
+              <div className="flex items-center justify-center opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 py-3 px-6 md:py-4 md:px-8 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl w-full max-w-[200px] md:w-auto">
+                <img src="/rsg-logo.png" alt="Red Sea Global" className="h-12 md:h-16 w-auto brightness-0 invert" />
               </div>
               <div className="hidden h-16 w-px bg-gradient-to-b from-transparent via-white/30 to-transparent md:block" />
-              <div className="flex items-center justify-center opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 py-4 px-8 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
-                <img src="/firstfix-v2.png" alt="FirstFix" className="h-12 w-auto brightness-0 invert" />
+              <div className="flex items-center justify-center opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 py-3 px-6 md:py-4 md:px-8 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl w-full max-w-[200px] md:w-auto">
+                <img src="/firstfix-v2.png" alt="FirstFix" className="h-8 md:h-12 w-auto brightness-0 invert" />
               </div>
             </div>
 
             {/* Main Title */}
-            <div className="mb-12 space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
-              <h1 className="text-4xl font-light tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
-                <span className="block font-medium mb-2">HW2 Commercial Register</span>
-                <span className="text-rsg-gold font-serif italic">Variation Order LOG</span>
+            <div className="mb-8 md:mb-12 space-y-4 md:space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
+              <h1 className="text-3xl font-light tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+                <span className="block font-medium mb-1 md:mb-2 text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-100">HW2 Commercial Register</span>
+                <span className="text-rsg-gold font-serif italic text-4xl sm:text-6xl md:text-7xl">Variation Order LOG</span>
               </h1>
             </div>
 
