@@ -35,11 +35,21 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <main className="flex-1">
-        <div className="relative pt-24 pb-40 bg-rsg-navy overflow-hidden">
-          {/* Abstract Background */}
-          <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="relative pt-24 pb-40 overflow-hidden min-h-screen flex flex-col justify-center">
+          {/* Background Image with Overlay */}
+          <div className="absolute inset-0 z-0">
+            <img
+              src="/rsg-hero.jpg"
+              alt="Red Sea Project"
+              className="h-full w-full object-cover object-center scale-105 animate-[pulse-subtle_10s_ease-in-out_infinite]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-rsg-navy via-rsg-navy/80 to-rsg-navy/70 mix-blend-multiply" />
+            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20 mixed-blend-overlay" />
+          </div>
+
+          {/* Abstract Animated Elements */}
+          <div className="absolute inset-0 opacity-30 pointer-events-none z-0">
             <div className="absolute -top-24 -right-24 w-[800px] h-[800px] rounded-full border-[1px] border-white/10 blur-3xl animate-[spin_60s_linear_infinite]" />
-            <div className="absolute bottom-0 left-0 w-full h-[400px] bg-gradient-to-t from-rsg-navy via-rsg-navy/50 to-transparent" />
             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-rsg-gold/20 rounded-full blur-[100px] mix-blend-overlay" />
           </div>
 
