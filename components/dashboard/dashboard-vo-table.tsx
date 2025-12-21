@@ -129,25 +129,26 @@ export function DashboardVOTable() {
             >
               <div
                 onClick={() => toggleRow(vo.id)}
-                className="cursor-pointer p-2 flex items-center justify-between gap-4 group"
+                className="cursor-pointer py-1 px-2 flex items-center justify-between gap-2 sm:gap-4 group"
               >
                 {/* Left Section */}
-                <div className="flex items-center gap-4 flex-1 min-w-0">
-                  <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <div className={`flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center transition-all duration-300
                     ${isExpanded ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-105' : 'bg-secondary text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary'}
                   `}>
                     {isExpanded ? (
-                      <ChevronDown className="h-4 w-4" />
+                      <ChevronDown className="h-3 w-3" />
                     ) : (
-                      <ChevronRight className="h-4 w-4" />
+                      <ChevronRight className="h-3 w-3" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 sm:gap-3">
-                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider bg-secondary/50 px-1.5 py-0.5 rounded-md border border-border/50 whitespace-nowrap">
+                    <div className="flex items-center gap-2">
+                      {/* Use S.No from data if possible, but we don't store it explicitly as S.No. Using index is fine as user asked "like this #23" */}
+                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider bg-secondary/50 px-1 py-0.5 rounded border border-border/50 whitespace-nowrap">
                         #{index + 1}
                       </span>
-                      <h3 className="text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors">
+                      <h3 className="text-xs sm:text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors">
                         {vo.subject}
                       </h3>
                     </div>
