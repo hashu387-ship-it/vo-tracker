@@ -59,7 +59,7 @@ const STATUS_LABELS: Record<string, string> = {
 
 export function DashboardVOTable() {
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
-  const { data, isLoading } = useVOs({ limit: 50 });
+  const { data, isLoading } = useVOs({});
 
   const toggleRow = (id: number) => {
     setExpandedRows((prev) => {
@@ -105,7 +105,7 @@ export function DashboardVOTable() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-          Recent Orders
+          All Variation Orders
         </h2>
       </div>
 
@@ -129,7 +129,7 @@ export function DashboardVOTable() {
             >
               <div
                 onClick={() => toggleRow(vo.id)}
-                className="cursor-pointer p-3 flex items-center justify-between gap-4 group"
+                className="cursor-pointer p-2 flex items-center justify-between gap-4 group"
               >
                 {/* Left Section */}
                 <div className="flex items-center gap-4 flex-1 min-w-0">
@@ -353,6 +353,6 @@ export function DashboardVOTable() {
           );
         })}
       </div>
-    </div>
+    </div >
   );
 }
