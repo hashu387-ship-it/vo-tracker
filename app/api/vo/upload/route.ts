@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { prisma } from '@/lib/db';
 import { uploadVOFile, FileUploadType } from '@/lib/supabase';
 
 export async function POST(request: NextRequest) {
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
       [fieldMap[fileType]]: fileUrl,
     };
 
-    const updatedVO = await db.vO.update({
+    const updatedVO = await prisma.vO.update({
       where: { id: parseInt(voId) },
       data: updateData,
     });
