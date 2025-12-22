@@ -20,8 +20,8 @@ if (match) {
   }
 }
 
-const supabaseUrl = `https://${projectRef}.supabase.co`;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabaseUrl = projectRef ? `https://${projectRef}.supabase.co` : 'https://placeholder.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key';
 
 // Create Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {

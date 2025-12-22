@@ -7,6 +7,8 @@ import { requireAuth, requireAdmin } from '@/lib/auth';
 import { createVOSchema, voQuerySchema } from '@/lib/validations/vo';
 import { Prisma } from '@prisma/client';
 
+export const dynamic = 'force-dynamic';
+
 // GET /api/vo - List all VOs with filtering, sorting, and pagination
 export async function GET(request: NextRequest) {
   try {

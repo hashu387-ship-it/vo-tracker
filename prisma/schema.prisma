@@ -36,6 +36,7 @@ model VO {
 
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
+  isExcludedFromStats Boolean  @default(false)
 
   @@map("variation_orders")
 }
@@ -51,4 +52,24 @@ model ActivityLog {
   createdAt   DateTime @default(now())
 
   @@map("activity_logs")
+}
+
+model PaymentApplication {
+  id                      Int       @id @default(autoincrement())
+  paymentNo               String    // e.g. "IPA 1", "AP01"
+  description             String    // e.g. "Sept 20th 2023 – Dec 25th 2023"
+  grossAmount             Float
+  advancePaymentRecovery  Float     @default(0)
+  retention               Float     @default(0)
+  vatRecovery             Float     @default(0)
+  vat                     Float
+  netPayment              Float
+  
+  submittedDate           DateTime?
+  invoiceDate             DateTime? // Corresponds to "Tax invoice submitted"
+
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  @@map("payment_applications")
 }

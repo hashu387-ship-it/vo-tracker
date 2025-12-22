@@ -9,7 +9,8 @@ import {
   X,
   FileText,
   Sparkles,
-  ChevronUp
+  ChevronUp,
+  CreditCard
 } from 'lucide-react';
 import Link from 'next/link';
 import {

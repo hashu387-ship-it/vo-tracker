@@ -4,6 +4,8 @@ import { requireAuth, requireAdmin } from '@/lib/auth';
 import { updateVOSchema } from '@/lib/validations/vo';
 import { logActivity } from '@/lib/actions/activity';
 
+export const dynamic = 'force-dynamic';
+
 interface RouteParams {
   params: Promise<{ id: string }>;
 }
@@ -86,20 +88,51 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     // Calculate changes for activity log
     const changes: string[] = [];
+    const formatCurrency = (amount: number | null) => {
+      if (amount === null) return 'N/A';
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'SAR' }).format(amount);
+    };
+
     if (existingVO.subject !== vo.subject) {
       changes.push(`Subject changed from "${existingVO.subject}" to "${vo.subject}"`);
     }
+
+    // Financial Value Changes
     if (existingVO.proposalValue !== vo.proposalValue) {
-      changes.push(`Proposal Value: ${existingVO.proposalValue} -> ${vo.proposalValue}`);
+      changes.push(`Proposal Value: ${formatCurrency(existingVO.proposalValue)} -> ${formatCurrency(vo.proposalValue)}`);
     }
     if (existingVO.assessmentValue !== vo.assessmentValue) {
-      changes.push(`Assessment Value: ${existingVO.assessmentValue} -> ${vo.assessmentValue}`);
+      changes.push(`Assessment Value: ${formatCurrency(existingVO.assessmentValue)} -> ${formatCurrency(vo.assessmentValue)}`);
     }
     if (existingVO.approvedAmount !== vo.approvedAmount) {
-      changes.push(`Approved Amount: ${existingVO.approvedAmount} -> ${vo.approvedAmount}`);
+      changes.push(`Approved Amount: ${formatCurrency(existingVO.approvedAmount)} -> ${formatCurrency(vo.approvedAmount)}`);
     }
+
+    // Status Change
     if (existingVO.status !== vo.status) {
       changes.push(`Status: ${existingVO.status} -> ${vo.status}`);
+    }
+
+    // Reference Changes
+    if (existingVO.submissionReference !== vo.submissionReference) {
+      changes.push(`Submission Ref: ${existingVO.submissionReference || 'None'} -> ${vo.submissionReference || 'None'}`);
+    }
+    if (existingVO.responseReference !== vo.responseReference) {
+      changes.push(`Response Ref: ${existingVO.responseReference || 'None'} -> ${vo.responseReference || 'None'}`);
+    }
+    if (existingVO.vorReference !== vo.vorReference) {
+      changes.push(`VOR Ref: ${existingVO.vorReference || 'None'} -> ${vo.vorReference || 'None'}`);
+    }
+    if (existingVO.dvoReference !== vo.dvoReference) {
+      changes.push(`DVO Ref: ${existingVO.dvoReference || 'None'} -> ${vo.dvoReference || 'None'}`);
+    }
+
+    // Notes/Remarks Changes
+    if (existingVO.remarks !== vo.remarks) {
+      changes.push(`Remarks updated`);
+    }
+    if (existingVO.actionNotes !== vo.actionNotes) {
+      changes.push(`Action Notes updated`);
     }
 
     const changeDetails = changes.length > 0 ? `Changes: ${changes.join(', ')}` : 'Updated details';

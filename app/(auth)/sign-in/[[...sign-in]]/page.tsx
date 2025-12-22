@@ -37,12 +37,12 @@ export default function Page() {
 
         {/* Logos (Same as Cover Page) */}
         <div className="mb-8 flex flex-col items-center justify-center gap-6 md:flex-row md:gap-16 animate-in fade-in slide-in-from-bottom-8 duration-700">
-          <div className="flex items-center justify-center bg-white/5 py-3 px-6 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
-            <img src="/rsg-logo.png" alt="Red Sea Global" className="h-10 md:h-12 w-auto brightness-0 invert" />
+          <div className="flex items-center justify-center bg-white/5 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl w-28 h-20 md:w-40 md:h-28">
+            <img src="/rsg-logo.png" alt="Red Sea Global" className="max-h-[70%] max-w-[70%] w-auto h-auto brightness-0 invert" />
           </div>
           <div className="hidden h-12 w-px bg-white/30 md:block" />
-          <div className="flex items-center justify-center bg-white/5 py-3 px-6 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
-            <img src="/firstfix-v2.png" alt="FirstFix" className="h-9 md:h-11 w-auto brightness-0 invert" />
+          <div className="flex items-center justify-center bg-white/5 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl w-28 h-20 md:w-40 md:h-28">
+            <img src="/firstfix-v2.png" alt="FirstFix" className="max-h-[70%] max-w-[70%] w-auto h-auto brightness-0 invert" />
           </div>
         </div>
 

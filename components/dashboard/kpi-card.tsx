@@ -4,6 +4,13 @@ import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+
 interface KPICardProps {
   title: string;
   value: string | number;
@@ -16,6 +23,7 @@ interface KPICardProps {
     isPositive: boolean;
   };
   delay?: number;
+  items?: Array<{ id: number; subject: string; proposalValue?: number | null; approvedAmount?: number | null }>;
 }
 
 export function KPICard({
@@ -26,14 +34,15 @@ export function KPICard({
   iconColor = 'text-primary',
   bgColor,
   delay = 0,
+  items,
 }: KPICardProps) {
-  return (
+  const content = (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay }}
     >
-      <div className="relative overflow-hidden p-6 bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl border border-white/60 dark:border-white/10 rounded-xl shadow-sm hover:shadow-lg dark:shadow-black/20 transition-all duration-300 group">
+      <div className="relative overflow-hidden p-6 bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl border border-white/60 dark:border-white/10 rounded-xl shadow-sm hover:shadow-lg dark:shadow-black/20 transition-all duration-300 group cursor-default">
 
         {/* Subtle Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent dark:from-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -61,5 +70,32 @@ export function KPICard({
         )} />
       </div>
     </motion.div>
+  );
+
+  if (!items || items.length === 0) return content;
+
+  return (
+    <TooltipProvider delayDuration={0}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          {content}
+        </TooltipTrigger>
+        <TooltipContent side="bottom" className="w-80 p-0 bg-slate-900 border-slate-800 text-slate-50 shadow-xl">
+          <div className="p-3 border-b border-white/10 font-semibold text-sm">
+            {title} ({items.length} recent)
+          </div>
+          <div className="max-h-[300px] overflow-y-auto py-1">
+            {items.map((item) => (
+              <div key={item.id} className="px-3 py-2 hover:bg-white/5 border-b border-white/5 last:border-0 text-sm">
+                <div className="font-medium truncate">{item.subject}</div>
+                <div className="text-xs text-slate-400 mt-0.5">
+                  {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'SAR' }).format(item.approvedAmount || item.proposalValue || 0)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }

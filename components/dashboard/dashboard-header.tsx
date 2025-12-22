@@ -81,12 +81,12 @@ export function DashboardHeader({ onExport, onPrint, isExporting }: DashboardHea
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
-              className="relative"
+              className="relative h-12 w-32 flex items-center justify-center"
             >
               <img
                 src="/rsg-logo.png"
                 alt="RSG"
-                className="h-10 md:h-12 w-auto brightness-0 invert opacity-90"
+                className="h-full w-auto object-contain brightness-0 invert opacity-90"
               />
             </motion.div>
 
@@ -96,11 +96,12 @@ export function DashboardHeader({ onExport, onPrint, isExporting }: DashboardHea
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
+              className="relative h-12 w-32 flex items-center justify-center"
             >
               <img
                 src="/firstfix-v2.png"
                 alt="FirstFix"
-                className="h-10 md:h-12 w-auto brightness-0 invert opacity-90"
+                className="h-full w-auto object-contain brightness-0 invert opacity-90"
               />
             </motion.div>
           </div>

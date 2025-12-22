@@ -438,106 +438,160 @@ export function InteractiveVOTable({ filterStatus }: { filterStatus: string | nu
     });
   };
 
-  if (isLoading) {
-    return (
-      <div className="space-y-3">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: i * 0.05 }}
-          >
-            <Skeleton className="h-20 w-full rounded-xl" />
-          </motion.div>
-        ))}
-      </div>
-    );
-  }
+  // State for tabs
+  const [activeTab, setActiveTab] = useState<'vos' | 'payments'>('vos');
+  const [payments, setPayments] = useState<any[]>([]);
+  const [loadingPayments, setLoadingPayments] = useState(false);
+
+  // Fetch payments logic
+  const fetchPayments = async () => {
+    setLoadingPayments(true);
+    try {
+      const res = await fetch('/api/payments');
+      const json = await res.json();
+      if (json.data) setPayments(json.data);
+    } catch (error) {
+      console.error('Failed to fetch payments', error);
+    } finally {
+      setLoadingPayments(false);
+    }
+  };
 
   const allVOs = data?.data || [];
   const vos = filterStatus
     ? allVOs.filter(vo => vo.status === filterStatus)
     : allVOs;
 
-  if (vos.length === 0) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="rounded-2xl bg-gradient-to-br from-muted/50 to-muted/30 p-12 text-center border border-border/50"
-      >
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: 'spring', delay: 0.1 }}
-          className="mx-auto h-20 w-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-6"
-        >
-          <FileText className="h-10 w-10 text-primary" />
-        </motion.div>
-        <h3 className="text-xl font-bold text-foreground mb-2">
-          {filterStatus ? `No ${STATUS_CONFIG[filterStatus]?.label || 'Matching'} Orders` : 'No Variation Orders Found'}
-        </h3>
-        <p className="text-muted-foreground max-w-sm mx-auto">
-          {filterStatus
-            ? 'Try selecting a different status or clear the filter.'
-            : 'Start by creating your first variation order to track its progress.'
-          }
-        </p>
-      </motion.div>
-    );
-  }
-
   return (
     <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      {/* Header & Tabs */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-bold text-foreground">
-            {filterStatus ? STATUS_CONFIG[filterStatus]?.label : 'All Variation Orders'}
+            {activeTab === 'vos'
+              ? (filterStatus ? STATUS_CONFIG[filterStatus]?.label : 'All Variation Orders')
+              : 'Payment Register'}
           </h2>
           <p className="text-sm text-muted-foreground mt-0.5">
-            {vos.length} record{vos.length !== 1 ? 's' : ''} found
+            {activeTab === 'vos'
+              ? (isLoading ? 'Loading records...' : `${vos.length} record${vos.length !== 1 ? 's' : ''} found`)
+              : `${payments.length} payment application${payments.length !== 1 ? 's' : ''} found`
+            }
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 dark:bg-primary/10 text-primary text-xs font-semibold"
+
+        <div className="flex items-center gap-2 bg-muted/30 p-1 rounded-lg border border-border/50">
+          <button
+            onClick={() => setActiveTab('vos')}
+            className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${activeTab === 'vos' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
           >
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>Click rows to expand</span>
-          </motion.div>
+            VO Logs
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab('payments');
+              if (payments.length === 0) fetchPayments();
+            }}
+            className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${activeTab === 'payments' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+          >
+            Payment Register
+          </button>
         </div>
       </div>
 
-      {/* Table Container */}
+      {/* Content */}
       <div className="rounded-2xl overflow-hidden border border-border/50 bg-card/50 backdrop-blur-xl shadow-xl">
-        {/* Desktop Header */}
-        <div className="hidden sm:grid grid-cols-12 gap-4 px-6 py-4 bg-muted/50 dark:bg-muted/30 border-b border-border/50 text-xs font-bold text-muted-foreground uppercase tracking-widest">
-          {/* <div className="col-span-1">#</div> Reason: Removed as per request */}
-          <div className="col-span-6">Subject</div>
-          <div className="col-span-2 text-right">Value</div>
-          <div className="col-span-2 text-right pr-4">Date</div>
-          <div className="col-span-2 text-right">Status</div>
-        </div>
+        {activeTab === 'vos' ? (
+          isLoading ? (
+            <div className="space-y-3 p-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: i * 0.05 }}
+                >
+                  <Skeleton className="h-20 w-full rounded-xl" />
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <>
+              {/* VO Table Header */}
+              <div className="hidden sm:grid grid-cols-12 gap-4 px-6 py-4 bg-muted/50 dark:bg-muted/30 border-b border-border/50 text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                <div className="col-span-6">Subject</div>
+                <div className="col-span-2 text-right">Value</div>
+                <div className="col-span-2 text-right pr-4">Date</div>
+                <div className="col-span-2 text-right">Status</div>
+              </div>
 
-        {/* Rows */}
-        <div className="divide-y divide-border/30">
-          <AnimatePresence mode="popLayout">
-            {vos.map((vo, index) => (
-              <VORow
-                key={vo.id}
-                vo={vo}
-                index={index}
-                isExpanded={expandedRows.has(vo.id)}
-                onToggle={() => toggleRow(vo.id)}
-                onRefresh={refetch}
-              />
-            ))}
-          </AnimatePresence>
-        </div>
+              {/* VO Rows */}
+              <div className="divide-y divide-border/30">
+                {vos.length === 0 ? (
+                  <div className="p-12 text-center">
+                    <p className="text-muted-foreground">No Variation Orders found.</p>
+                  </div>
+                ) : (
+                  <AnimatePresence mode="popLayout">
+                    {vos.map((vo, index) => (
+                      <VORow
+                        key={vo.id}
+                        vo={vo}
+                        index={index}
+                        isExpanded={expandedRows.has(vo.id)}
+                        onToggle={() => toggleRow(vo.id)}
+                        onRefresh={refetch}
+                      />
+                    ))}
+                  </AnimatePresence>
+                )}
+              </div>
+            </>
+          )
+        ) : (
+          /* Payment Table */
+          <>
+            {/* Payment Header */}
+            <div className="hidden sm:grid grid-cols-12 gap-2 px-6 py-4 bg-muted/50 dark:bg-muted/30 border-b border-border/50 text-xs font-bold text-muted-foreground uppercase tracking-widest">
+              <div className="col-span-1">Ref</div>
+              <div className="col-span-3">Description</div>
+              <div className="col-span-2 text-right">Gross</div>
+              <div className="col-span-2 text-right">Adv/Ret/VAT</div>
+              <div className="col-span-2 text-right bg-green-500/5 text-green-600">Net</div>
+              <div className="col-span-2 text-right">Date</div>
+            </div>
+
+            {/* Payment Rows */}
+            <div className="divide-y divide-border/30 max-h-[600px] overflow-y-auto">
+              {loadingPayments ? (
+                <div className="p-12 text-center">
+                  <Sparkles className="h-6 w-6 animate-spin mx-auto text-primary mb-2" />
+                  <p className="text-muted-foreground">Loading payments...</p>
+                </div>
+              ) : payments.length === 0 ? (
+                <p className="p-12 text-center text-muted-foreground">No payments found.</p>
+              ) : (
+                payments.map((p, idx) => (
+                  <div key={p.id} className="grid grid-cols-1 sm:grid-cols-12 gap-2 px-6 py-4 items-center hover:bg-muted/30 transition-colors text-sm">
+                    <div className="col-span-1 font-mono font-medium text-primary">{p.paymentNo}</div>
+                    <div className="col-span-3 text-muted-foreground truncate" title={p.description}>{p.description}</div>
+                    <div className="col-span-2 text-right font-mono">{formatCurrency(p.grossAmount)}</div>
+                    <div className="col-span-2 text-right text-xs text-muted-foreground flex flex-col items-end gap-1">
+                      <span className="text-red-500/80" title="Adv Recovery">{formatCurrency(p.advancePaymentRecovery)} (Adv)</span>
+                      <span className="text-red-500/80" title="Retention">{formatCurrency(p.retention)} (Ret)</span>
+                    </div>
+                    <div className="col-span-2 text-right font-mono font-bold text-green-600 bg-green-500/5 py-1 px-2 rounded">
+                      {formatCurrency(p.netPayment)}
+                    </div>
+                    <div className="col-span-2 text-right text-xs text-muted-foreground">
+                      {p.submittedDate ? new Date(p.submittedDate).toLocaleDateString() : '-'}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

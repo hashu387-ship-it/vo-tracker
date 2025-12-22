@@ -3,6 +3,8 @@ import { prisma } from '@/lib/db';
 import { uploadVOFile, FileUploadType } from '@/lib/supabase';
 import { logActivity } from '@/lib/actions/activity';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();

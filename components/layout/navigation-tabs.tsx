@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { LayoutDashboard, FileText, Plus } from 'lucide-react';
+import { LayoutDashboard, FileText, Plus, CreditCard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const tabs = [
@@ -16,6 +16,11 @@ const tabs = [
     name: 'Variation Orders',
     href: '/vos',
     icon: FileText,
+  },
+  {
+    name: 'Payment Register',
+    href: '/payments',
+    icon: CreditCard,
   },
 ];
 

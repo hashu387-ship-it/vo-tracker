@@ -7,6 +7,8 @@ export async function GET() {
   try {
     await requireAuth();
 
+    const whereBase = { isExcludedFromStats: false };
+
     const [
       total,
       pendingWithFFC,
@@ -20,40 +22,75 @@ export async function GET() {
       pendingWithRSGFFCFinancials,
       approvedAwaitingDVOFinancials,
       dvoRRIssuedFinancials,
+      // Detailed Lists
+      pendingWithFFCList,
+      pendingWithRSGList,
+      pendingWithRSGFFCList,
+      approvedAwaitingDVOList,
+      dvoRRIssuedList,
     ] = await Promise.all([
-      prisma.vO.count(),
-      prisma.vO.count({ where: { status: 'PendingWithFFC' } }),
-      prisma.vO.count({ where: { status: 'PendingWithRSG' } }),
-      prisma.vO.count({ where: { status: 'PendingWithRSGFFC' } }),
-      prisma.vO.count({ where: { status: 'ApprovedAwaitingDVO' } }),
-      prisma.vO.count({ where: { status: 'DVORRIssued' } }),
+      prisma.vO.count({ where: whereBase }),
+      prisma.vO.count({ where: { ...whereBase, status: 'PendingWithFFC' } }),
+      prisma.vO.count({ where: { ...whereBase, status: 'PendingWithRSG' } }),
+      prisma.vO.count({ where: { ...whereBase, status: 'PendingWithRSGFFC' } }),
+      prisma.vO.count({ where: { ...whereBase, status: 'ApprovedAwaitingDVO' } }),
+      prisma.vO.count({ where: { ...whereBase, status: 'DVORRIssued' } }),
 
       // Financials per status
       prisma.vO.aggregate({
-        where: { status: 'PendingWithFFC' },
+        where: { ...whereBase, status: 'PendingWithFFC' },
         _sum: { proposalValue: true },
       }),
       prisma.vO.aggregate({
-        where: { status: 'PendingWithRSG' },
+        where: { ...whereBase, status: 'PendingWithRSG' },
         _sum: { proposalValue: true },
       }),
       prisma.vO.aggregate({
-        where: { status: 'PendingWithRSGFFC' },
+        where: { ...whereBase, status: 'PendingWithRSGFFC' },
         _sum: { proposalValue: true },
       }),
       prisma.vO.aggregate({
-        where: { status: 'ApprovedAwaitingDVO' },
+        where: { ...whereBase, status: 'ApprovedAwaitingDVO' },
         _sum: { approvedAmount: true },
       }),
       prisma.vO.aggregate({
-        where: { status: 'DVORRIssued' },
+        where: { ...whereBase, status: 'DVORRIssued' },
         _sum: { approvedAmount: true },
+      }),
+
+      // Lists for Tooltips (Limit 10)
+      prisma.vO.findMany({
+        where: { ...whereBase, status: 'PendingWithFFC' },
+        select: { id: true, subject: true, proposalValue: true },
+        orderBy: { submissionDate: 'desc' },
+        take: 10,
+      }),
+      prisma.vO.findMany({
+        where: { ...whereBase, status: 'PendingWithRSG' },
+        select: { id: true, subject: true, proposalValue: true },
+        orderBy: { submissionDate: 'desc' },
+        take: 10,
+      }),
+      prisma.vO.findMany({
+        where: { ...whereBase, status: 'PendingWithRSGFFC' },
+        select: { id: true, subject: true, proposalValue: true },
+        orderBy: { submissionDate: 'desc' },
+        take: 10,
+      }),
+      prisma.vO.findMany({
+        where: { ...whereBase, status: 'ApprovedAwaitingDVO' },
+        select: { id: true, subject: true, approvedAmount: true },
+        orderBy: { submissionDate: 'desc' },
+        take: 10,
+      }),
+      prisma.vO.findMany({
+        where: { ...whereBase, status: 'DVORRIssued' },
+        select: { id: true, subject: true, approvedAmount: true },
+        orderBy: { submissionDate: 'desc' },
+        take: 10,
       }),
     ]);
 
-    // Calculate smart total:
-    // For Pending statuses: Use Proposal Value
-    // For Approved statuses: Use Approved Amount
     const totalSubmittedValue =
       (pendingWithFFCFinancials._sum.proposalValue || 0) +
       (pendingWithRSGFinancials._sum.proposalValue || 0) +
@@ -87,6 +124,7 @@ export async function GET() {
             amount: pendingWithFFCFinancials._sum.proposalValue || 0,
             color: 'orange',
             gradient: 'from-orange-500 to-orange-600',
+            items: pendingWithFFCList,
           },
           {
             status: 'PendingWithRSG',
@@ -95,6 +133,7 @@ export async function GET() {
             amount: pendingWithRSGFinancials._sum.proposalValue || 0,
             color: 'amber',
             gradient: 'from-amber-500 to-amber-600',
+            items: pendingWithRSGList,
           },
           {
             status: 'PendingWithRSGFFC',
@@ -103,6 +142,7 @@ export async function GET() {
             amount: pendingWithRSGFFCFinancials._sum.proposalValue || 0,
             color: 'yellow',
             gradient: 'from-yellow-400 to-yellow-500',
+            items: pendingWithRSGFFCList,
           },
           {
             status: 'ApprovedAwaitingDVO',
@@ -111,6 +151,7 @@ export async function GET() {
             amount: approvedAwaitingDVOFinancials._sum.approvedAmount || 0,
             color: 'cyan',
             gradient: 'from-cyan-500 to-cyan-600',
+            items: approvedAwaitingDVOList,
           },
           {
             status: 'DVORRIssued',
@@ -119,6 +160,7 @@ export async function GET() {
             amount: dvoRRIssuedFinancials._sum.approvedAmount || 0,
             color: 'green',
             gradient: 'from-green-500 to-green-600',
+            items: dvoRRIssuedList,
           },
         ],
       },

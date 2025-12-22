@@ -64,12 +64,12 @@ export default function LandingPage() {
           <div className="container relative mx-auto px-4 md:px-6 text-center z-10">
             {/* Logos */}
             <div className="mb-10 md:mb-16 flex flex-col items-center justify-center gap-6 md:flex-row md:gap-16 animate-in fade-in slide-in-from-bottom-8 duration-700">
-              <div className="flex items-center justify-center opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 py-3 px-6 md:py-4 md:px-8 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl w-full max-w-[200px] md:w-auto">
-                <img src="/rsg-logo.png" alt="Red Sea Global" className="h-12 md:h-16 w-auto brightness-0 invert" />
+              <div className="flex items-center justify-center opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl w-32 h-24 md:w-48 md:h-32">
+                <img src="/rsg-logo.png" alt="Red Sea Global" className="max-h-[70%] max-w-[70%] w-auto h-auto brightness-0 invert" />
               </div>
               <div className="hidden h-16 w-px bg-gradient-to-b from-transparent via-white/30 to-transparent md:block" />
-              <div className="flex items-center justify-center opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 py-3 px-6 md:py-4 md:px-8 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl w-full max-w-[200px] md:w-auto">
-                <img src="/firstfix-v2.png" alt="FirstFix" className="h-10 md:h-14 w-auto brightness-0 invert" />
+              <div className="flex items-center justify-center opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl w-32 h-24 md:w-48 md:h-32">
+                <img src="/firstfix-v2.png" alt="FirstFix" className="max-h-[70%] max-w-[70%] w-auto h-auto brightness-0 invert" />
               </div>
             </div>
 

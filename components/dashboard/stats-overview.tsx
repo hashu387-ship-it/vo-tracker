@@ -40,46 +40,26 @@ export function StatsOverview() {
             bgColor="bg-blue-500"
             delay={0}
           />
-          <KPICard
-            title="Pending with FFC"
-            value={stats.counts.pendingWithFFC}
-            icon={Clock}
-            iconColor="text-orange-500"
-            bgColor="bg-orange-500"
-            delay={0.1}
-          />
-          <KPICard
-            title="Pending with RSG"
-            value={stats.counts.pendingWithRSG}
-            icon={Clock}
-            iconColor="text-amber-600"
-            bgColor="bg-amber-600"
-            delay={0.2}
-          />
-          <KPICard
-            title="Pending with RSG/FFC"
-            value={stats.counts.pendingWithRSGFFC}
-            icon={Clock}
-            iconColor="text-yellow-500"
-            bgColor="bg-yellow-400"
-            delay={0.3}
-          />
-          <KPICard
-            title="Approved & Awaiting DVO"
-            value={stats.counts.approvedAwaitingDVO}
-            icon={CheckCircle}
-            iconColor="text-cyan-500"
-            bgColor="bg-cyan-500"
-            delay={0.4}
-          />
-          <KPICard
-            title="DVO RR Issued"
-            value={stats.counts.dvoRRIssued}
-            icon={FileCheck}
-            iconColor="text-green-500"
-            bgColor="bg-green-500"
-            delay={0.5}
-          />
+          {stats.statusBreakdown && (
+            <>
+              {stats.statusBreakdown.map((status: any, index: number) => (
+                <KPICard
+                  key={status.status}
+                  title={status.label}
+                  value={status.count}
+                  icon={
+                    status.status.includes('Approved') || status.status.includes('Issued')
+                      ? (status.status.includes('RR') ? FileCheck : CheckCircle)
+                      : Clock
+                  }
+                  iconColor={`text-${status.color}-500`}
+                  bgColor={`bg-${status.color}-${status.color === 'yellow' ? '400' : '500'}`}
+                  delay={0.1 + (index * 0.1)}
+                  items={status.items}
+                />
+              ))}
+            </>
+          )}
         </div>
       </div>
 
