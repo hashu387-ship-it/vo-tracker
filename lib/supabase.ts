@@ -1,10 +1,24 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Extract Supabase URL and anon key from DATABASE_URL
-// Format: postgresql://postgres:password@db.xxx.supabase.co:5432/postgres
+// Extract Supabase project reference from DATABASE_URL
+// Handles both formats:
+// - Standard: postgresql://postgres:password@db.xxx.supabase.co:5432/postgres
+// - Pooler: postgresql://postgres.xxx:password@aws-region.pooler.supabase.com:6543/postgres
 const databaseUrl = process.env.DATABASE_URL || '';
-const match = databaseUrl.match(/@db\.([^.]+)\.supabase\.co/);
-const projectRef = match ? match[1] : '';
+
+let projectRef = '';
+
+// Try standard format first
+let match = databaseUrl.match(/@db\.([^.]+)\.supabase\.co/);
+if (match) {
+  projectRef = match[1];
+} else {
+  // Try pooler format: postgres.xxx in username or in host
+  match = databaseUrl.match(/postgres\.([^:@]+)/);
+  if (match) {
+    projectRef = match[1];
+  }
+}
 
 const supabaseUrl = `https://${projectRef}.supabase.co`;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
