@@ -23,7 +23,7 @@ export default function LandingPage() {
                  The FirstFix logo is likely colored. 
              */}
             <div className="h-6 w-px bg-gray-200" />
-            <img src="/firstfix-v2.png" alt="FirstFix" className="h-8 w-auto" />
+            <img src="/firstfix-v2.png" alt="FirstFix" className="h-10 w-auto" />
           </div>
           <div className="flex items-center gap-4">
             <Link href="/sign-in">
@@ -69,7 +69,7 @@ export default function LandingPage() {
               </div>
               <div className="hidden h-16 w-px bg-gradient-to-b from-transparent via-white/30 to-transparent md:block" />
               <div className="flex items-center justify-center opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-500 bg-white/5 py-3 px-6 md:py-4 md:px-8 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl w-full max-w-[200px] md:w-auto">
-                <img src="/firstfix-v2.png" alt="FirstFix" className="h-8 md:h-12 w-auto brightness-0 invert" />
+                <img src="/firstfix-v2.png" alt="FirstFix" className="h-10 md:h-14 w-auto brightness-0 invert" />
               </div>
             </div>
 

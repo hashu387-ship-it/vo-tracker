@@ -42,7 +42,7 @@ export default function Page() {
           </div>
           <div className="hidden h-12 w-px bg-white/30 md:block" />
           <div className="flex items-center justify-center bg-white/5 py-3 px-6 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
-            <img src="/firstfix-v2.png" alt="FirstFix" className="h-6 md:h-8 w-auto brightness-0 invert" />
+            <img src="/firstfix-v2.png" alt="FirstFix" className="h-9 md:h-11 w-auto brightness-0 invert" />
           </div>
         </div>
 
