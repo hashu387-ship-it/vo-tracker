@@ -46,6 +46,11 @@ export default async function EditVOPage({ params }: EditVOPageProps) {
     ffcRsgProposedFile: vo.ffcRsgProposedFile,
     rsgAssessedFile: vo.rsgAssessedFile,
     dvoRrApprovedFile: vo.dvoRrApprovedFile,
+    // Add missing legacy fields required by VO interface
+    proposedFileUrl: vo.proposedFileUrl || null,
+    assessmentFileUrl: vo.assessmentFileUrl || null,
+    approvalFileUrl: vo.approvalFileUrl || null,
+    dvoFileUrl: vo.dvoFileUrl || null,
     createdAt: vo.createdAt.toISOString(),
     updatedAt: vo.updatedAt.toISOString(),
   };

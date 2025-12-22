@@ -84,7 +84,26 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       data: sanitizedData as any,
     });
 
-    await logActivity('UPDATE', 'VO', vo.id.toString(), `Updated VO: ${vo.subject}`);
+    // Calculate changes for activity log
+    const changes: string[] = [];
+    if (existingVO.subject !== vo.subject) {
+      changes.push(`Subject changed from "${existingVO.subject}" to "${vo.subject}"`);
+    }
+    if (existingVO.proposalValue !== vo.proposalValue) {
+      changes.push(`Proposal Value: ${existingVO.proposalValue} -> ${vo.proposalValue}`);
+    }
+    if (existingVO.assessmentValue !== vo.assessmentValue) {
+      changes.push(`Assessment Value: ${existingVO.assessmentValue} -> ${vo.assessmentValue}`);
+    }
+    if (existingVO.approvedAmount !== vo.approvedAmount) {
+      changes.push(`Approved Amount: ${existingVO.approvedAmount} -> ${vo.approvedAmount}`);
+    }
+    if (existingVO.status !== vo.status) {
+      changes.push(`Status: ${existingVO.status} -> ${vo.status}`);
+    }
+
+    const changeDetails = changes.length > 0 ? `Changes: ${changes.join(', ')}` : 'Updated details';
+    await logActivity('UPDATE', 'VO', vo.id.toString(), `Updated VO: "${vo.subject}". ${changeDetails}`);
 
     return NextResponse.json({ data: vo });
   } catch (error) {

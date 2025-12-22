@@ -123,7 +123,8 @@ export async function POST(request: NextRequest) {
       data: sanitizedData as any,
     });
 
-    await logActivity('CREATE', 'VO', vo.id.toString(), `Created VO: ${vo.subject}`);
+    const amount = vo.proposalValue ? ` - Amount: ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'SAR' }).format(vo.proposalValue)}` : '';
+    await logActivity('CREATE', 'VO', vo.id.toString(), `Created VO: "${vo.subject}"${amount}`);
 
     return NextResponse.json({ data: vo }, { status: 201 });
   } catch (error) {
