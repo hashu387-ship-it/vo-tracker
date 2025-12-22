@@ -4,6 +4,8 @@ import { prisma } from '@/lib/db';
 import { requireAuth, requireAdmin } from '@/lib/auth';
 import { z } from 'zod';
 
+export const dynamic = 'force-dynamic';
+
 const updatePaymentSchema = z.object({
     paymentNo: z.string().min(1).optional(),
     description: z.string().min(1).optional(),
