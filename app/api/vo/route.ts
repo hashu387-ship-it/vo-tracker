@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { logActivity } from '@/lib/actions/activity';
+import { z } from 'zod';
 import { prisma } from '@/lib/db';
 import { requireAuth, requireAdmin } from '@/lib/auth';
 import { createVOSchema, voQuerySchema } from '@/lib/validations/vo';
@@ -119,6 +122,8 @@ export async function POST(request: NextRequest) {
     const vo = await prisma.vO.create({
       data: sanitizedData as any,
     });
+
+    await logActivity('CREATE', 'VO', vo.id.toString(), `Created VO: ${vo.subject}`);
 
     return NextResponse.json({ data: vo }, { status: 201 });
   } catch (error) {

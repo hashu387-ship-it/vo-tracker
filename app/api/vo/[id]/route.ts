@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { requireAuth, requireAdmin } from '@/lib/auth';
 import { updateVOSchema } from '@/lib/validations/vo';
+import { logActivity } from '@/lib/actions/activity';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -83,6 +84,8 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       data: sanitizedData as any,
     });
 
+    await logActivity('UPDATE', 'VO', vo.id.toString(), `Updated VO: ${vo.subject}`);
+
     return NextResponse.json({ data: vo });
   } catch (error) {
     console.error('PUT /api/vo/:id error:', error);
@@ -121,6 +124,8 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     await prisma.vO.delete({
       where: { id: voId },
     });
+
+    await logActivity('DELETE', 'VO', voId.toString(), `Deleted VO: ${existingVO.subject}`);
 
     return NextResponse.json({ message: 'VO deleted successfully' });
   } catch (error) {

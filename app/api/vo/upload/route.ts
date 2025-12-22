@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { uploadVOFile, FileUploadType } from '@/lib/supabase';
+import { logActivity } from '@/lib/actions/activity';
 
 export async function POST(request: NextRequest) {
   try {
@@ -48,6 +49,8 @@ export async function POST(request: NextRequest) {
       where: { id: parseInt(voId) },
       data: updateData,
     });
+
+    await logActivity('UPLOAD', 'VO', voId, `Uploaded ${fileType} for VO #${voId}`);
 
     return NextResponse.json({
       success: true,

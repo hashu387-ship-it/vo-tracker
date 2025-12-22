@@ -17,12 +17,16 @@ export interface VO {
   dvoIssuedDate: string | null;
   remarks: string | null;
   actionNotes: string | null;
-
   // File attachments for different approval stages
   ffcRsgProposedFile: string | null;
   rsgAssessedFile: string | null;
   dvoRrApprovedFile: string | null;
 
+  // Legacy/Other file references
+  proposedFileUrl: string | null;
+  assessmentFileUrl: string | null;
+  approvalFileUrl: string | null;
+  dvoFileUrl: string | null;
   createdAt: string;
   updatedAt: string;
 }

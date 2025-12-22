@@ -20,9 +20,13 @@ model VO {
   approvedAmount      Float?
   status              String   @default("PendingWithFFC") // PendingWithFFC, PendingWithRSG, PendingWithRSGFFC, ApprovedAwaitingDVO, DVORRIssued
   vorReference        String?
-  dvoReference        String?
-  dvoIssuedDate       DateTime?
-  remarks             String?
+  dvoReference          String?
+  dvoIssuedDate         DateTime?
+  proposedFileUrl       String?
+  assessmentFileUrl     String?
+  approvalFileUrl       String?
+  dvoFileUrl            String?
+  remarks               String?
   actionNotes         String?
 
   // File attachments for different approval stages
@@ -34,4 +38,17 @@ model VO {
   updatedAt           DateTime @updatedAt
 
   @@map("variation_orders")
+}
+
+model ActivityLog {
+  id          Int      @id @default(autoincrement())
+  userId      String   // Clerk User ID
+  userName    String   // Display Name
+  action      String   // CREATE, UPDATE, DELETE, UPLOAD
+  entityType  String   // VO, FILE, etc.
+  entityId    String   // ID reference
+  details     String?  // Description of change
+  createdAt   DateTime @default(now())
+
+  @@map("activity_logs")
 }

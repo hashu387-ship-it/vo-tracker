@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Calendar, Sparkles, Building2 } from 'lucide-react';
 import { QuickActionsBar } from './floating-actions';
+import { NotificationBell } from '@/components/notifications/notification-bell';
 
 interface DashboardHeaderProps {
   onExport: () => void;
@@ -99,7 +100,7 @@ export function DashboardHeader({ onExport, onPrint, isExporting }: DashboardHea
               <img
                 src="/firstfix-v2.png"
                 alt="FirstFix"
-                className="h-7 md:h-8 w-auto brightness-0 invert opacity-90"
+                className="h-10 md:h-12 w-auto brightness-0 invert opacity-90"
               />
             </motion.div>
           </div>
@@ -140,7 +141,10 @@ export function DashboardHeader({ onExport, onPrint, isExporting }: DashboardHea
           transition={{ delay: 0.5 }}
           className="md:self-start"
         >
-          <QuickActionsBar onExport={onExport} onPrint={onPrint} isExporting={isExporting} />
+          <div className="flex items-center gap-4">
+            <NotificationBell />
+            <QuickActionsBar onExport={onExport} onPrint={onPrint} isExporting={isExporting} />
+          </div>
         </motion.div>
       </div>
 

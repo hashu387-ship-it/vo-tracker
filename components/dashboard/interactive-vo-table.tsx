@@ -16,7 +16,9 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
-  MoreHorizontal
+  MoreHorizontal,
+  UploadCloud,
+  Download
 } from 'lucide-react';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
@@ -92,17 +94,60 @@ interface VORowProps {
     vorReference?: string | null;
     dvoReference?: string | null;
     remarks?: string | null;
+    proposedFileUrl?: string | null;
+    assessmentFileUrl?: string | null;
+    approvalFileUrl?: string | null;
+    dvoFileUrl?: string | null;
   };
   index: number;
   isExpanded: boolean;
   onToggle: () => void;
+  onRefresh: () => void;
 }
 
-function VORow({ vo, index, isExpanded, onToggle }: VORowProps) {
+function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [uploading, setUploading] = useState<string | null>(null);
   const statusConfig = STATUS_CONFIG[vo.status] || STATUS_CONFIG.PendingWithFFC;
   const displayValue = vo.approvedAmount || vo.proposalValue || 0;
   const isApproved = vo.approvedAmount !== null && vo.approvedAmount > 0;
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, fileType: string) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(fileType);
+    try {
+      // 1. Upload to Supabase
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('path', `vo-${vo.id}/${fileType}-${Date.now()}.xlsx`);
+
+      const uploadRes = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!uploadRes.ok) throw new Error('Upload failed');
+      const { url } = await uploadRes.json();
+
+      // 2. Update VO record
+      const updateRes = await fetch(`/api/vo/${vo.id}/files`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileType, fileUrl: url }),
+      });
+
+      if (!updateRes.ok) throw new Error('Update failed');
+
+      onRefresh(); // Refresh data to show new file
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload file');
+    } finally {
+      setUploading(null);
+    }
+  };
 
   return (
     <motion.div
@@ -133,9 +178,9 @@ function VORow({ vo, index, isExpanded, onToggle }: VORowProps) {
       >
         {/* Mobile: Top row with ID and Status */}
         <div className="sm:hidden flex justify-between items-center">
-          <span className="text-xs font-mono text-muted-foreground font-bold">
+          {/* <span className="text-xs font-mono text-muted-foreground font-bold">
             #{String(index + 1).padStart(3, '0')}
-          </span>
+          </span> */}<span /> {/* Spacer */}
           <Badge
             className={`${statusConfig.bg} ${statusConfig.text} border-0 gap-1 text-[10px] font-semibold uppercase tracking-wide`}
           >
@@ -144,16 +189,16 @@ function VORow({ vo, index, isExpanded, onToggle }: VORowProps) {
           </Badge>
         </div>
 
-        {/* ID (Desktop) */}
-        <div className="hidden sm:flex col-span-1 items-center gap-2">
+        {/* ID (Desktop) - Removed */}
+        {/* <div className="hidden sm:flex col-span-1 items-center gap-2">
           <span className="text-sm font-mono text-muted-foreground font-medium group-hover:text-foreground transition-colors">
             {String(index + 1).padStart(3, '0')}
           </span>
-        </div>
+        </div> */}
 
         {/* Subject */}
-        <div className="col-span-1 sm:col-span-5">
-          <h3 className={`text-sm font-medium text-foreground group-hover:text-primary transition-colors leading-tight ${isExpanded ? '' : 'line-clamp-2'}`}>
+        <div className="col-span-1 sm:col-span-6">
+          <h3 className="text-sm font-medium text-foreground group-hover:text-primary transition-colors leading-tight">
             {vo.subject}
           </h3>
           {/* Mobile: Date & Value */}
@@ -168,14 +213,6 @@ function VORow({ vo, index, isExpanded, onToggle }: VORowProps) {
           </div>
         </div>
 
-        {/* Date (Desktop) */}
-        <div className="hidden sm:block col-span-2 text-sm text-muted-foreground">
-          <div className="flex items-center gap-1.5">
-            <Calendar className="h-3.5 w-3.5" />
-            <span>{formatDate(vo.submissionDate)}</span>
-          </div>
-        </div>
-
         {/* Value (Desktop) */}
         <div className="hidden sm:block col-span-2 text-right">
           <div className={`font-mono text-sm font-medium ${isApproved ? 'text-emerald-600 dark:text-emerald-400' : 'text-foreground'}`}>
@@ -186,6 +223,14 @@ function VORow({ vo, index, isExpanded, onToggle }: VORowProps) {
               Approved
             </span>
           )}
+        </div>
+
+        {/* Date (Desktop) */}
+        <div className="hidden sm:block col-span-2 text-sm text-muted-foreground text-right pr-4">
+          <div className="flex items-center gap-1.5 justify-end">
+            <Calendar className="h-3.5 w-3.5" />
+            <span>{formatDate(vo.submissionDate)}</span>
+          </div>
         </div>
 
         {/* Status (Desktop) */}
@@ -301,6 +346,73 @@ function VORow({ vo, index, isExpanded, onToggle }: VORowProps) {
                     </motion.div>
                   </div>
                 </div>
+
+                {/* Documents Section */}
+                <div className="border-t border-border/50 pt-4 mt-4">
+                  {/* DEBUG: Temporary visibility check */}
+                  {/* <div className="p-2 bg-red-500/10 border border-red-500 text-red-500 mb-2 font-bold text-center">
+                    DEBUG: DOCUMENTS SECTION IS RENDERED
+                  </div> */}
+                  <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-2">
+                    <FileText className="h-3.5 w-3.5" />
+                    Attached Documents
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    {[
+                      { id: 'proposedFileUrl', label: 'Proposed File', file: vo.proposedFileUrl },
+                      { id: 'assessmentFileUrl', label: 'RSG Assessment', file: vo.assessmentFileUrl },
+                      { id: 'approvalFileUrl', label: 'Approval Doc', file: vo.approvalFileUrl },
+                      { id: 'dvoFileUrl', label: 'DVO RR', file: vo.dvoFileUrl },
+                    ].map((doc) => (
+                      <div key={doc.id} className="p-3 rounded-lg bg-muted/30 border border-border/50 flex flex-col gap-2">
+                        <span className="text-[10px] uppercase font-bold text-muted-foreground">{doc.label}</span>
+
+                        {doc.file ? (
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="w-full gap-2 text-xs h-8 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border border-emerald-500/20"
+                            asChild
+                          >
+                            <a
+                              href={doc.file}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Download className="h-3 w-3" />
+                              Download
+                            </a>
+                          </Button>
+                        ) : (
+                          <div className="relative">
+                            <input
+                              type="file"
+                              accept=".xlsx, .xls"
+                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                              disabled={!!uploading}
+                              onChange={(e) => handleFileUpload(e, doc.id)}
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full gap-2 text-xs h-8"
+                              disabled={!!uploading}
+                            >
+                              {uploading === doc.id ? (
+                                <Sparkles className="h-3 w-3 animate-spin" />
+                              ) : (
+                                <UploadCloud className="h-3 w-3" />
+                              )}
+                              {uploading === doc.id ? 'Uploading...' : 'Upload Excel'}
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -312,7 +424,7 @@ function VORow({ vo, index, isExpanded, onToggle }: VORowProps) {
 
 export function InteractiveVOTable({ filterStatus }: { filterStatus: string | null }) {
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
-  const { data, isLoading } = useVOs({});
+  const { data, isLoading, refetch } = useVOs({});
 
   const toggleRow = (id: number) => {
     setExpandedRows((prev) => {
@@ -404,10 +516,10 @@ export function InteractiveVOTable({ filterStatus }: { filterStatus: string | nu
       <div className="rounded-2xl overflow-hidden border border-border/50 bg-card/50 backdrop-blur-xl shadow-xl">
         {/* Desktop Header */}
         <div className="hidden sm:grid grid-cols-12 gap-4 px-6 py-4 bg-muted/50 dark:bg-muted/30 border-b border-border/50 text-xs font-bold text-muted-foreground uppercase tracking-widest">
-          <div className="col-span-1">#</div>
-          <div className="col-span-5">Subject</div>
-          <div className="col-span-2">Date</div>
+          {/* <div className="col-span-1">#</div> Reason: Removed as per request */}
+          <div className="col-span-6">Subject</div>
           <div className="col-span-2 text-right">Value</div>
+          <div className="col-span-2 text-right pr-4">Date</div>
           <div className="col-span-2 text-right">Status</div>
         </div>
 
@@ -421,6 +533,7 @@ export function InteractiveVOTable({ filterStatus }: { filterStatus: string | nu
                 index={index}
                 isExpanded={expandedRows.has(vo.id)}
                 onToggle={() => toggleRow(vo.id)}
+                onRefresh={refetch}
               />
             ))}
           </AnimatePresence>
