@@ -76,12 +76,12 @@ export function DashboardHeader({ onExport, onPrint, isExporting }: DashboardHea
         {/* Left side - Branding & Info */}
         <div className="space-y-4">
           {/* Logo section */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
-              className="relative h-12 w-28 flex items-center justify-center"
+              className="relative h-12 w-auto flex items-center justify-center"
             >
               <img
                 src="/rsg-logo.png"
@@ -96,7 +96,7 @@ export function DashboardHeader({ onExport, onPrint, isExporting }: DashboardHea
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="relative h-12 w-28 flex items-center justify-center"
+              className="relative h-12 w-auto flex items-center justify-center"
             >
               <img
                 src="/firstfix-v2.png"
