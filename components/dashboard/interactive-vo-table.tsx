@@ -25,6 +25,7 @@ import { formatCurrency, formatDate } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useVOs } from '@/lib/hooks/use-vos';
+import { PaymentRegister } from '@/components/dashboard/payment-register';
 import { PaymentStats } from './payment-stats';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -752,50 +753,14 @@ export function InteractiveVOTable({ filterStatus }: { filterStatus: string | nu
             </>
           )
         ) : (
-          /* Payment Table */
-          <>
-            {/* Payment Header */}
-            <div className="hidden sm:grid grid-cols-12 gap-4 px-6 py-4 bg-muted/50 dark:bg-muted/30 border-b border-border/50 text-xs font-bold text-muted-foreground uppercase tracking-widest">
-              <div className="col-span-6">Description</div>
-              <div className="col-span-2 text-right">Net Value</div>
-              <div className="col-span-2 text-right pr-4">Date</div>
-              <div className="col-span-2 text-right">Status</div>
-            </div>
-
-            {/* Payment Rows */}
-            <div className="divide-y divide-border/30">
-              {loadingPayments ? (
-                <div className="space-y-3 p-6">
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: i * 0.05 }}
-                    >
-                      <Skeleton className="h-20 w-full rounded-xl" />
-                    </motion.div>
-                  ))}
-                </div>
-              ) : payments.length === 0 ? (
-                <div className="p-12 text-center">
-                  <p className="text-muted-foreground">No payments found.</p>
-                </div>
-              ) : (
-                <AnimatePresence mode="popLayout">
-                  {payments.map((p, idx) => (
-                    <PaymentRow
-                      key={p.id}
-                      payment={p}
-                      index={idx}
-                      isExpanded={expandedRows.has(p.id)}
-                      onToggle={() => toggleRow(p.id)}
-                    />
-                  ))}
-                </AnimatePresence>
-              )}
-            </div>
-          </>
+          /* Payment Register Component */
+          <div className="p-6">
+            <PaymentRegister
+              payments={payments}
+              onRefresh={fetchPayments}
+              isLoading={loadingPayments}
+            />
+          </div>
         )}
       </div>
     </div>

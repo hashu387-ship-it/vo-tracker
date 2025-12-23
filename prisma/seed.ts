@@ -1108,7 +1108,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 24",
-      paymentStatus: "Submitted on ACONEX", // "Submitted on ACONEX" in Remarks/Status column
+      paymentStatus: "Submitted on ACONEX", // Remarks: Waiting For payment Certificate
       description: "Oct 25th 2025 – Nov 25th 2025",
       grossAmount: 9837424.54,
       advancePaymentRecovery: -3156829.54,
