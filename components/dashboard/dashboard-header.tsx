@@ -74,7 +74,7 @@ export function DashboardHeader({ onExport, onPrint, isExporting }: DashboardHea
 
       <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         {/* Left side - Branding & Info */}
-        <div className="space-y-4">
+        <div className="space-y-10">
           {/* Logo section */}
           <div className="flex items-center gap-5">
             <motion.div

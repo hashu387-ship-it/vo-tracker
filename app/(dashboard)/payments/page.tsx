@@ -30,14 +30,14 @@ export default function PaymentsPage() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gray-50/50 pb-20">
+        <div className="min-h-screen bg-[#09090b] pb-20 text-zinc-100">
             <div className="container mx-auto p-6 space-y-8">
                 <DashboardHeader
                     onExport={() => { }}
                     onPrint={() => window.print()}
                 />
 
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div className="bg-transparent">
                     <PaymentRegister
                         payments={payments}
                         onRefresh={fetchPayments}
