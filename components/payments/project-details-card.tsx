@@ -134,10 +134,10 @@ export function ProjectDetailsCard() {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Project Details */}
-            <Card className="lg:col-span-1">
-                <CardHeader className="bg-rsg-navy text-white pb-3">
+            <Card className="lg:col-span-1 border-2">
+                <CardHeader className="bg-[#003B5C] text-white pb-3">
                     <div className="flex items-center justify-between">
-                        <CardTitle className="text-sm font-semibold">PROJECT DETAILS</CardTitle>
+                        <CardTitle className="text-sm font-bold tracking-wide">PROJECT DETAILS</CardTitle>
                         {!isEditing ? (
                             <Button
                                 size="icon"
@@ -173,48 +173,48 @@ export function ProjectDetailsCard() {
                         )}
                     </div>
                 </CardHeader>
-                <CardContent className="p-4 space-y-3 text-xs">
+                <CardContent className="p-4 space-y-3 bg-white">
                     <div>
-                        <p className="text-gray-500 text-[10px] font-medium">Project:</p>
+                        <p className="text-gray-600 text-xs font-semibold mb-1">Project:</p>
                         {isEditing ? (
                             <Input
                                 value={editData.projectCode}
                                 onChange={(e) => setEditData({ ...editData, projectCode: e.target.value })}
-                                className="h-7 text-xs mt-1"
+                                className="h-8 text-sm"
                             />
                         ) : (
-                            <p className="font-semibold text-rsg-blue">{projectDetails.projectCode}</p>
+                            <p className="font-bold text-[#003B5C] text-sm">{projectDetails.projectCode}</p>
                         )}
                     </div>
                     <div>
-                        <p className="text-gray-500 text-[10px] font-medium">Contractor:</p>
+                        <p className="text-gray-600 text-xs font-semibold mb-1">Contractor:</p>
                         {isEditing ? (
                             <Input
                                 value={editData.contractor}
                                 onChange={(e) => setEditData({ ...editData, contractor: e.target.value })}
-                                className="h-7 text-xs mt-1"
+                                className="h-8 text-sm"
                             />
                         ) : (
-                            <p className="font-semibold">{projectDetails.contractor}</p>
+                            <p className="font-bold text-gray-900 text-sm">{projectDetails.contractor}</p>
                         )}
                     </div>
                     <div>
-                        <p className="text-gray-500 text-[10px] font-medium">Contract Date:</p>
+                        <p className="text-gray-600 text-xs font-semibold mb-1">Contract Date:</p>
                         {isEditing ? (
                             <Input
                                 type="date"
                                 value={editData.contractDate}
                                 onChange={(e) => setEditData({ ...editData, contractDate: e.target.value })}
-                                className="h-7 text-xs mt-1"
+                                className="h-8 text-sm"
                             />
                         ) : (
-                            <p className="font-semibold">
+                            <p className="font-bold text-gray-900 text-sm">
                                 {format(new Date(projectDetails.contractDate), 'dd-MMM-yyyy')}
                             </p>
                         )}
                     </div>
-                    <div className="pt-2 border-t">
-                        <p className="text-gray-500 text-[10px] font-medium">Original Contract Value:</p>
+                    <div className="pt-2 border-t border-gray-200">
+                        <p className="text-gray-600 text-xs font-semibold mb-1">Original Contract Value:</p>
                         {isEditing ? (
                             <Input
                                 type="number"
@@ -223,14 +223,14 @@ export function ProjectDetailsCard() {
                                 onChange={(e) =>
                                     setEditData({ ...editData, originalContractValue: parseFloat(e.target.value) })
                                 }
-                                className="h-7 text-xs mt-1"
+                                className="h-8 text-sm"
                             />
                         ) : (
-                            <p className="font-bold text-blue-600">{currency(projectDetails.originalContractValue)}</p>
+                            <p className="font-bold text-blue-700 text-base">{currency(projectDetails.originalContractValue)}</p>
                         )}
                     </div>
                     <div>
-                        <p className="text-gray-500 text-[10px] font-medium">Revised Contract Value:</p>
+                        <p className="text-gray-600 text-xs font-semibold mb-1">Revised Contract Value:</p>
                         {isEditing ? (
                             <Input
                                 type="number"
@@ -239,76 +239,76 @@ export function ProjectDetailsCard() {
                                 onChange={(e) =>
                                     setEditData({ ...editData, revisedContractValue: parseFloat(e.target.value) })
                                 }
-                                className="h-7 text-xs mt-1"
+                                className="h-8 text-sm"
                             />
                         ) : (
-                            <p className="font-bold text-blue-600">{currency(projectDetails.revisedContractValue)}</p>
+                            <p className="font-bold text-blue-700 text-base">{currency(projectDetails.revisedContractValue)}</p>
                         )}
                     </div>
                 </CardContent>
             </Card>
 
             {/* Advance Payment Summary */}
-            <Card>
-                <CardHeader className="bg-orange-600 text-white pb-3">
-                    <CardTitle className="text-sm font-semibold">SUMMARY OF ADVANCE PAYMENT RECOVERY</CardTitle>
+            <Card className="border-2">
+                <CardHeader className="bg-gradient-to-r from-orange-600 to-orange-500 text-white pb-3">
+                    <CardTitle className="text-sm font-bold tracking-wide">SUMMARY OF ADVANCE PAYMENT RECOVERY</CardTitle>
                 </CardHeader>
-                <CardContent className="p-4 space-y-2 text-xs">
-                    <div className="flex justify-between items-center">
-                        <span className="text-gray-600">Advance Payment:</span>
+                <CardContent className="p-4 space-y-3 bg-white">
+                    <div className="flex justify-between items-start">
+                        <span className="text-gray-700 font-semibold text-sm">Advance Payment:</span>
                         <div className="text-right">
-                            <p className="font-bold text-orange-600">
+                            <p className="font-bold text-orange-600 text-base">
                                 {currency(projectDetails.advancePaymentTotal)}
                             </p>
-                            <p className="text-[10px] text-gray-500">{percent(projectDetails.advancePaymentPercent)}</p>
+                            <p className="text-xs text-gray-600 font-medium">{percent(projectDetails.advancePaymentPercent)}</p>
                         </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                        <span className="text-gray-600">Deducted till Date:</span>
+                    <div className="flex justify-between items-start">
+                        <span className="text-gray-700 font-semibold text-sm">Deducted till Date:</span>
                         <div className="text-right">
-                            <p className="font-semibold">{currency(projectDetails.advanceDeductedTillDate)}</p>
-                            <p className="text-[10px] text-gray-500">
+                            <p className="font-bold text-gray-900 text-base">{currency(projectDetails.advanceDeductedTillDate)}</p>
+                            <p className="text-xs text-gray-600 font-medium">
                                 {percent(projectDetails.advanceDeductedPercent)}
                             </p>
                         </div>
                     </div>
-                    <div className="flex justify-between items-center pt-2 border-t">
-                        <span className="text-gray-600 font-medium">Balance:</span>
+                    <div className="flex justify-between items-start pt-2 border-t-2 border-gray-200">
+                        <span className="text-gray-900 font-bold text-sm">Balance:</span>
                         <div className="text-right">
-                            <p className="font-bold text-green-600">{currency(projectDetails.advanceBalance)}</p>
-                            <p className="text-[10px] text-gray-500">{percent(projectDetails.advanceBalancePercent)}</p>
+                            <p className="font-bold text-green-600 text-base">{currency(projectDetails.advanceBalance)}</p>
+                            <p className="text-xs text-gray-600 font-medium">{percent(projectDetails.advanceBalancePercent)}</p>
                         </div>
                     </div>
                 </CardContent>
             </Card>
 
             {/* Retention Summary */}
-            <Card>
-                <CardHeader className="bg-purple-600 text-white pb-3">
-                    <CardTitle className="text-sm font-semibold">SUMMARY OF RETENTION</CardTitle>
+            <Card className="border-2">
+                <CardHeader className="bg-gradient-to-r from-purple-600 to-purple-500 text-white pb-3">
+                    <CardTitle className="text-sm font-bold tracking-wide">SUMMARY OF RETENTION</CardTitle>
                 </CardHeader>
-                <CardContent className="p-4 space-y-2 text-xs">
-                    <div className="flex justify-between items-center">
-                        <span className="text-gray-600">Total Retention:</span>
+                <CardContent className="p-4 space-y-3 bg-white">
+                    <div className="flex justify-between items-start">
+                        <span className="text-gray-700 font-semibold text-sm">Total Retention:</span>
                         <div className="text-right">
-                            <p className="font-bold text-purple-600">{currency(projectDetails.totalRetention)}</p>
-                            <p className="text-[10px] text-gray-500">{percent(projectDetails.retentionPercent)}</p>
+                            <p className="font-bold text-purple-600 text-base">{currency(projectDetails.totalRetention)}</p>
+                            <p className="text-xs text-gray-600 font-medium">{percent(projectDetails.retentionPercent)}</p>
                         </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                        <span className="text-gray-600">Deducted till Date:</span>
+                    <div className="flex justify-between items-start">
+                        <span className="text-gray-700 font-semibold text-sm">Deducted till Date:</span>
                         <div className="text-right">
-                            <p className="font-semibold">{currency(projectDetails.retentionDeductedTillDate)}</p>
-                            <p className="text-[10px] text-gray-500">
+                            <p className="font-bold text-gray-900 text-base">{currency(projectDetails.retentionDeductedTillDate)}</p>
+                            <p className="text-xs text-gray-600 font-medium">
                                 {percent(projectDetails.retentionDeductedPercent)}
                             </p>
                         </div>
                     </div>
-                    <div className="flex justify-between items-center pt-2 border-t">
-                        <span className="text-gray-600 font-medium">Balance:</span>
+                    <div className="flex justify-between items-start pt-2 border-t-2 border-gray-200">
+                        <span className="text-gray-900 font-bold text-sm">Balance:</span>
                         <div className="text-right">
-                            <p className="font-bold text-green-600">{currency(projectDetails.retentionBalance)}</p>
-                            <p className="text-[10px] text-gray-500">
+                            <p className="font-bold text-green-600 text-base">{currency(projectDetails.retentionBalance)}</p>
+                            <p className="text-xs text-gray-600 font-medium">
                                 {percent(projectDetails.retentionBalancePercent)}
                             </p>
                         </div>
@@ -317,39 +317,39 @@ export function ProjectDetailsCard() {
             </Card>
 
             {/* Work Summary */}
-            <Card className="lg:col-span-3">
-                <CardHeader className="bg-rsg-blue text-white pb-3">
-                    <CardTitle className="text-sm font-semibold">WORK SUMMARY</CardTitle>
+            <Card className="lg:col-span-3 border-2">
+                <CardHeader className="bg-[#003B5C] text-white pb-3">
+                    <CardTitle className="text-sm font-bold tracking-wide">WORK SUMMARY</CardTitle>
                 </CardHeader>
-                <CardContent className="p-4">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
-                        <div className="text-center p-3 bg-blue-50 rounded-lg">
-                            <p className="text-gray-600 text-[10px] mb-1">Received</p>
-                            <p className="font-bold text-blue-700 text-sm">{currency(projectDetails.receivedAmount)}</p>
-                            <p className="text-[10px] text-gray-500 mt-1">{percent(projectDetails.receivedPercent)}</p>
+                <CardContent className="p-4 bg-white">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div className="text-center p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+                            <p className="text-gray-700 font-semibold text-xs mb-2">Received</p>
+                            <p className="font-bold text-blue-700 text-lg">{currency(projectDetails.receivedAmount)}</p>
+                            <p className="text-xs text-gray-600 font-medium mt-1">{percent(projectDetails.receivedPercent)}</p>
                         </div>
-                        <div className="text-center p-3 bg-green-50 rounded-lg">
-                            <p className="text-gray-600 text-[10px] mb-1">Total Work Done</p>
-                            <p className="font-bold text-green-700 text-sm">{currency(projectDetails.totalWorkDone)}</p>
-                            <p className="text-[10px] text-gray-500 mt-1">
+                        <div className="text-center p-4 bg-green-50 rounded-lg border-2 border-green-200">
+                            <p className="text-gray-700 font-semibold text-xs mb-2">Total Work Done</p>
+                            <p className="font-bold text-green-700 text-lg">{currency(projectDetails.totalWorkDone)}</p>
+                            <p className="text-xs text-gray-600 font-medium mt-1">
                                 {percent(projectDetails.totalWorkDonePercent)}
                             </p>
                         </div>
-                        <div className="text-center p-3 bg-yellow-50 rounded-lg">
-                            <p className="text-gray-600 text-[10px] mb-1">Balance Work Done</p>
-                            <p className="font-bold text-yellow-700 text-sm">
+                        <div className="text-center p-4 bg-yellow-50 rounded-lg border-2 border-yellow-200">
+                            <p className="text-gray-700 font-semibold text-xs mb-2">Balance Work Done</p>
+                            <p className="font-bold text-yellow-700 text-lg">
                                 {currency(projectDetails.balanceWorkDone)}
                             </p>
-                            <p className="text-[10px] text-gray-500 mt-1">
+                            <p className="text-xs text-gray-600 font-medium mt-1">
                                 {percent(projectDetails.balanceWorkDonePercent)}
                             </p>
                         </div>
-                        <div className="text-center p-3 bg-purple-50 rounded-lg">
-                            <p className="text-gray-600 text-[10px] mb-1">Revised Contract Value</p>
-                            <p className="font-bold text-purple-700 text-sm">
+                        <div className="text-center p-4 bg-purple-50 rounded-lg border-2 border-purple-200">
+                            <p className="text-gray-700 font-semibold text-xs mb-2">Revised Contract Value</p>
+                            <p className="font-bold text-purple-700 text-lg">
                                 {currency(projectDetails.revisedContractValue)}
                             </p>
-                            <p className="text-[10px] text-gray-500 mt-1">100%</p>
+                            <p className="text-xs text-gray-600 font-medium mt-1">100%</p>
                         </div>
                     </div>
                 </CardContent>
