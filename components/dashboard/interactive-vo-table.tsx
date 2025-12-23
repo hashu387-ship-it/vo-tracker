@@ -18,13 +18,17 @@ import {
   AlertCircle,
   MoreHorizontal,
   UploadCloud,
-  Download
+  Download,
+  Receipt
 } from 'lucide-react';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useVOs } from '@/lib/hooks/use-vos';
+import { PaymentStats } from './payment-stats';
 import { Skeleton } from '@/components/ui/skeleton';
+
+// --- Configurations ---
 
 const STATUS_CONFIG: Record<string, {
   label: string;
@@ -82,6 +86,45 @@ const STATUS_CONFIG: Record<string, {
   },
 };
 
+const PAYMENT_STATUS_CONFIG: Record<string, {
+  label: string;
+  bg: string;
+  text: string;
+  icon: React.ReactNode;
+  gradient: string;
+}> = {
+  Draft: {
+    label: 'Draft',
+    bg: 'bg-gray-500/10 dark:bg-gray-500/20',
+    text: 'text-gray-600 dark:text-gray-400',
+    icon: <Edit3 className="h-3 w-3" />,
+    gradient: 'from-gray-500 to-gray-600',
+  },
+  Submitted: {
+    label: 'Submitted',
+    bg: 'bg-blue-500/10 dark:bg-blue-500/20',
+    text: 'text-blue-600 dark:text-blue-400',
+    icon: <ExternalLink className="h-3 w-3" />,
+    gradient: 'from-blue-500 to-blue-600',
+  },
+  Certified: {
+    label: 'Certified',
+    bg: 'bg-purple-500/10 dark:bg-purple-500/20',
+    text: 'text-purple-600 dark:text-purple-400',
+    icon: <CheckCircle2 className="h-3 w-3" />,
+    gradient: 'from-purple-500 to-purple-600',
+  },
+  Paid: {
+    label: 'Paid',
+    bg: 'bg-emerald-500/10 dark:bg-emerald-500/20',
+    text: 'text-emerald-600 dark:text-emerald-400',
+    icon: <DollarSign className="h-3 w-3" />,
+    gradient: 'from-emerald-500 to-emerald-600',
+  },
+};
+
+// --- Types ---
+
 interface VORowProps {
   vo: {
     id: number;
@@ -105,6 +148,28 @@ interface VORowProps {
   onRefresh: () => void;
 }
 
+interface PaymentRowProps {
+  payment: {
+    id: number;
+    paymentNo: string;
+    status: string;
+    description: string;
+    grossAmount: number;
+    advancePaymentRecovery: number;
+    retention: number;
+    vatRecovery: number;
+    vat: number;
+    netPayment: number;
+    submittedDate: string | null;
+    invoiceDate: string | null;
+  };
+  index: number;
+  isExpanded: boolean;
+  onToggle: () => void;
+}
+
+// --- Components ---
+
 function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [uploading, setUploading] = useState<string | null>(null);
@@ -118,7 +183,6 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
 
     setUploading(fileType);
     try {
-      // 1. Upload to Supabase
       const formData = new FormData();
       formData.append('file', file);
       formData.append('path', `vo-${vo.id}/${fileType}-${Date.now()}.xlsx`);
@@ -131,7 +195,6 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
       if (!uploadRes.ok) throw new Error('Upload failed');
       const { url } = await uploadRes.json();
 
-      // 2. Update VO record
       const updateRes = await fetch(`/api/vo/${vo.id}/files`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -140,7 +203,7 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
 
       if (!updateRes.ok) throw new Error('Update failed');
 
-      onRefresh(); // Refresh data to show new file
+      onRefresh();
     } catch (error) {
       console.error('Upload error:', error);
       alert('Failed to upload file');
@@ -162,7 +225,6 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
         ${isHovered && !isExpanded ? 'bg-muted/30 dark:bg-muted/10' : ''}
       `}
     >
-      {/* Hover accent line */}
       <motion.div
         className={`absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b ${statusConfig.gradient}`}
         initial={{ scaleY: 0 }}
@@ -171,37 +233,22 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
         style={{ originY: 0 }}
       />
 
-      {/* Main Row */}
       <div
         onClick={onToggle}
         className="cursor-pointer px-4 sm:px-6 py-4 grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 items-center"
       >
-        {/* Mobile: Top row with ID and Status */}
         <div className="sm:hidden flex justify-between items-center">
-          {/* <span className="text-xs font-mono text-muted-foreground font-bold">
-            #{String(index + 1).padStart(3, '0')}
-          </span> */}<span /> {/* Spacer */}
-          <Badge
-            className={`${statusConfig.bg} ${statusConfig.text} border-0 gap-1 text-[10px] font-semibold uppercase tracking-wide`}
-          >
+          <span />
+          <Badge className={`${statusConfig.bg} ${statusConfig.text} border-0 gap-1 text-[10px] font-semibold uppercase tracking-wide`}>
             {statusConfig.icon}
             {statusConfig.shortLabel}
           </Badge>
         </div>
 
-        {/* ID (Desktop) - Removed */}
-        {/* <div className="hidden sm:flex col-span-1 items-center gap-2">
-          <span className="text-sm font-mono text-muted-foreground font-medium group-hover:text-foreground transition-colors">
-            {String(index + 1).padStart(3, '0')}
-          </span>
-        </div> */}
-
-        {/* Subject */}
         <div className="col-span-1 sm:col-span-6">
           <h3 className="text-sm font-medium text-foreground group-hover:text-primary transition-colors leading-tight">
             {vo.subject}
           </h3>
-          {/* Mobile: Date & Value */}
           <div className="sm:hidden mt-2 flex items-center justify-between text-xs">
             <span className="text-muted-foreground flex items-center gap-1">
               <Calendar className="h-3 w-3" />
@@ -213,7 +260,6 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
           </div>
         </div>
 
-        {/* Value (Desktop) */}
         <div className="hidden sm:block col-span-2 text-right">
           <div className={`font-mono text-sm font-medium ${isApproved ? 'text-emerald-600 dark:text-emerald-400' : 'text-foreground'}`}>
             {formatCurrency(displayValue)}
@@ -225,7 +271,6 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
           )}
         </div>
 
-        {/* Date (Desktop) */}
         <div className="hidden sm:block col-span-2 text-sm text-muted-foreground text-right pr-4">
           <div className="flex items-center gap-1.5 justify-end">
             <Calendar className="h-3.5 w-3.5" />
@@ -233,11 +278,8 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
           </div>
         </div>
 
-        {/* Status (Desktop) */}
         <div className="hidden sm:flex col-span-2 justify-end items-center gap-3">
-          <Badge
-            className={`${statusConfig.bg} ${statusConfig.text} border-0 gap-1.5 px-3 py-1 text-xs font-semibold`}
-          >
+          <Badge className={`${statusConfig.bg} ${statusConfig.text} border-0 gap-1.5 px-3 py-1 text-xs font-semibold`}>
             {statusConfig.icon}
             {statusConfig.shortLabel}
           </Badge>
@@ -251,7 +293,6 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
         </div>
       </div>
 
-      {/* Expanded Details */}
       <AnimatePresence>
         {isExpanded && (
           <motion.div
@@ -264,7 +305,6 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
             <div className="px-4 sm:px-6 pb-5 pt-2">
               <div className="rounded-xl bg-background/80 dark:bg-background/40 border border-border/50 p-4 sm:p-5 backdrop-blur-sm">
                 <div className="grid gap-4 lg:grid-cols-3">
-                  {/* References */}
                   <div className="lg:col-span-2 space-y-3">
                     <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                       <FileText className="h-3.5 w-3.5" />
@@ -292,7 +332,6 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
                       ))}
                     </div>
 
-                    {/* Remarks */}
                     {vo.remarks && (
                       <motion.div
                         initial={{ opacity: 0, y: 5 }}
@@ -311,7 +350,6 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
                     )}
                   </div>
 
-                  {/* Actions */}
                   <div className="flex flex-col gap-2 lg:items-end lg:justify-center">
                     <motion.div
                       initial={{ opacity: 0, x: 10 }}
@@ -347,12 +385,7 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
                   </div>
                 </div>
 
-                {/* Documents Section */}
                 <div className="border-t border-border/50 pt-4 mt-4">
-                  {/* DEBUG: Temporary visibility check */}
-                  {/* <div className="p-2 bg-red-500/10 border border-red-500 text-red-500 mb-2 font-bold text-center">
-                    DEBUG: DOCUMENTS SECTION IS RENDERED
-                  </div> */}
                   <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-2">
                     <FileText className="h-3.5 w-3.5" />
                     Attached Documents
@@ -366,7 +399,6 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
                     ].map((doc) => (
                       <div key={doc.id} className="p-3 rounded-lg bg-muted/30 border border-border/50 flex flex-col gap-2">
                         <span className="text-[10px] uppercase font-bold text-muted-foreground">{doc.label}</span>
-
                         {doc.file ? (
                           <Button
                             variant="secondary"
@@ -374,12 +406,7 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
                             className="w-full gap-2 text-xs h-8 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border border-emerald-500/20"
                             asChild
                           >
-                            <a
-                              href={doc.file}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                            >
+                            <a href={doc.file} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
                               <Download className="h-3 w-3" />
                               Download
                             </a>
@@ -394,17 +421,8 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
                               onChange={(e) => handleFileUpload(e, doc.id)}
                               onClick={(e) => e.stopPropagation()}
                             />
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-full gap-2 text-xs h-8"
-                              disabled={!!uploading}
-                            >
-                              {uploading === doc.id ? (
-                                <Sparkles className="h-3 w-3 animate-spin" />
-                              ) : (
-                                <UploadCloud className="h-3 w-3" />
-                              )}
+                            <Button variant="outline" size="sm" className="w-full gap-2 text-xs h-8" disabled={!!uploading}>
+                              {uploading === doc.id ? <Sparkles className="h-3 w-3 animate-spin" /> : <UploadCloud className="h-3 w-3" />}
                               {uploading === doc.id ? 'Uploading...' : 'Upload Excel'}
                             </Button>
                           </div>
@@ -421,6 +439,177 @@ function VORow({ vo, index, isExpanded, onToggle, onRefresh }: VORowProps) {
     </motion.div>
   );
 }
+
+function PaymentRow({ payment, index, isExpanded, onToggle }: PaymentRowProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const statusConfig = PAYMENT_STATUS_CONFIG[payment.status] || PAYMENT_STATUS_CONFIG.Draft;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.03, duration: 0.3 }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      className={`
+        group relative transition-all duration-300
+        ${isExpanded ? 'bg-muted/50 dark:bg-muted/20' : ''}
+        ${isHovered && !isExpanded ? 'bg-muted/30 dark:bg-muted/10' : ''}
+      `}
+    >
+      <motion.div
+        className={`absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b ${statusConfig.gradient}`}
+        initial={{ scaleY: 0 }}
+        animate={{ scaleY: isHovered || isExpanded ? 1 : 0 }}
+        transition={{ duration: 0.2 }}
+        style={{ originY: 0 }}
+      />
+
+      <div
+        onClick={onToggle}
+        className="cursor-pointer px-4 sm:px-6 py-4 grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 items-center"
+      >
+        <div className="sm:hidden flex justify-between items-center">
+          <span className="text-xs font-mono text-primary font-bold">{payment.paymentNo}</span>
+          <Badge className={`${statusConfig.bg} ${statusConfig.text} border-0 gap-1 text-[10px] font-semibold uppercase tracking-wide`}>
+            {statusConfig.icon}
+            {statusConfig.label}
+          </Badge>
+        </div>
+
+        <div className="col-span-1 sm:col-span-6">
+          <div className="flex items-center gap-2">
+            <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-primary/10 text-primary font-bold">
+              {payment.paymentNo}
+            </span>
+            <h3 className="text-sm font-medium text-foreground group-hover:text-primary transition-colors leading-tight truncate">
+              {payment.description}
+            </h3>
+          </div>
+          <div className="sm:hidden mt-2 flex items-center justify-between text-xs">
+            <span className="text-muted-foreground flex items-center gap-1">
+              <Calendar className="h-3 w-3" />
+              {payment.submittedDate ? formatDate(payment.submittedDate) : '-'}
+            </span>
+            <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+              {formatCurrency(payment.netPayment)}
+            </span>
+          </div>
+        </div>
+
+        <div className="hidden sm:block col-span-2 text-right">
+          <div className="font-mono text-sm font-medium text-emerald-600 dark:text-emerald-400">
+            {formatCurrency(payment.netPayment)}
+          </div>
+          <span className="text-[10px] text-muted-foreground uppercase tracking-wide">Net Payment</span>
+        </div>
+
+        <div className="hidden sm:block col-span-2 text-sm text-muted-foreground text-right pr-4">
+          <div className="flex items-center gap-1.5 justify-end">
+            <Calendar className="h-3.5 w-3.5" />
+            <span>{payment.submittedDate ? formatDate(payment.submittedDate) : '-'}</span>
+          </div>
+        </div>
+
+        <div className="hidden sm:flex col-span-2 justify-end items-center gap-3">
+          <Badge className={`${statusConfig.bg} ${statusConfig.text} border-0 gap-1.5 px-3 py-1 text-xs font-semibold`}>
+            {statusConfig.icon}
+            {statusConfig.label}
+          </Badge>
+          <motion.div
+            animate={{ rotate: isExpanded ? 180 : 0 }}
+            transition={{ duration: 0.3 }}
+            className="text-muted-foreground group-hover:text-foreground"
+          >
+            <ChevronDown className="h-4 w-4" />
+          </motion.div>
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="px-4 sm:px-6 pb-5 pt-2">
+              <div className="rounded-xl bg-background/80 dark:bg-background/40 border border-border/50 p-4 sm:p-5 backdrop-blur-sm">
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  <div className="space-y-4">
+                    <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                      <Receipt className="h-3.5 w-3.5" />
+                      Financial Breakdown
+                    </h4>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center text-sm p-2 rounded bg-muted/30">
+                        <span className="text-muted-foreground">Gross Amount</span>
+                        <span className="font-mono font-medium">{formatCurrency(payment.grossAmount)}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-sm p-2 rounded bg-red-500/5 text-red-600 dark:text-red-400">
+                        <span className="opacity-80">Adv. Recovery</span>
+                        <span className="font-mono font-medium">{formatCurrency(payment.advancePaymentRecovery)}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-sm p-2 rounded bg-red-500/5 text-red-600 dark:text-red-400">
+                        <span className="opacity-80">Retention</span>
+                        <span className="font-mono font-medium">{formatCurrency(payment.retention)}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-sm p-2 rounded bg-red-500/5 text-red-600 dark:text-red-400">
+                        <span className="opacity-80">VAT Recovery</span>
+                        <span className="font-mono font-medium">{formatCurrency(payment.vatRecovery)}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-sm p-2 rounded bg-muted/30">
+                        <span className="text-muted-foreground">VAT Addn</span>
+                        <span className="font-mono font-medium">{formatCurrency(payment.vat)}</span>
+                      </div>
+                      <div className="border-t border-border/50 my-2 pt-2 flex justify-between items-center text-sm p-2 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold">
+                        <span>Net Payment</span>
+                        <span className="font-mono text-base">{formatCurrency(payment.netPayment)}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                      <Calendar className="h-3.5 w-3.5" />
+                      Dates & Details
+                    </h4>
+                    <div className="grid gap-2">
+                      {[
+                        { label: 'Submitted Date', value: payment.submittedDate ? formatDate(payment.submittedDate) : 'Not submitted' },
+                        { label: 'Invoice Date', value: payment.invoiceDate ? formatDate(payment.invoiceDate) : 'Not invoiced' },
+                      ].map((item) => (
+                        <div key={item.label} className="p-3 rounded-lg bg-muted/30 border border-border/30">
+                          <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold mb-1">{item.label}</p>
+                          <p className="font-mono text-sm font-medium">{item.value}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2 justify-end">
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                      <Edit3 className="h-3.5 w-3.5" />
+                      Edit Application
+                    </Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                      <Download className="h-3.5 w-3.5" />
+                      Download Certificate
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+// --- Main Interactive Table ---
 
 export function InteractiveVOTable({ filterStatus }: { filterStatus: string | null }) {
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
@@ -499,6 +688,20 @@ export function InteractiveVOTable({ filterStatus }: { filterStatus: string | nu
         </div>
       </div>
 
+      {/* Payment Stats */}
+      <AnimatePresence>
+        {activeTab === 'payments' && !loadingPayments && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden"
+          >
+            <PaymentStats payments={payments} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Content */}
       <div className="rounded-2xl overflow-hidden border border-border/50 bg-card/50 backdrop-blur-xl shadow-xl">
         {activeTab === 'vos' ? (
@@ -552,42 +755,44 @@ export function InteractiveVOTable({ filterStatus }: { filterStatus: string | nu
           /* Payment Table */
           <>
             {/* Payment Header */}
-            <div className="hidden sm:grid grid-cols-12 gap-2 px-6 py-4 bg-muted/50 dark:bg-muted/30 border-b border-border/50 text-xs font-bold text-muted-foreground uppercase tracking-widest">
-              <div className="col-span-1">Ref</div>
-              <div className="col-span-3">Description</div>
-              <div className="col-span-2 text-right">Gross</div>
-              <div className="col-span-2 text-right">Adv/Ret/VAT</div>
-              <div className="col-span-2 text-right bg-green-500/5 text-green-600">Net</div>
-              <div className="col-span-2 text-right">Date</div>
+            <div className="hidden sm:grid grid-cols-12 gap-4 px-6 py-4 bg-muted/50 dark:bg-muted/30 border-b border-border/50 text-xs font-bold text-muted-foreground uppercase tracking-widest">
+              <div className="col-span-6">Description</div>
+              <div className="col-span-2 text-right">Net Value</div>
+              <div className="col-span-2 text-right pr-4">Date</div>
+              <div className="col-span-2 text-right">Status</div>
             </div>
 
             {/* Payment Rows */}
-            <div className="divide-y divide-border/30 max-h-[600px] overflow-y-auto">
+            <div className="divide-y divide-border/30">
               {loadingPayments ? (
-                <div className="p-12 text-center">
-                  <Sparkles className="h-6 w-6 animate-spin mx-auto text-primary mb-2" />
-                  <p className="text-muted-foreground">Loading payments...</p>
+                <div className="space-y-3 p-6">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: i * 0.05 }}
+                    >
+                      <Skeleton className="h-20 w-full rounded-xl" />
+                    </motion.div>
+                  ))}
                 </div>
               ) : payments.length === 0 ? (
-                <p className="p-12 text-center text-muted-foreground">No payments found.</p>
+                <div className="p-12 text-center">
+                  <p className="text-muted-foreground">No payments found.</p>
+                </div>
               ) : (
-                payments.map((p, idx) => (
-                  <div key={p.id} className="grid grid-cols-1 sm:grid-cols-12 gap-2 px-6 py-4 items-center hover:bg-muted/30 transition-colors text-sm">
-                    <div className="col-span-1 font-mono font-medium text-primary">{p.paymentNo}</div>
-                    <div className="col-span-3 text-muted-foreground truncate" title={p.description}>{p.description}</div>
-                    <div className="col-span-2 text-right font-mono">{formatCurrency(p.grossAmount)}</div>
-                    <div className="col-span-2 text-right text-xs text-muted-foreground flex flex-col items-end gap-1">
-                      <span className="text-red-500/80" title="Adv Recovery">{formatCurrency(p.advancePaymentRecovery)} (Adv)</span>
-                      <span className="text-red-500/80" title="Retention">{formatCurrency(p.retention)} (Ret)</span>
-                    </div>
-                    <div className="col-span-2 text-right font-mono font-bold text-green-600 bg-green-500/5 py-1 px-2 rounded">
-                      {formatCurrency(p.netPayment)}
-                    </div>
-                    <div className="col-span-2 text-right text-xs text-muted-foreground">
-                      {p.submittedDate ? new Date(p.submittedDate).toLocaleDateString() : '-'}
-                    </div>
-                  </div>
-                ))
+                <AnimatePresence mode="popLayout">
+                  {payments.map((p, idx) => (
+                    <PaymentRow
+                      key={p.id}
+                      payment={p}
+                      index={idx}
+                      isExpanded={expandedRows.has(p.id)}
+                      onToggle={() => toggleRow(p.id)}
+                    />
+                  ))}
+                </AnimatePresence>
               )}
             </div>
           </>
