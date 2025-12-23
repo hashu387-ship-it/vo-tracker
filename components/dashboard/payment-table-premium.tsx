@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
+import { exportPaymentsToExcel } from "@/lib/excel-export";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -84,6 +85,7 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
     const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
     const [viewMode, setViewMode] = useState<ViewMode>('table');
     const [expandedCard, setExpandedCard] = useState<number | null>(null);
+    const [isExporting, setIsExporting] = useState(false);
 
     // Sort and filter payments
     const filteredPayments = useMemo(() => {
@@ -214,6 +216,33 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
         }
     };
 
+    const handleExport = async (exportAll: boolean = false) => {
+        setIsExporting(true);
+        try {
+            const dataToExport = exportAll ? payments : filteredPayments;
+            await exportPaymentsToExcel(dataToExport, {
+                filename: exportAll
+                    ? `Payment_Register_Complete_${format(new Date(), "yyyy-MM-dd")}`
+                    : `Payment_Register_Filtered_${format(new Date(), "yyyy-MM-dd")}`,
+                includeFilters: !exportAll,
+                filterInfo: exportAll ? {} : {
+                    searchQuery,
+                    statusFilter,
+                },
+            });
+            toast.success(
+                exportAll
+                    ? `Exported all ${payments.length} payments to Excel`
+                    : `Exported ${filteredPayments.length} filtered payments to Excel`
+            );
+        } catch (error) {
+            console.error("Export error:", error);
+            toast.error("Failed to export payments");
+        } finally {
+            setIsExporting(false);
+        }
+    };
+
     const SortButton = ({ field, label }: { field: SortField; label: string }) => (
         <button
             onClick={() => handleSort(field)}
@@ -289,6 +318,49 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
                             <LayoutGrid className="h-4 w-4" />
                         </button>
                     </div>
+
+                    {/* Export Button */}
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                variant="outline"
+                                className="bg-zinc-800/50 border-zinc-700/50 text-white hover:bg-zinc-700/50 hover:border-zinc-600/50"
+                                disabled={isExporting || payments.length === 0}
+                            >
+                                {isExporting ? (
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                ) : (
+                                    <Download className="mr-2 h-4 w-4" />
+                                )}
+                                <span className="hidden sm:inline">Export</span>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 w-56">
+                            <DropdownMenuLabel className="text-zinc-400">Export to Excel</DropdownMenuLabel>
+                            <DropdownMenuSeparator className="bg-zinc-800" />
+                            <DropdownMenuItem
+                                onClick={() => handleExport(false)}
+                                className="text-zinc-300 focus:bg-zinc-800 cursor-pointer"
+                                disabled={filteredPayments.length === 0}
+                            >
+                                <Download className="mr-2 h-4 w-4" />
+                                <div className="flex flex-col">
+                                    <span>Export Filtered</span>
+                                    <span className="text-xs text-zinc-500">{filteredPayments.length} records</span>
+                                </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => handleExport(true)}
+                                className="text-zinc-300 focus:bg-zinc-800 cursor-pointer"
+                            >
+                                <Download className="mr-2 h-4 w-4" />
+                                <div className="flex flex-col">
+                                    <span>Export All</span>
+                                    <span className="text-xs text-zinc-500">{payments.length} records</span>
+                                </div>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
 
                     {/* New Payment Button */}
                     <Button
