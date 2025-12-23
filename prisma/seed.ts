@@ -771,10 +771,13 @@ const payments: Array<{
   netPayment: number;
   submittedDate: Date | null;
   invoiceDate: Date | null;
+  approvalStatus: string | null;
+  remarks: string | null;
+  ffcLiveAction: string | null;
+  rsgLiveAction: string | null;
 }> = [
     {
       paymentNo: "AP01",
-      paymentStatus: "Paid",
       description: "Adv Payment Invoice",
       grossAmount: 43500311.22,
       advancePaymentRecovery: 0,
