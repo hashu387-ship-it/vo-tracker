@@ -44,6 +44,7 @@ import { formatCurrency } from '@/lib/utils';
 import { format } from 'date-fns';
 import { exportPaymentsToExcel } from '@/lib/excel-export';
 import { PaymentForm } from '@/components/dashboard/payment-form';
+import { PaymentDashboard } from '@/components/dashboard/payment-dashboard';
 
 type SortField = 'paymentNo' | 'grossAmount' | 'netPayment' | 'submittedDate';
 type SortOrder = 'asc' | 'desc';
@@ -306,6 +307,11 @@ export default function PaymentsPage() {
                     </Button>
                 </div>
             </motion.div>
+
+            {/* Dashboard Stats & Charts */}
+            {!isLoading && payments.length > 0 && (
+                <PaymentDashboard payments={payments} />
+            )}
 
             {/* Filters */}
             <motion.div
