@@ -28,6 +28,10 @@ const paymentSchema = z.object({
     netPayment: z.number(),
     submittedDate: z.date().optional().nullable(),
     invoiceDate: z.date().optional().nullable(),
+    paymentStatus: z.string().default('Draft'),
+    ffcLiveAction: z.string().optional(),
+    rsgLiveAction: z.string().optional(),
+    remarks: z.string().optional(),
 });
 
 type PaymentFormValues = z.infer<typeof paymentSchema>;
@@ -56,6 +60,10 @@ export function PaymentForm({ initialData, onSuccess, isDialog }: PaymentFormPro
             netPayment: 0,
             submittedDate: undefined,
             invoiceDate: undefined,
+            paymentStatus: 'Draft',
+            ffcLiveAction: '',
+            rsgLiveAction: '',
+            remarks: '',
         },
     });
 
@@ -254,6 +262,36 @@ export function PaymentForm({ initialData, onSuccess, isDialog }: PaymentFormPro
                                 </PopoverContent>
                             </Popover>
                         </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="space-y-2">
+                            <Label>Payment Status</Label>
+                            <select
+                                {...form.register('paymentStatus')}
+                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                                <option value="Draft">Draft</option>
+                                <option value="Submitted on ACONEX">Submitted on ACONEX</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Received">Received</option>
+                            </select>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label>FFC Live Action</Label>
+                            <Input {...form.register('ffcLiveAction')} placeholder="e.g. Transaction Received" />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label>RSG Live Action</Label>
+                            <Input {...form.register('rsgLiveAction')} placeholder="e.g. Transaction Placed" />
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label>Remarks</Label>
+                        <Input {...form.register('remarks')} placeholder="Additional remarks or notes" />
                     </div>
 
                     <div className="flex justify-end gap-2">

@@ -57,7 +57,7 @@ model ActivityLog {
 model PaymentApplication {
   id                      Int       @id @default(autoincrement())
   paymentNo               String    // e.g. "IPA 1", "AP01"
-  status                  String    @default("Draft") // Draft, Submitted, Certified, Paid
+  paymentStatus           String    @default("Draft") // Draft, Submitted on ACONEX, Paid, Received
   description             String    // e.g. "Sept 20th 2023 – Dec 25th 2023"
   grossAmount             Float
   advancePaymentRecovery  Float     @default(0)
@@ -65,12 +65,59 @@ model PaymentApplication {
   vatRecovery             Float     @default(0)
   vat                     Float
   netPayment              Float
-  
+
   submittedDate           DateTime?
   invoiceDate             DateTime? // Corresponds to "Tax invoice submitted"
+
+  // Additional tracking fields
+  ffcLiveAction           String?   // FFC Live Action status
+  rsgLiveAction           String?   // RSG Live Action status
+  remarks                 String?   // General remarks
 
   createdAt               DateTime  @default(now())
   updatedAt               DateTime  @updatedAt
 
   @@map("payment_applications")
+}
+
+model ProjectDetails {
+  id                      Int       @id @default(autoincrement())
+  projectCode             String    @unique // e.g. "R06-HW2C05-5020"
+  projectName             String    // Optional project name
+  contractor              String    // e.g. "First Fix"
+  contractDate            DateTime  // e.g. "20-Sep-2023"
+
+  // Contract values
+  originalContractValue   Float
+  revisedContractValue    Float
+
+  // Advance payment details
+  advancePaymentTotal     Float     // Total advance payment amount
+  advancePaymentPercent   Float     @default(32.0) // e.g. 32%
+  advanceDeductedTillDate Float     @default(0)
+  advanceDeductedPercent  Float     @default(0)
+  advanceBalance          Float     @default(0)
+  advanceBalancePercent   Float     @default(0)
+
+  // Retention details
+  totalRetention          Float     @default(0)
+  retentionPercent        Float     @default(5.0) // e.g. 5%
+  retentionDeductedTillDate Float   @default(0)
+  retentionDeductedPercent Float    @default(0)
+  retentionBalance        Float     @default(0)
+  retentionBalancePercent Float     @default(0)
+
+  // Work summary
+  totalWorkDone           Float     @default(0)
+  totalWorkDonePercent    Float     @default(0)
+  balanceWorkDone         Float     @default(0)
+  balanceWorkDonePercent  Float     @default(0)
+
+  receivedAmount          Float     @default(0)
+  receivedPercent         Float     @default(0)
+
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  @@map("project_details")
 }
