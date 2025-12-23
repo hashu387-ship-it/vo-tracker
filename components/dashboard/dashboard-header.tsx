@@ -24,7 +24,7 @@ export function DashboardHeader({ onExport, onPrint, isExporting }: DashboardHea
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-rsg-navy via-rsg-navy to-rsg-blue p-6 md:p-8 shadow-2xl"
+      className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-rsg-navy via-rsg-navy to-rsg-blue p-4 md:p-6 shadow-2xl"
     >
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -72,9 +72,9 @@ export function DashboardHeader({ onExport, onPrint, isExporting }: DashboardHea
         </motion.div>
       </div>
 
-      <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+      <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         {/* Left side - Branding & Info */}
-        <div className="space-y-10">
+        <div className="space-y-4">
           {/* Logo section */}
           <div className="flex items-center gap-5">
             <motion.div
