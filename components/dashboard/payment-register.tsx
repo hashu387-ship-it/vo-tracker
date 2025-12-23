@@ -161,7 +161,7 @@ export function PaymentRegister({ payments, onRefresh, isLoading }: PaymentRegis
 
             {/* Main Table Card */}
             <div className="rounded-xl border border-border/40 bg-card/60 backdrop-blur-xl shadow-2xl overflow-hidden">
-                <div className="overflow-x-auto custom-scrollbar">
+                <div className="hidden md:block overflow-x-auto custom-scrollbar">
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/30 hover:bg-muted/40 border-b border-border/50">
@@ -327,6 +327,102 @@ export function PaymentRegister({ payments, onRefresh, isLoading }: PaymentRegis
                             )}
                         </TableBody>
                     </Table>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden space-y-4 p-4">
+                    {isLoading ? (
+                        <div className="text-center py-12 text-muted-foreground">
+                            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-3" />
+                            <p>Loading payments...</p>
+                        </div>
+                    ) : payments.length === 0 ? (
+                        <div className="text-center py-12 text-muted-foreground">
+                            <Receipt className="h-12 w-12 opacity-20 mx-auto mb-3" />
+                            <p>No payment records found</p>
+                        </div>
+                    ) : (
+                        payments.map((payment) => (
+                            <div key={payment.id} className="bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl p-5 shadow-sm space-y-4">
+                                {/* Header */}
+                                <div className="flex justify-between items-start">
+                                    <div className="space-y-1">
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-mono text-lg font-bold text-foreground">{payment.paymentNo}</span>
+                                            <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider ${payment.paymentStatus === 'Paid' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' :
+                                                    payment.paymentStatus === 'Certified' ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20' :
+                                                        'bg-muted text-muted-foreground border border-border'
+                                                }`}>
+                                                {payment.paymentStatus}
+                                            </span>
+                                        </div>
+                                        <p className="text-xs text-muted-foreground font-medium">{payment.description}</p>
+                                    </div>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                                <MoreHorizontal className="h-4 w-4" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end">
+                                            <DropdownMenuItem onClick={() => openEdit(payment)}>
+                                                <Pencil className="mr-2 h-4 w-4" /> Edit
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => handleDelete(payment.id)} className="text-destructive">
+                                                <Trash2 className="mr-2 h-4 w-4" /> Delete
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
+
+                                {/* Key Metrics Grid */}
+                                <div className="grid grid-cols-2 gap-3 py-3 border-y border-border/50">
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Gross Amount</p>
+                                        <p className="font-mono font-semibold text-blue-600 dark:text-blue-400 text-sm">
+                                            {formatCurrency(payment.grossAmount)}
+                                        </p>
+                                    </div>
+                                    <div className="space-y-1 text-right">
+                                        <p className="text-[10px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-bold">Net Payment</p>
+                                        <p className="font-mono font-bold text-emerald-600 dark:text-emerald-400 text-base">
+                                            {formatCurrency(payment.netPayment)}
+                                        </p>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Retention</p>
+                                        <p className="font-mono text-xs text-amber-600 dark:text-amber-500">
+                                            {payment.retention ? formatCurrency(payment.retention) : '-'}
+                                        </p>
+                                    </div>
+                                    <div className="space-y-1 text-right">
+                                        <p className="text-[10px] uppercase tracking-wider text-muted-foreground">VAT (15%)</p>
+                                        <p className="font-mono text-xs text-muted-foreground">
+                                            {formatCurrency(payment.vat)}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Footer & Dates */}
+                                <div className="flex justify-between items-center text-xs text-muted-foreground">
+                                    <div className="flex items-center gap-2">
+                                        <span>Sub: {payment.submittedDate ? format(new Date(payment.submittedDate), "dd MMM") : "-"}</span>
+                                        <span className="w-1 h-1 rounded-full bg-border" />
+                                        <span>Inv: {payment.invoiceDate ? format(new Date(payment.invoiceDate), "dd MMM") : "-"}</span>
+                                    </div>
+
+                                    {/* Simple Status Toggle for Mobile (Simplified) */}
+                                    {/* For full editing, user can edit via menu, but we can show approval status here */}
+                                    <div className={`flex items-center gap-1.5 px-2 py-1 rounded-md border ${(payment as any).approvalStatus === 'Received'
+                                            ? 'bg-blue-500/5 border-blue-500/20 text-blue-600 dark:text-blue-400'
+                                            : 'bg-muted/30 border-border text-muted-foreground'
+                                        }`}>
+                                        <span className="text-[10px] font-medium">{(payment as any).approvalStatus || 'Pending'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
 

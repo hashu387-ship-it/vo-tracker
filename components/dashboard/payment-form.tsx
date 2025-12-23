@@ -16,7 +16,13 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Loader2, Info } from "lucide-react";
-import { addMonths, format } from "date-fns";
+import { addMonths, format, subMonths } from "date-fns";
+
+// ... (lines 20-99 skipped in thought, but included implicitly by tool behavior if I don't touch them)
+// Wait, REPLACE tool needs exact match. I'll split this into TWO edits to be safe.
+// Edit 1: Imports
+// Edit 2: Logic
+
 
 // Calculations
 const ADV_RECOVERY_PERCENT = 0.3209; // 32.09%
@@ -103,9 +109,14 @@ export function PaymentForm({ open, onOpenChange, onSubmit, initialData, lastPay
             const nextDateStr = format(nextDate, 'yyyy-MM-dd');
 
             // Intelligent Description Parsing
-            let nextDescription = "";
-            const nextMonth = format(nextDate, 'MMMM yyyy');
-            nextDescription = `Payment Application for ${nextMonth}`;
+            // Format: "Period November 2025 to December 2025"
+            // Start date = Previous month of the invoice date
+            // End date = Invoice date's month
+            const currentMonth = format(nextDate, 'MMMM yyyy');
+            const prevMonthDate = subMonths(nextDate, 1);
+            const prevMonth = format(prevMonthDate, 'MMMM yyyy');
+
+            const nextDescription = `Period ${prevMonth} to ${currentMonth}`;
 
             reset({
                 paymentNo: nextNo,
