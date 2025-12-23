@@ -17,6 +17,10 @@ const updatePaymentSchema = z.object({
     netPayment: z.number().optional(),
     submittedDate: z.string().optional().nullable().transform((val) => val ? new Date(val) : null),
     invoiceDate: z.string().optional().nullable().transform((val) => val ? new Date(val) : null),
+    paymentStatus: z.string().optional(),
+    ffcLiveAction: z.string().optional().nullable(),
+    rsgLiveAction: z.string().optional().nullable(),
+    remarks: z.string().optional().nullable(),
 });
 
 interface RouteParams {

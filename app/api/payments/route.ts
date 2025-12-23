@@ -18,6 +18,10 @@ const createPaymentSchema = z.object({
     netPayment: z.number(),
     submittedDate: z.string().optional().nullable().transform((val) => val ? new Date(val) : null),
     invoiceDate: z.string().optional().nullable().transform((val) => val ? new Date(val) : null),
+    paymentStatus: z.string().default('Draft'),
+    ffcLiveAction: z.string().optional().nullable(),
+    rsgLiveAction: z.string().optional().nullable(),
+    remarks: z.string().optional().nullable(),
 });
 
 // GET /api/payments - List all payments
