@@ -26,6 +26,16 @@ export function DashboardHeader({ onExport, onPrint, isExporting }: DashboardHea
       transition={{ duration: 0.5 }}
       className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-rsg-navy via-rsg-navy to-rsg-blue p-4 md:p-6 shadow-2xl"
     >
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <img
+          src="https://welcomesaudi-media.s3.me-south-1.amazonaws.com/0000/64/2025/04/17/2-red-sea-global-reveals-laheq-island-1st-private-residential-island-on-red-sea.jpg"
+          alt="Red Sea Global"
+          className="w-full h-full object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-rsg-navy/90 via-rsg-navy/85 to-rsg-blue/80" />
+      </div>
+
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Grid pattern */}

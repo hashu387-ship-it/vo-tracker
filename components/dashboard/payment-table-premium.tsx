@@ -62,17 +62,17 @@ type SortOrder = 'asc' | 'desc';
 type ViewMode = 'table' | 'cards';
 
 const statusColors: { [key: string]: { bg: string; text: string; border: string; dot: string } } = {
-    'Draft': { bg: 'bg-zinc-500/10', text: 'text-zinc-400', border: 'border-zinc-500/20', dot: 'bg-zinc-400' },
-    'Submitted': { bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/20', dot: 'bg-blue-400' },
-    'Submitted on ACONEX': { bg: 'bg-indigo-500/10', text: 'text-indigo-400', border: 'border-indigo-500/20', dot: 'bg-indigo-400' },
-    'Certified': { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/20', dot: 'bg-amber-400' },
-    'Paid': { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/20', dot: 'bg-emerald-400' },
+    'Draft': { bg: 'bg-slate-100 dark:bg-zinc-500/10', text: 'text-slate-600 dark:text-zinc-400', border: 'border-slate-200 dark:border-zinc-500/20', dot: 'bg-slate-400 dark:bg-zinc-400' },
+    'Submitted': { bg: 'bg-blue-100 dark:bg-blue-500/10', text: 'text-blue-600 dark:text-blue-400', border: 'border-blue-200 dark:border-blue-500/20', dot: 'bg-blue-500 dark:bg-blue-400' },
+    'Submitted on ACONEX': { bg: 'bg-indigo-100 dark:bg-indigo-500/10', text: 'text-indigo-600 dark:text-indigo-400', border: 'border-indigo-200 dark:border-indigo-500/20', dot: 'bg-indigo-500 dark:bg-indigo-400' },
+    'Certified': { bg: 'bg-amber-100 dark:bg-amber-500/10', text: 'text-amber-600 dark:text-amber-400', border: 'border-amber-200 dark:border-amber-500/20', dot: 'bg-amber-500 dark:bg-amber-400' },
+    'Paid': { bg: 'bg-emerald-100 dark:bg-emerald-500/10', text: 'text-emerald-600 dark:text-emerald-400', border: 'border-emerald-200 dark:border-emerald-500/20', dot: 'bg-emerald-500 dark:bg-emerald-400' },
 };
 
 const approvalColors: { [key: string]: { bg: string; text: string } } = {
-    'Pending': { bg: 'bg-zinc-500/10', text: 'text-zinc-400' },
-    'Received': { bg: 'bg-emerald-500/10', text: 'text-emerald-400' },
-    'Under Review': { bg: 'bg-amber-500/10', text: 'text-amber-400' },
+    'Pending': { bg: 'bg-slate-100 dark:bg-zinc-500/10', text: 'text-slate-600 dark:text-zinc-400' },
+    'Received': { bg: 'bg-emerald-100 dark:bg-emerald-500/10', text: 'text-emerald-600 dark:text-emerald-400' },
+    'Under Review': { bg: 'bg-amber-100 dark:bg-amber-500/10', text: 'text-amber-600 dark:text-amber-400' },
 };
 
 export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentTablePremiumProps) {
@@ -246,7 +246,7 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
     const SortButton = ({ field, label }: { field: SortField; label: string }) => (
         <button
             onClick={() => handleSort(field)}
-            className={`flex items-center gap-1 text-xs uppercase tracking-wider font-medium transition-colors ${sortField === field ? 'text-indigo-400' : 'text-zinc-500 hover:text-zinc-300'
+            className={`flex items-center gap-1 text-xs uppercase tracking-wider font-medium transition-colors ${sortField === field ? 'text-rsg-navy dark:text-indigo-400' : 'text-slate-500 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-zinc-300'
                 }`}
         >
             {label}
@@ -264,21 +264,21 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
             <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between p-4 bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 rounded-2xl"
+                className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between p-4 bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl border border-slate-200 dark:border-zinc-800/50 rounded-2xl shadow-sm"
             >
                 {/* Search */}
                 <div className="relative flex-1 w-full lg:max-w-md">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-zinc-500" />
                     <Input
                         placeholder="Search payments..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10 bg-zinc-800/50 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:ring-indigo-500/50"
+                        className="pl-10 bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700/50 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-zinc-500 focus:ring-rsg-navy/50 dark:focus:ring-indigo-500/50"
                     />
                     {searchQuery && (
                         <button
                             onClick={() => setSearchQuery('')}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-white"
                         >
                             <X className="h-4 w-4" />
                         </button>
@@ -289,8 +289,8 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
                 <div className="flex flex-wrap gap-3 items-center w-full lg:w-auto">
                     {/* Status Filter */}
                     <Select value={statusFilter} onValueChange={setStatusFilter}>
-                        <SelectTrigger className="w-[160px] bg-zinc-800/50 border-zinc-700/50 text-white">
-                            <Filter className="h-4 w-4 mr-2 text-zinc-500" />
+                        <SelectTrigger className="w-[160px] bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700/50 text-slate-900 dark:text-white">
+                            <Filter className="h-4 w-4 mr-2 text-slate-400 dark:text-zinc-500" />
                             <SelectValue placeholder="All Status" />
                         </SelectTrigger>
                         <SelectContent>
@@ -304,16 +304,16 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
                     </Select>
 
                     {/* View Toggle */}
-                    <div className="flex items-center gap-1 p-1 bg-zinc-800/50 rounded-xl border border-zinc-700/50">
+                    <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/50">
                         <button
                             onClick={() => setViewMode('table')}
-                            className={`p-2 rounded-lg transition-all ${viewMode === 'table' ? 'bg-indigo-500/20 text-indigo-400' : 'text-zinc-500 hover:text-white'}`}
+                            className={`p-2 rounded-lg transition-all ${viewMode === 'table' ? 'bg-rsg-navy/10 dark:bg-indigo-500/20 text-rsg-navy dark:text-indigo-400' : 'text-slate-500 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-white'}`}
                         >
                             <LayoutList className="h-4 w-4" />
                         </button>
                         <button
                             onClick={() => setViewMode('cards')}
-                            className={`p-2 rounded-lg transition-all ${viewMode === 'cards' ? 'bg-indigo-500/20 text-indigo-400' : 'text-zinc-500 hover:text-white'}`}
+                            className={`p-2 rounded-lg transition-all ${viewMode === 'cards' ? 'bg-rsg-navy/10 dark:bg-indigo-500/20 text-rsg-navy dark:text-indigo-400' : 'text-slate-500 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-white'}`}
                         >
                             <LayoutGrid className="h-4 w-4" />
                         </button>
@@ -324,7 +324,7 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
                         <DropdownMenuTrigger asChild>
                             <Button
                                 variant="outline"
-                                className="bg-zinc-800/50 border-zinc-700/50 text-white hover:bg-zinc-700/50 hover:border-zinc-600/50"
+                                className="bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700/50 text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-zinc-700/50 hover:border-slate-300 dark:hover:border-zinc-600/50"
                                 disabled={isExporting || payments.length === 0}
                             >
                                 {isExporting ? (
@@ -335,28 +335,28 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
                                 <span className="hidden sm:inline">Export</span>
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 w-56">
-                            <DropdownMenuLabel className="text-zinc-400">Export to Excel</DropdownMenuLabel>
-                            <DropdownMenuSeparator className="bg-zinc-800" />
+                        <DropdownMenuContent align="end" className="w-56">
+                            <DropdownMenuLabel>Export to Excel</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
                             <DropdownMenuItem
                                 onClick={() => handleExport(false)}
-                                className="text-zinc-300 focus:bg-zinc-800 cursor-pointer"
+                                className="cursor-pointer"
                                 disabled={filteredPayments.length === 0}
                             >
                                 <Download className="mr-2 h-4 w-4" />
                                 <div className="flex flex-col">
                                     <span>Export Filtered</span>
-                                    <span className="text-xs text-zinc-500">{filteredPayments.length} records</span>
+                                    <span className="text-xs text-muted-foreground">{filteredPayments.length} records</span>
                                 </div>
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 onClick={() => handleExport(true)}
-                                className="text-zinc-300 focus:bg-zinc-800 cursor-pointer"
+                                className="cursor-pointer"
                             >
                                 <Download className="mr-2 h-4 w-4" />
                                 <div className="flex flex-col">
                                     <span>Export All</span>
-                                    <span className="text-xs text-zinc-500">{payments.length} records</span>
+                                    <span className="text-xs text-muted-foreground">{payments.length} records</span>
                                 </div>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -376,9 +376,9 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
 
             {/* Results Summary */}
             <div className="flex items-center justify-between px-1">
-                <p className="text-sm text-zinc-500">
-                    Showing <span className="text-white font-medium">{filteredPayments.length}</span> of{" "}
-                    <span className="text-white font-medium">{payments.length}</span> payments
+                <p className="text-sm text-slate-500 dark:text-zinc-500">
+                    Showing <span className="text-slate-900 dark:text-white font-medium">{filteredPayments.length}</span> of{" "}
+                    <span className="text-slate-900 dark:text-white font-medium">{payments.length}</span> payments
                 </p>
             </div>
 
@@ -390,23 +390,23 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
-                        className="hidden md:block overflow-hidden rounded-2xl bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 shadow-2xl"
+                        className="hidden md:block overflow-hidden rounded-2xl bg-white dark:bg-zinc-900/50 backdrop-blur-xl border border-slate-200 dark:border-zinc-800/50 shadow-xl dark:shadow-2xl"
                     >
                         <div className="overflow-x-auto">
                             <table className="w-full">
                                 <thead>
-                                    <tr className="border-b border-zinc-800/50">
+                                    <tr className="border-b border-slate-200 dark:border-zinc-800/50 bg-slate-50/50 dark:bg-transparent">
                                         <th className="text-left p-4"><SortButton field="paymentNo" label="Ref" /></th>
                                         <th className="text-left p-4 min-w-[200px]">
-                                            <span className="text-xs uppercase tracking-wider font-medium text-zinc-500">Description</span>
+                                            <span className="text-xs uppercase tracking-wider font-medium text-slate-500 dark:text-zinc-500">Description</span>
                                         </th>
                                         <th className="text-right p-4"><SortButton field="grossAmount" label="Gross" /></th>
                                         <th className="text-right p-4">
-                                            <span className="text-xs uppercase tracking-wider font-medium text-zinc-500">Deductions</span>
+                                            <span className="text-xs uppercase tracking-wider font-medium text-slate-500 dark:text-zinc-500">Deductions</span>
                                         </th>
                                         <th className="text-right p-4"><SortButton field="netPayment" label="Net" /></th>
                                         <th className="text-center p-4">
-                                            <span className="text-xs uppercase tracking-wider font-medium text-zinc-500">Status</span>
+                                            <span className="text-xs uppercase tracking-wider font-medium text-slate-500 dark:text-zinc-500">Status</span>
                                         </th>
                                         <th className="text-center p-4"><SortButton field="submittedDate" label="Date" /></th>
                                         <th className="text-right p-4 w-12"></th>
@@ -416,20 +416,20 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
                                     {isLoading ? (
                                         <tr>
                                             <td colSpan={8} className="p-16 text-center">
-                                                <Loader2 className="h-8 w-8 animate-spin mx-auto text-indigo-400" />
-                                                <p className="text-zinc-500 mt-3">Loading payments...</p>
+                                                <Loader2 className="h-8 w-8 animate-spin mx-auto text-rsg-navy dark:text-indigo-400" />
+                                                <p className="text-slate-500 dark:text-zinc-500 mt-3">Loading payments...</p>
                                             </td>
                                         </tr>
                                     ) : filteredPayments.length === 0 ? (
                                         <tr>
                                             <td colSpan={8} className="p-16 text-center">
                                                 <div className="flex flex-col items-center gap-4">
-                                                    <div className="p-4 rounded-2xl bg-zinc-800/50 border border-zinc-700/50">
-                                                        <Receipt className="h-8 w-8 text-zinc-600" />
+                                                    <div className="p-4 rounded-2xl bg-slate-100 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700/50">
+                                                        <Receipt className="h-8 w-8 text-slate-400 dark:text-zinc-600" />
                                                     </div>
                                                     <div>
-                                                        <p className="text-lg font-medium text-zinc-400">No payments found</p>
-                                                        <p className="text-sm text-zinc-600">Try adjusting your search or filters</p>
+                                                        <p className="text-lg font-medium text-slate-600 dark:text-zinc-400">No payments found</p>
+                                                        <p className="text-sm text-slate-500 dark:text-zinc-600">Try adjusting your search or filters</p>
                                                     </div>
                                                 </div>
                                             </td>
@@ -445,36 +445,36 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
                                                     initial={{ opacity: 0, x: -20 }}
                                                     animate={{ opacity: 1, x: 0 }}
                                                     transition={{ delay: index * 0.02 }}
-                                                    className="border-b border-zinc-800/30 hover:bg-zinc-800/30 transition-colors group"
+                                                    className="border-b border-slate-100 dark:border-zinc-800/30 hover:bg-slate-50 dark:hover:bg-zinc-800/30 transition-colors group"
                                                 >
                                                     <td className="p-4">
                                                         <div className="flex items-center gap-3">
                                                             <div className={`w-1 h-10 rounded-full ${status.dot}`} />
-                                                            <span className="font-mono font-bold text-white">{payment.paymentNo}</span>
+                                                            <span className="font-mono font-bold text-slate-900 dark:text-white">{payment.paymentNo}</span>
                                                         </div>
                                                     </td>
                                                     <td className="p-4">
-                                                        <p className="text-zinc-300 truncate max-w-[200px]" title={payment.description}>
+                                                        <p className="text-slate-600 dark:text-zinc-300 truncate max-w-[200px]" title={payment.description}>
                                                             {payment.description}
                                                         </p>
                                                     </td>
                                                     <td className="p-4 text-right">
-                                                        <span className="font-mono text-blue-400 font-medium">
+                                                        <span className="font-mono text-blue-600 dark:text-blue-400 font-medium">
                                                             {formatCurrency(payment.grossAmount)}
                                                         </span>
                                                     </td>
                                                     <td className="p-4 text-right">
                                                         <div className="flex flex-col items-end gap-0.5">
-                                                            <span className="font-mono text-xs text-red-400/80">
+                                                            <span className="font-mono text-xs text-red-600 dark:text-red-400/80">
                                                                 -{formatCurrency(Math.abs(payment.advancePaymentRecovery || 0))}
                                                             </span>
-                                                            <span className="font-mono text-xs text-amber-400/80">
+                                                            <span className="font-mono text-xs text-amber-600 dark:text-amber-400/80">
                                                                 -{formatCurrency(Math.abs(payment.retention || 0))}
                                                             </span>
                                                         </div>
                                                     </td>
                                                     <td className="p-4 text-right">
-                                                        <span className="font-mono text-emerald-400 font-bold text-lg">
+                                                        <span className="font-mono text-emerald-600 dark:text-emerald-400 font-bold text-lg">
                                                             {formatCurrency(payment.netPayment)}
                                                         </span>
                                                     </td>
@@ -497,7 +497,7 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
                                                         </Select>
                                                     </td>
                                                     <td className="p-4 text-center">
-                                                        <span className="font-mono text-xs text-zinc-500">
+                                                        <span className="font-mono text-xs text-slate-500 dark:text-zinc-500">
                                                             {payment.submittedDate ? format(new Date(payment.submittedDate), "dd MMM yy") : "-"}
                                                         </span>
                                                     </td>
@@ -505,16 +505,16 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
                                                         <DropdownMenu>
                                                             <DropdownMenuTrigger asChild>
                                                                 <Button variant="ghost" size="sm" className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                    <MoreHorizontal className="h-4 w-4 text-zinc-400" />
+                                                                    <MoreHorizontal className="h-4 w-4 text-slate-400 dark:text-zinc-400" />
                                                                 </Button>
                                                             </DropdownMenuTrigger>
-                                                            <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800">
-                                                                <DropdownMenuLabel className="text-zinc-400">Actions</DropdownMenuLabel>
-                                                                <DropdownMenuItem onClick={() => openEdit(payment)} className="text-zinc-300 focus:bg-zinc-800 cursor-pointer">
+                                                            <DropdownMenuContent align="end">
+                                                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                                <DropdownMenuItem onClick={() => openEdit(payment)} className="cursor-pointer">
                                                                     <Pencil className="mr-2 h-4 w-4" /> Edit
                                                                 </DropdownMenuItem>
-                                                                <DropdownMenuSeparator className="bg-zinc-800" />
-                                                                <DropdownMenuItem onClick={() => handleDelete(payment.id)} className="text-red-400 focus:bg-red-500/10 cursor-pointer">
+                                                                <DropdownMenuSeparator />
+                                                                <DropdownMenuItem onClick={() => handleDelete(payment.id)} className="text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400 cursor-pointer">
                                                                     <Trash2 className="mr-2 h-4 w-4" /> Delete
                                                                 </DropdownMenuItem>
                                                             </DropdownMenuContent>
@@ -542,13 +542,13 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
                         <div className={`grid gap-4 ${viewMode === 'cards' ? 'sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
                             {isLoading ? (
                                 <div className="col-span-full p-16 text-center">
-                                    <Loader2 className="h-8 w-8 animate-spin mx-auto text-indigo-400" />
-                                    <p className="text-zinc-500 mt-3">Loading payments...</p>
+                                    <Loader2 className="h-8 w-8 animate-spin mx-auto text-rsg-navy dark:text-indigo-400" />
+                                    <p className="text-slate-500 dark:text-zinc-500 mt-3">Loading payments...</p>
                                 </div>
                             ) : filteredPayments.length === 0 ? (
                                 <div className="col-span-full p-16 text-center">
-                                    <Receipt className="h-12 w-12 mx-auto text-zinc-600 mb-4" />
-                                    <p className="text-lg font-medium text-zinc-400">No payments found</p>
+                                    <Receipt className="h-12 w-12 mx-auto text-slate-400 dark:text-zinc-600 mb-4" />
+                                    <p className="text-lg font-medium text-slate-500 dark:text-zinc-400">No payments found</p>
                                 </div>
                             ) : (
                                 filteredPayments.map((payment, index) => {
@@ -563,7 +563,7 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{ delay: index * 0.03 }}
                                             layout
-                                            className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 rounded-2xl overflow-hidden hover:border-zinc-700/50 transition-all group"
+                                            className="bg-white dark:bg-zinc-900/50 backdrop-blur-xl border border-slate-200 dark:border-zinc-800/50 rounded-2xl overflow-hidden hover:border-slate-300 dark:hover:border-zinc-700/50 transition-all group shadow-sm"
                                         >
                                             {/* Card Header */}
                                             <div className="p-5 space-y-4">
@@ -571,21 +571,21 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
                                                     <div className="flex items-center gap-3">
                                                         <div className={`w-1.5 h-12 rounded-full ${status.dot}`} />
                                                         <div>
-                                                            <h3 className="font-mono font-bold text-xl text-white">{payment.paymentNo}</h3>
-                                                            <p className="text-xs text-zinc-500 mt-0.5 truncate max-w-[180px]">{payment.description}</p>
+                                                            <h3 className="font-mono font-bold text-xl text-slate-900 dark:text-white">{payment.paymentNo}</h3>
+                                                            <p className="text-xs text-slate-500 dark:text-zinc-500 mt-0.5 truncate max-w-[180px]">{payment.description}</p>
                                                         </div>
                                                     </div>
                                                     <DropdownMenu>
                                                         <DropdownMenuTrigger asChild>
                                                             <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                                                <MoreHorizontal className="h-4 w-4 text-zinc-400" />
+                                                                <MoreHorizontal className="h-4 w-4 text-slate-400 dark:text-zinc-400" />
                                                             </Button>
                                                         </DropdownMenuTrigger>
-                                                        <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800">
-                                                            <DropdownMenuItem onClick={() => openEdit(payment)} className="text-zinc-300 cursor-pointer">
+                                                        <DropdownMenuContent align="end">
+                                                            <DropdownMenuItem onClick={() => openEdit(payment)} className="cursor-pointer">
                                                                 <Pencil className="mr-2 h-4 w-4" /> Edit
                                                             </DropdownMenuItem>
-                                                            <DropdownMenuItem onClick={() => handleDelete(payment.id)} className="text-red-400 cursor-pointer">
+                                                            <DropdownMenuItem onClick={() => handleDelete(payment.id)} className="text-red-600 dark:text-red-400 cursor-pointer">
                                                                 <Trash2 className="mr-2 h-4 w-4" /> Delete
                                                             </DropdownMenuItem>
                                                         </DropdownMenuContent>
@@ -603,21 +603,21 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
                                                 </div>
 
                                                 {/* Financial Summary */}
-                                                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-zinc-800/50">
+                                                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-200 dark:border-zinc-800/50">
                                                     <div>
-                                                        <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1">Gross Amount</p>
-                                                        <p className="font-mono font-semibold text-blue-400">{formatCurrency(payment.grossAmount)}</p>
+                                                        <p className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-zinc-500 mb-1">Gross Amount</p>
+                                                        <p className="font-mono font-semibold text-blue-600 dark:text-blue-400">{formatCurrency(payment.grossAmount)}</p>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="text-[10px] uppercase tracking-wider text-emerald-500 font-bold mb-1">Net Payment</p>
-                                                        <p className="font-mono font-bold text-lg text-emerald-400">{formatCurrency(payment.netPayment)}</p>
+                                                        <p className="text-[10px] uppercase tracking-wider text-emerald-600 dark:text-emerald-500 font-bold mb-1">Net Payment</p>
+                                                        <p className="font-mono font-bold text-lg text-emerald-600 dark:text-emerald-400">{formatCurrency(payment.netPayment)}</p>
                                                     </div>
                                                 </div>
 
                                                 {/* Expand/Collapse Button */}
                                                 <button
                                                     onClick={() => setExpandedCard(isExpanded ? null : payment.id)}
-                                                    className="w-full flex items-center justify-center gap-2 pt-3 text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+                                                    className="w-full flex items-center justify-center gap-2 pt-3 text-xs text-slate-500 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-zinc-300 transition-colors"
                                                 >
                                                     {isExpanded ? (
                                                         <>
@@ -645,35 +645,35 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
                                                     >
                                                         <div className="p-5 pt-0 space-y-4">
                                                             {/* Deductions */}
-                                                            <div className="grid grid-cols-2 gap-3 p-3 bg-zinc-800/30 rounded-xl">
+                                                            <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50 dark:bg-zinc-800/30 rounded-xl">
                                                                 <div>
-                                                                    <p className="text-[10px] text-zinc-500 uppercase">Adv. Recovery</p>
-                                                                    <p className="font-mono text-sm text-red-400">
+                                                                    <p className="text-[10px] text-slate-500 dark:text-zinc-500 uppercase">Adv. Recovery</p>
+                                                                    <p className="font-mono text-sm text-red-600 dark:text-red-400">
                                                                         -{formatCurrency(Math.abs(payment.advancePaymentRecovery || 0))}
                                                                     </p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-[10px] text-zinc-500 uppercase">Retention</p>
-                                                                    <p className="font-mono text-sm text-amber-400">
+                                                                    <p className="text-[10px] text-slate-500 dark:text-zinc-500 uppercase">Retention</p>
+                                                                    <p className="font-mono text-sm text-amber-600 dark:text-amber-400">
                                                                         -{formatCurrency(Math.abs(payment.retention || 0))}
                                                                     </p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-[10px] text-zinc-500 uppercase">VAT Recovery</p>
-                                                                    <p className="font-mono text-sm text-red-400/70">
+                                                                    <p className="text-[10px] text-slate-500 dark:text-zinc-500 uppercase">VAT Recovery</p>
+                                                                    <p className="font-mono text-sm text-red-500 dark:text-red-400/70">
                                                                         -{formatCurrency(Math.abs(payment.vatRecovery || 0))}
                                                                     </p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-[10px] text-zinc-500 uppercase">VAT (15%)</p>
-                                                                    <p className="font-mono text-sm text-zinc-400">
+                                                                    <p className="text-[10px] text-slate-500 dark:text-zinc-500 uppercase">VAT (15%)</p>
+                                                                    <p className="font-mono text-sm text-slate-600 dark:text-zinc-400">
                                                                         +{formatCurrency(payment.vat)}
                                                                     </p>
                                                                 </div>
                                                             </div>
 
                                                             {/* Dates */}
-                                                            <div className="flex items-center justify-between text-xs text-zinc-500">
+                                                            <div className="flex items-center justify-between text-xs text-slate-500 dark:text-zinc-500">
                                                                 <div className="flex items-center gap-2">
                                                                     <Calendar className="h-3.5 w-3.5" />
                                                                     <span>Submitted: {payment.submittedDate ? format(new Date(payment.submittedDate), "dd MMM yyyy") : "-"}</span>
@@ -686,20 +686,20 @@ export function PaymentTablePremium({ payments, onRefresh, isLoading }: PaymentT
 
                                                             {/* Remarks */}
                                                             {(payment as any).remarks && (
-                                                                <div className="p-3 bg-zinc-800/20 rounded-lg border border-zinc-800/50">
-                                                                    <p className="text-[10px] text-zinc-500 uppercase mb-1">Remarks</p>
-                                                                    <p className="text-xs text-zinc-400">{(payment as any).remarks}</p>
+                                                                <div className="p-3 bg-slate-100 dark:bg-zinc-800/20 rounded-lg border border-slate-200 dark:border-zinc-800/50">
+                                                                    <p className="text-[10px] text-slate-500 dark:text-zinc-500 uppercase mb-1">Remarks</p>
+                                                                    <p className="text-xs text-slate-600 dark:text-zinc-400">{(payment as any).remarks}</p>
                                                                 </div>
                                                             )}
 
                                                             {/* Status Update */}
-                                                            <div className="pt-3 border-t border-zinc-800/50">
+                                                            <div className="pt-3 border-t border-slate-200 dark:border-zinc-800/50">
                                                                 <Select
                                                                     defaultValue={payment.paymentStatus}
                                                                     onValueChange={(val) => handleStatusUpdate(payment.id, val, 'paymentStatus')}
                                                                     disabled={updatingStatusId === payment.id}
                                                                 >
-                                                                    <SelectTrigger className="w-full bg-zinc-800/50 border-zinc-700/50 text-white">
+                                                                    <SelectTrigger className="w-full bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700/50 text-slate-900 dark:text-white">
                                                                         <SelectValue placeholder="Update Status" />
                                                                     </SelectTrigger>
                                                                     <SelectContent>
