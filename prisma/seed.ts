@@ -783,13 +783,15 @@ const payments: Array<{
       vat: 6525046.68,
       netPayment: 43500311.22,
       submittedDate: new Date("2023-11-23"),
-      invoiceDate: new Date("2023-04-12") // "12/04/23" in table? check columns. "Tax invoice submitted" vs "Submitted Date"?
-      // User table: "Submitted Date (FFC to TRSDC 1)": 23/11/23. "Tax invoice sumbitted": 12/04/23.
-      // Wait, AP01 Tax invoice 12/04/23 (April?) or Dec 4? 23/11 is Nov. April is before Nov? Maybe DD/MM/YY?
+      invoiceDate: new Date("2023-04-12"), // 12/04/23 -> April 12th? Or Dec 4th? Usually dd/mm/yy in Middle East. Assuming 12 Apr.
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "AP02",
-      paymentStatus: "Paid",
       description: "Adv Payment Invoice 2",
       grossAmount: 21750155.61,
       advancePaymentRecovery: 0,
@@ -798,11 +800,15 @@ const payments: Array<{
       vat: 3262523.34,
       netPayment: 21750155.61,
       submittedDate: new Date("2024-11-20"),
-      invoiceDate: new Date("2024-11-22")
+      invoiceDate: new Date("2024-11-22"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 1",
-      paymentStatus: "Paid",
       description: "Sept 20th 2023 – Dec 25th 2023",
       grossAmount: 2571831.80,
       advancePaymentRecovery: -514366.36,
@@ -811,11 +817,15 @@ const payments: Array<{
       vat: 385774.77,
       netPayment: 2108902.08,
       submittedDate: new Date("2023-12-14"),
-      invoiceDate: new Date("2024-01-22")
+      invoiceDate: new Date("2024-01-22"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 2",
-      paymentStatus: "Paid",
       description: "Dec 25th 2023 – Jan 25th 2024",
       grossAmount: 1727779.48,
       advancePaymentRecovery: -345555.90,
@@ -824,11 +834,15 @@ const payments: Array<{
       vat: 259166.92,
       netPayment: 1416779.17,
       submittedDate: new Date("2024-01-30"),
-      invoiceDate: new Date("2024-03-26")
+      invoiceDate: new Date("2024-03-26"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 3",
-      paymentStatus: "Paid",
       description: "Jan 25th 2024 – Feb 25th 2024",
       grossAmount: 1363441.89,
       advancePaymentRecovery: -272688.38,
@@ -837,11 +851,15 @@ const payments: Array<{
       vat: 204516.28,
       netPayment: 1118022.35,
       submittedDate: new Date("2024-04-22"),
-      invoiceDate: new Date("2024-12-04")
+      invoiceDate: new Date("2024-12-04"), // 04/12/24 -> Dec 4
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 4",
-      paymentStatus: "Paid",
       description: "Feb 25th 2024 – Mar 25th 2024",
       grossAmount: 963176.50,
       advancePaymentRecovery: -192635.30,
@@ -850,11 +868,15 @@ const payments: Array<{
       vat: 144476.48,
       netPayment: 789804.73,
       submittedDate: new Date("2024-05-15"),
-      invoiceDate: new Date("2024-05-13")
+      invoiceDate: new Date("2024-05-13"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 5",
-      paymentStatus: "Paid",
       description: "Mar 25th 2024 – Apr 25th 2024",
       grossAmount: 6730484.94,
       advancePaymentRecovery: -1346096.99,
@@ -863,11 +885,15 @@ const payments: Array<{
       vat: 1009572.74,
       netPayment: 5518997.65,
       submittedDate: new Date("2024-05-28"),
-      invoiceDate: new Date("2024-05-28")
+      invoiceDate: new Date("2024-05-28"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 6",
-      paymentStatus: "Paid",
       description: "Apr 25th 2024 – May 25th 2024",
       grossAmount: 3008114.09,
       advancePaymentRecovery: -601622.82,
@@ -875,12 +901,16 @@ const payments: Array<{
       vatRecovery: -90243.42,
       vat: 451217.11,
       netPayment: 2466653.55,
-      submittedDate: new Date("2024-04-29"),
-      invoiceDate: new Date("2024-06-27")
+      submittedDate: new Date("2024-04-29"), // 29/04/24 - Note: submitted before IPA 5? Check data. Data says 29/04.
+      invoiceDate: new Date("2024-06-27"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 7",
-      paymentStatus: "Paid",
       description: "May 25th 2024 – Jun 25th 2024",
       grossAmount: 3972034.68,
       advancePaymentRecovery: -794406.94,
@@ -889,11 +919,15 @@ const payments: Array<{
       vat: 595805.20,
       netPayment: 3257068.44,
       submittedDate: new Date("2024-06-26"),
-      invoiceDate: new Date("2024-07-28")
+      invoiceDate: new Date("2024-07-28"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 8",
-      paymentStatus: "Paid",
       description: "Jun 25th 2024 – Jul 25th 2024",
       grossAmount: 5556560.41,
       advancePaymentRecovery: -1111312.08,
@@ -902,11 +936,15 @@ const payments: Array<{
       vat: 833484.06,
       netPayment: 4556379.54,
       submittedDate: new Date("2024-08-19"),
-      invoiceDate: new Date("2024-07-05")
+      invoiceDate: new Date("2024-07-05"), // 05/07/24
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 9",
-      paymentStatus: "Paid",
       description: "Jul 25th 2024 – Aug 25th 2024",
       grossAmount: 6512584.83,
       advancePaymentRecovery: -1302516.97,
@@ -915,11 +953,15 @@ const payments: Array<{
       vat: 976887.72,
       netPayment: 5340319.56,
       submittedDate: new Date("2024-08-31"),
-      invoiceDate: new Date("2024-10-06")
+      invoiceDate: new Date("2024-10-06"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 10",
-      paymentStatus: "Paid",
       description: "Aug 25th 2024 – Sep 25th 2024",
       grossAmount: 5212335.00,
       advancePaymentRecovery: -1042467.00,
@@ -928,24 +970,32 @@ const payments: Array<{
       vat: 781850.25,
       netPayment: 4274114.70,
       submittedDate: new Date("2024-10-02"),
-      invoiceDate: new Date("2024-10-21")
+      invoiceDate: new Date("2024-10-21"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 11",
-      paymentStatus: "Paid",
       description: "Sep 25th 2024 – Oct 25th 2024",
       grossAmount: 11178597.35,
-      advancePaymentRecovery: -3587211.89, // Table: (3,587,211.89)
+      advancePaymentRecovery: -3587211.89,
       retention: -1117859.74,
       vatRecovery: -538081.78,
       vat: 1676789.60,
       netPayment: 7612233.54,
       submittedDate: new Date("2024-11-23"),
-      invoiceDate: new Date("2024-12-13")
+      invoiceDate: new Date("2024-12-13"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 12",
-      paymentStatus: "Paid",
       description: "Oct 25th 2024 – Nov 25th 2024",
       grossAmount: 5338593.85,
       advancePaymentRecovery: -1713154.77,
@@ -954,11 +1004,15 @@ const payments: Array<{
       vat: 800789.08,
       netPayment: 3635395.56,
       submittedDate: new Date("2024-12-08"),
-      invoiceDate: new Date("2024-12-29")
+      invoiceDate: new Date("2024-12-29"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 13",
-      paymentStatus: "Paid",
       description: "Nov 25th 2024 – Dec 25th 2024",
       grossAmount: 10523911.06,
       advancePaymentRecovery: -3377123.06,
@@ -967,11 +1021,15 @@ const payments: Array<{
       vat: 1578586.66,
       netPayment: 7166415.10,
       submittedDate: new Date("2025-01-19"),
-      invoiceDate: new Date("2025-02-02")
+      invoiceDate: new Date("2025-02-02"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 14",
-      paymentStatus: "Paid",
       description: "Dec 25th 2024 – Jan 25th 2025",
       grossAmount: 14789522.58,
       advancePaymentRecovery: -4745957.80,
@@ -980,11 +1038,15 @@ const payments: Array<{
       vat: 2218428.39,
       netPayment: 10071147.24,
       submittedDate: new Date("2025-02-13"),
-      invoiceDate: new Date("2025-03-02")
+      invoiceDate: new Date("2025-03-02"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 15",
-      paymentStatus: "Paid",
       description: "Jan 25th 2025 – Feb 25th 2025",
       grossAmount: 14091614.85,
       advancePaymentRecovery: -4521999.21,
@@ -993,11 +1055,15 @@ const payments: Array<{
       vat: 2113742.23,
       netPayment: 9595896.51,
       submittedDate: new Date("2025-03-18"),
-      invoiceDate: new Date("2025-03-27")
+      invoiceDate: new Date("2025-03-27"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 16",
-      paymentStatus: "Paid",
       description: "Feb 25th 2025 – Mar 25th 2025",
       grossAmount: 5147125.92,
       advancePaymentRecovery: -1651712.71,
@@ -1006,11 +1072,15 @@ const payments: Array<{
       vat: 772068.89,
       netPayment: 3505012.60,
       submittedDate: new Date("2025-04-23"),
-      invoiceDate: new Date("2025-05-07")
+      invoiceDate: new Date("2025-05-07"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 17",
-      paymentStatus: "Paid",
       description: "Mar 25th 2025 – Apr 25th 2025",
       grossAmount: 14619843.80,
       advancePaymentRecovery: -4691507.88,
@@ -1019,11 +1089,15 @@ const payments: Array<{
       vat: 2192976.57,
       netPayment: 9955601.93,
       submittedDate: new Date("2025-05-13"),
-      invoiceDate: new Date("2025-05-24")
+      invoiceDate: new Date("2025-05-24"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 18",
-      paymentStatus: "Paid",
       description: "Apr 25th 2025 – May 25th 2025",
       grossAmount: 13904093.66,
       advancePaymentRecovery: -4461823.66,
@@ -1032,11 +1106,15 @@ const payments: Array<{
       vat: 2085614.05,
       netPayment: 9468201.14,
       submittedDate: new Date("2025-06-18"),
-      invoiceDate: new Date("2025-06-28")
+      invoiceDate: new Date("2025-06-28"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 19",
-      paymentStatus: "Paid",
       description: "May 25th 2025 – Jun 25th 2025",
       grossAmount: 9497761.36,
       advancePaymentRecovery: -3047831.62,
@@ -1045,11 +1123,15 @@ const payments: Array<{
       vat: 1424664.20,
       netPayment: 6467643.06,
       submittedDate: new Date("2025-06-16"),
-      invoiceDate: new Date("2025-07-29")
+      invoiceDate: new Date("2025-07-29"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 20",
-      paymentStatus: "Paid",
       description: "Jun 25th 2025 – Jul 25th 2025",
       grossAmount: 6813139.26,
       advancePaymentRecovery: -2186336.39,
@@ -1058,31 +1140,32 @@ const payments: Array<{
       vat: 1021970.89,
       netPayment: 4639509.38,
       submittedDate: new Date("2025-09-04"),
-      invoiceDate: new Date("2025-09-16")
+      invoiceDate: new Date("2025-09-16"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 21",
-      paymentStatus: "Paid",
       description: "Jul 25th 2025 – Aug 25th 2025",
       grossAmount: 5324464.12,
       advancePaymentRecovery: -1708620.53,
-      retention: 6909904.18, // Positive? The table says "6,909,904.18" in "Less Retention"? No, wait. "Less Retention (10%)" column has 6,909,904.18. Why positive? Maybe retention release? But description is IPA21...
-      // Checking other rows. IPA21: Gross 5.3M. Ret 6.9M ?? Maybe data error in user prompt, or retention release.
-      // 5,324,464.12 * 0.10 = 532,446. 6.9M is huge.
-      // Net Payment is 11,068,124.30.
-      // 5.3M - 1.7M(Adv) + 6.9M(Ret) - 0.25M(VATRec) + 0.8M(VAT) = 11M?
-      // 5.3 - 1.7 = 3.6
-      // 3.6 + 6.9 = 10.5
-      // 10.5 approx 11M. Yes. So strictly speaking it's +6.9M retention. Meaning retention release.
+      retention: 6909904.18, // Positive value from data!
       vatRecovery: -256293.08,
       vat: 798669.62,
       netPayment: 11068124.30,
       submittedDate: new Date("2025-09-15"),
-      invoiceDate: new Date("2025-10-16")
+      invoiceDate: new Date("2025-10-16"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 22",
-      paymentStatus: "Paid",
       description: "Aug 25th 2025 – Sep 25th 2025",
       grossAmount: 6418102.35,
       advancePaymentRecovery: -2059569.04,
@@ -1091,11 +1174,15 @@ const payments: Array<{
       vat: 962715.35,
       netPayment: 4691408.19,
       submittedDate: new Date("2025-10-19"),
-      invoiceDate: new Date("2025-11-02")
+      invoiceDate: new Date("2025-11-02"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 23",
-      paymentStatus: "Paid",
       description: "Sep 25th 2025 – Oct 25th 2025",
       grossAmount: 18005054.06,
       advancePaymentRecovery: -5777821.85,
@@ -1104,11 +1191,15 @@ const payments: Array<{
       vat: 2700758.11,
       netPayment: 13161064.34,
       submittedDate: new Date("2025-11-11"),
-      invoiceDate: new Date("2025-11-27")
+      invoiceDate: new Date("2025-11-27"),
+      paymentStatus: "Paid",
+      approvalStatus: "Received",
+      remarks: "Transaction Received",
+      rsgLiveAction: "Transaction Placed",
+      ffcLiveAction: "Transaction Received"
     },
     {
       paymentNo: "IPA 24",
-      paymentStatus: "Submitted on ACONEX", // Remarks: Waiting For payment Certificate
       description: "Oct 25th 2025 – Nov 25th 2025",
       grossAmount: 9837424.54,
       advancePaymentRecovery: -3156829.54,
@@ -1117,7 +1208,12 @@ const payments: Array<{
       vat: 1475613.68,
       netPayment: 7190813.03,
       submittedDate: new Date("2025-12-10"),
-      invoiceDate: null
+      invoiceDate: null,
+      paymentStatus: "Submitted on ACONEX",
+      approvalStatus: "Submitted Via acconex Waiting For payment Certificate",
+      remarks: "To send the Payment Certifcate",
+      rsgLiveAction: null,
+      ffcLiveAction: null
     }
   ];
 

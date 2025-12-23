@@ -26,7 +26,8 @@ const VAT_PERCENT = 0.15; // 15%
 const formSchema = z.object({
     paymentNo: z.string().min(1, "Payment No is required"),
     description: z.string().min(1, "Description is required"),
-    paymentStatus: z.string().min(1, "Status is required"),
+    paymentStatus: z.string().min(1, "Payment Status is required"),
+    approvalStatus: z.string().optional(),
     grossAmount: z.coerce.number().min(0, "Must be positive"),
     advancePaymentRecovery: z.coerce.number(),
     retention: z.coerce.number(),
@@ -35,6 +36,9 @@ const formSchema = z.object({
     netPayment: z.coerce.number(),
     submittedDate: z.string().optional(),
     invoiceDate: z.string().optional(),
+    remarks: z.string().optional(),
+    ffcLiveAction: z.string().optional(),
+    rsgLiveAction: z.string().optional(),
 });
 
 type PaymentFormValues = z.infer<typeof formSchema>;
@@ -61,6 +65,7 @@ export function PaymentForm({ open, onOpenChange, onSubmit, initialData }: Payme
             paymentNo: "",
             description: "",
             paymentStatus: "Draft",
+            approvalStatus: "",
             grossAmount: 0,
             advancePaymentRecovery: 0,
             retention: 0,
@@ -69,6 +74,9 @@ export function PaymentForm({ open, onOpenChange, onSubmit, initialData }: Payme
             netPayment: 0,
             submittedDate: "",
             invoiceDate: "",
+            remarks: "",
+            ffcLiveAction: "",
+            rsgLiveAction: "",
         },
     });
 
@@ -78,12 +86,17 @@ export function PaymentForm({ open, onOpenChange, onSubmit, initialData }: Payme
                 ...initialData,
                 submittedDate: initialData.submittedDate ? new Date(initialData.submittedDate).toISOString().split('T')[0] : "",
                 invoiceDate: initialData.invoiceDate ? new Date(initialData.invoiceDate).toISOString().split('T')[0] : "",
+                approvalStatus: initialData.approvalStatus || "",
+                remarks: initialData.remarks || "",
+                ffcLiveAction: initialData.ffcLiveAction || "",
+                rsgLiveAction: initialData.rsgLiveAction || "",
             });
         } else {
             reset({
                 paymentNo: "",
                 description: "",
                 paymentStatus: "Draft",
+                approvalStatus: "",
                 grossAmount: 0,
                 advancePaymentRecovery: 0,
                 retention: 0,
@@ -92,6 +105,9 @@ export function PaymentForm({ open, onOpenChange, onSubmit, initialData }: Payme
                 netPayment: 0,
                 submittedDate: "",
                 invoiceDate: "",
+                remarks: "",
+                ffcLiveAction: "",
+                rsgLiveAction: "",
             });
         }
     }, [initialData, reset]);
@@ -125,12 +141,12 @@ export function PaymentForm({ open, onOpenChange, onSubmit, initialData }: Payme
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>{initialData ? "Edit Payment" : "New Payment"}</DialogTitle>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="paymentNo">Payment No</Label>
@@ -139,7 +155,7 @@ export function PaymentForm({ open, onOpenChange, onSubmit, initialData }: Payme
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="paymentStatus">Status</Label>
+                            <Label htmlFor="paymentStatus">Payment Status</Label>
                             <Controller
                                 control={control}
                                 name="paymentStatus"
@@ -168,6 +184,25 @@ export function PaymentForm({ open, onOpenChange, onSubmit, initialData }: Payme
                         {errors.description && <p className="text-sm text-red-500">{errors.description.message}</p>}
                     </div>
 
+                    <div className="grid grid-cols-3 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="approvalStatus">Approval Status</Label>
+                            <Input id="approvalStatus" placeholder="Received, Pending..." {...register("approvalStatus")} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="ffcLiveAction">FFC Action</Label>
+                            <Input id="ffcLiveAction" placeholder="Transaction..." {...register("ffcLiveAction")} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="rsgLiveAction">RSG Action</Label>
+                            <Input id="rsgLiveAction" placeholder="Transaction..." {...register("rsgLiveAction")} />
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="remarks">Remarks</Label>
+                        <Input id="remarks" placeholder="Any remarks" {...register("remarks")} />
+                    </div>
+
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="grossAmount">Gross Amount</Label>
@@ -176,7 +211,7 @@ export function PaymentForm({ open, onOpenChange, onSubmit, initialData }: Payme
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="netPayment">Net Payment</Label>
-                            <Input id="netPayment" type="number" step="0.01" {...register("netPayment")} readOnly className="bg-muted" />
+                            <Input id="netPayment" type="number" step="0.01" {...register("netPayment")} readOnly className="bg-muted font-bold text-emerald-600" />
                         </div>
                     </div>
 
