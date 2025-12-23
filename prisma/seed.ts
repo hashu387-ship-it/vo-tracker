@@ -761,7 +761,7 @@ const voRecords: Array<{
 
 const payments: Array<{
   paymentNo: string;
-  status: string;
+  paymentStatus: string;
   description: string;
   grossAmount: number;
   advancePaymentRecovery: number;
@@ -774,7 +774,7 @@ const payments: Array<{
 }> = [
     {
       paymentNo: "AP01",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Adv Payment Invoice",
       grossAmount: 43500311.22,
       advancePaymentRecovery: 0,
@@ -789,7 +789,7 @@ const payments: Array<{
     },
     {
       paymentNo: "AP02",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Adv Payment Invoice 2",
       grossAmount: 21750155.61,
       advancePaymentRecovery: 0,
@@ -802,7 +802,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 1",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Sept 20th 2023 – Dec 25th 2023",
       grossAmount: 2571831.80,
       advancePaymentRecovery: -514366.36,
@@ -815,7 +815,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 2",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Dec 25th 2023 – Jan 25th 2024",
       grossAmount: 1727779.48,
       advancePaymentRecovery: -345555.90,
@@ -828,7 +828,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 3",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Jan 25th 2024 – Feb 25th 2024",
       grossAmount: 1363441.89,
       advancePaymentRecovery: -272688.38,
@@ -841,7 +841,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 4",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Feb 25th 2024 – Mar 25th 2024",
       grossAmount: 963176.50,
       advancePaymentRecovery: -192635.30,
@@ -854,7 +854,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 5",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Mar 25th 2024 – Apr 25th 2024",
       grossAmount: 6730484.94,
       advancePaymentRecovery: -1346096.99,
@@ -867,7 +867,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 6",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Apr 25th 2024 – May 25th 2024",
       grossAmount: 3008114.09,
       advancePaymentRecovery: -601622.82,
@@ -880,7 +880,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 7",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "May 25th 2024 – Jun 25th 2024",
       grossAmount: 3972034.68,
       advancePaymentRecovery: -794406.94,
@@ -893,7 +893,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 8",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Jun 25th 2024 – Jul 25th 2024",
       grossAmount: 5556560.41,
       advancePaymentRecovery: -1111312.08,
@@ -906,7 +906,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 9",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Jul 25th 2024 – Aug 25th 2024",
       grossAmount: 6512584.83,
       advancePaymentRecovery: -1302516.97,
@@ -919,7 +919,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 10",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Aug 25th 2024 – Sep 25th 2024",
       grossAmount: 5212335.00,
       advancePaymentRecovery: -1042467.00,
@@ -932,7 +932,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 11",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Sep 25th 2024 – Oct 25th 2024",
       grossAmount: 11178597.35,
       advancePaymentRecovery: -3587211.89, // Table: (3,587,211.89)
@@ -945,7 +945,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 12",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Oct 25th 2024 – Nov 25th 2024",
       grossAmount: 5338593.85,
       advancePaymentRecovery: -1713154.77,
@@ -958,7 +958,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 13",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Nov 25th 2024 – Dec 25th 2024",
       grossAmount: 10523911.06,
       advancePaymentRecovery: -3377123.06,
@@ -971,7 +971,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 14",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Dec 25th 2024 – Jan 25th 2025",
       grossAmount: 14789522.58,
       advancePaymentRecovery: -4745957.80,
@@ -984,7 +984,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 15",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Jan 25th 2025 – Feb 25th 2025",
       grossAmount: 14091614.85,
       advancePaymentRecovery: -4521999.21,
@@ -997,7 +997,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 16",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Feb 25th 2025 – Mar 25th 2025",
       grossAmount: 5147125.92,
       advancePaymentRecovery: -1651712.71,
@@ -1010,7 +1010,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 17",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Mar 25th 2025 – Apr 25th 2025",
       grossAmount: 14619843.80,
       advancePaymentRecovery: -4691507.88,
@@ -1023,7 +1023,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 18",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Apr 25th 2025 – May 25th 2025",
       grossAmount: 13904093.66,
       advancePaymentRecovery: -4461823.66,
@@ -1036,7 +1036,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 19",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "May 25th 2025 – Jun 25th 2025",
       grossAmount: 9497761.36,
       advancePaymentRecovery: -3047831.62,
@@ -1049,7 +1049,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 20",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Jun 25th 2025 – Jul 25th 2025",
       grossAmount: 6813139.26,
       advancePaymentRecovery: -2186336.39,
@@ -1062,7 +1062,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 21",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Jul 25th 2025 – Aug 25th 2025",
       grossAmount: 5324464.12,
       advancePaymentRecovery: -1708620.53,
@@ -1082,7 +1082,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 22",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Aug 25th 2025 – Sep 25th 2025",
       grossAmount: 6418102.35,
       advancePaymentRecovery: -2059569.04,
@@ -1095,7 +1095,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 23",
-      status: "Paid",
+      paymentStatus: "Paid",
       description: "Sep 25th 2025 – Oct 25th 2025",
       grossAmount: 18005054.06,
       advancePaymentRecovery: -5777821.85,
@@ -1108,7 +1108,7 @@ const payments: Array<{
     },
     {
       paymentNo: "IPA 24",
-      status: "Submitted on ACONEX", // "Submitted on ACONEX" in Remarks/Status column
+      paymentStatus: "Submitted on ACONEX", // "Submitted on ACONEX" in Remarks/Status column
       description: "Oct 25th 2025 – Nov 25th 2025",
       grossAmount: 9837424.54,
       advancePaymentRecovery: -3156829.54,
@@ -1156,7 +1156,7 @@ async function main() {
     await prisma.paymentApplication.create({
       data: {
         paymentNo: payment.paymentNo,
-        status: payment.status,
+        paymentStatus: payment.paymentStatus,
         description: payment.description,
         grossAmount: payment.grossAmount,
         advancePaymentRecovery: payment.advancePaymentRecovery,
