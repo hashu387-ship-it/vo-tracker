@@ -247,11 +247,10 @@ export default function PaymentsPage() {
     const SortHeader = ({ field, label, align = 'left' }: { field: SortField; label: string; align?: 'left' | 'right' }) => (
         <button
             onClick={() => handleSort(field)}
-            className={`flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider transition-colors ${
-                sortField === field
-                    ? 'text-rsg-gold'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-rsg-navy dark:hover:text-white'
-            } ${align === 'right' ? 'justify-end ml-auto' : ''}`}
+            className={`flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider transition-colors ${sortField === field
+                ? 'text-rsg-gold'
+                : 'text-slate-500 dark:text-slate-400 hover:text-rsg-navy dark:hover:text-white'
+                } ${align === 'right' ? 'justify-end ml-auto' : ''}`}
         >
             {label}
             {sortField === field ? (
@@ -358,11 +357,11 @@ export default function PaymentsPage() {
                 className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden"
             >
                 {/* Table Header */}
-                <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
+                <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
                     <div className="col-span-3">
                         <SortHeader field="paymentNo" label="Payment" />
                     </div>
-                    <div className="col-span-3 hidden md:block">
+                    <div className="col-span-3">
                         <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Description</span>
                     </div>
                     <div className="col-span-2">
@@ -404,20 +403,79 @@ export default function PaymentsPage() {
                                     onMouseEnter={() => setHoveredRow(payment.id)}
                                     onMouseLeave={() => setHoveredRow(null)}
                                 >
-                                    {/* Main Row */}
-                                    <div className={`grid grid-cols-12 gap-4 px-6 py-4 items-center transition-colors ${
-                                        isHovered ? 'bg-slate-50 dark:bg-slate-800/50' : ''
-                                    }`}>
+                                    {/* Mobile Card View */}
+                                    <div className="md:hidden p-4 space-y-3">
+                                        <div className="flex justify-between items-start">
+                                            <div className="space-y-1">
+                                                <div className="flex flex-wrap items-center gap-2">
+                                                    <span className="font-mono text-lg font-bold text-slate-900 dark:text-white">
+                                                        {payment.paymentNo}
+                                                    </span>
+                                                    <span className="font-mono text-sm font-semibold text-blue-600 dark:text-blue-400">
+                                                        {formatCurrency(payment.grossAmount)}
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${status.bg} ${status.text} border ${status.border}`}>
+                                                        {payment.paymentStatus === 'Submitted on ACONEX' ? 'ACONEX' : payment.paymentStatus}
+                                                    </span>
+                                                    {payment.submittedDate && (
+                                                        <span className="text-xs text-slate-500">
+                                                            {format(new Date(payment.submittedDate), 'dd MMM yyyy')}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                                        <MoreHorizontal className="h-4 w-4" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                    <DropdownMenuItem onClick={() => { setEditingPayment(payment); setIsFormOpen(true); }}>
+                                                        <Pencil className="h-4 w-4 mr-2" /> Edit
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuSeparator />
+                                                    <DropdownMenuItem onClick={() => handleDelete(payment.id)} className="text-red-600">
+                                                        <Trash2 className="h-4 w-4 mr-2" /> Delete
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </div>
+
+                                        <div className="flex justify-between items-end border-t border-slate-100 dark:border-slate-800 pt-3">
+                                            <div className="space-y-1">
+                                                <p className="text-xs text-slate-500 uppercase tracking-wider">Net Payment</p>
+                                                <p className="font-mono text-lg font-bold text-emerald-600 dark:text-emerald-400">
+                                                    {formatCurrency(payment.netPayment)}
+                                                </p>
+                                            </div>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="text-xs text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                                                onClick={() => setHoveredRow(isHovered ? null : payment.id)}
+                                            >
+                                                {isHovered ? 'Hide Details' : 'View Details'}
+                                            </Button>
+                                        </div>
+                                    </div>
+
+                                    {/* Desktop Table Row */}
+                                    <div className={`hidden md:grid grid-cols-12 gap-4 px-6 py-4 items-center transition-colors ${isHovered ? 'bg-slate-50 dark:bg-slate-800/50' : ''
+                                        }`}>
                                         <div className="col-span-3">
                                             <div className="flex items-center gap-3">
                                                 <div className={`w-1 h-10 rounded-full ${status.dot}`} />
                                                 <div>
                                                     <p className="font-mono font-bold text-slate-900 dark:text-white">{payment.paymentNo}</p>
-                                                    <p className="text-xs text-slate-500 dark:text-slate-400 md:hidden truncate max-w-[120px]">{payment.description}</p>
+                                                    <p className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[120px]">{payment.description}</p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-span-3 hidden md:block">
+                                        <div className="col-span-3">
                                             <p className="text-sm text-slate-600 dark:text-slate-300 truncate">{payment.description}</p>
                                         </div>
                                         <div className="col-span-2 text-right">
@@ -456,7 +514,7 @@ export default function PaymentsPage() {
                                         </div>
                                     </div>
 
-                                    {/* Hover Details Panel */}
+                                    {/* Hover Details Panel (Shared) */}
                                     <AnimatePresence>
                                         {isHovered && (
                                             <motion.div
