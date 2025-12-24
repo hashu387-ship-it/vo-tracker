@@ -343,36 +343,49 @@ export function PaymentRegister({ payments, onRefresh, isLoading }: PaymentRegis
                         </div>
                     ) : (
                         payments.map((payment) => (
-                            <div key={payment.id} className="bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl p-5 shadow-sm space-y-4">
+                            <div key={payment.id} className="relative bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl p-5 shadow-sm space-y-4">
                                 {/* Header */}
-                                <div className="flex justify-between items-start">
+                                <div className="pr-8">
                                     <div className="space-y-1">
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                                             <span className="font-mono text-lg font-bold text-foreground">{payment.paymentNo}</span>
-                                            <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider ${payment.paymentStatus === 'Paid' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' :
-                                                    payment.paymentStatus === 'Certified' ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20' :
-                                                        'bg-muted text-muted-foreground border border-border'
+                                            <span className="font-mono text-sm font-semibold text-blue-600 dark:text-blue-400">
+                                                {formatCurrency(payment.grossAmount)}
+                                            </span>
+                                            <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider whitespace-nowrap ${payment.paymentStatus === 'Paid' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' :
+                                                payment.paymentStatus === 'Certified' ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20' :
+                                                    'bg-muted text-muted-foreground border border-border'
                                                 }`}>
                                                 {payment.paymentStatus}
                                             </span>
                                         </div>
-                                        <p className="text-xs text-muted-foreground font-medium">{payment.description}</p>
+                                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                            <span>{payment.submittedDate ? format(new Date(payment.submittedDate), "dd MMM yyyy") : "-"}</span>
+                                            {payment.invoiceDate && (
+                                                <>
+                                                    <span className="text-border">•</span>
+                                                    <span>{payment.invoiceDate ? format(new Date(payment.invoiceDate), "dd MMM yyyy") : "-"}</span>
+                                                </>
+                                            )}
+                                        </div>
                                     </div>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                                <MoreHorizontal className="h-4 w-4" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuItem onClick={() => openEdit(payment)}>
-                                                <Pencil className="mr-2 h-4 w-4" /> Edit
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => handleDelete(payment.id)} className="text-destructive">
-                                                <Trash2 className="mr-2 h-4 w-4" /> Delete
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                    <div className="absolute top-4 right-4">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-muted text-muted-foreground">
+                                                    <MoreHorizontal className="h-4 w-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem onClick={() => openEdit(payment)}>
+                                                    <Pencil className="mr-2 h-4 w-4" /> Edit
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => handleDelete(payment.id)} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                                                    <Trash2 className="mr-2 h-4 w-4" /> Delete
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
                                 </div>
 
                                 {/* Key Metrics Grid */}
@@ -414,8 +427,8 @@ export function PaymentRegister({ payments, onRefresh, isLoading }: PaymentRegis
                                     {/* Simple Status Toggle for Mobile (Simplified) */}
                                     {/* For full editing, user can edit via menu, but we can show approval status here */}
                                     <div className={`flex items-center gap-1.5 px-2 py-1 rounded-md border ${(payment as any).approvalStatus === 'Received'
-                                            ? 'bg-blue-500/5 border-blue-500/20 text-blue-600 dark:text-blue-400'
-                                            : 'bg-muted/30 border-border text-muted-foreground'
+                                        ? 'bg-blue-500/5 border-blue-500/20 text-blue-600 dark:text-blue-400'
+                                        : 'bg-muted/30 border-border text-muted-foreground'
                                         }`}>
                                         <span className="text-[10px] font-medium">{(payment as any).approvalStatus || 'Pending'}</span>
                                     </div>
