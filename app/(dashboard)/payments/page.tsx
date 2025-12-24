@@ -354,7 +354,7 @@ export default function PaymentsPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden"
+                className="md:bg-white md:dark:bg-slate-900 md:rounded-2xl md:border md:border-slate-200 md:dark:border-slate-800 md:shadow-sm md:overflow-hidden bg-transparent"
             >
                 {/* Table Header */}
                 <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
@@ -377,7 +377,7 @@ export default function PaymentsPage() {
                 </div>
 
                 {/* Table Body */}
-                <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                <div className="space-y-4 md:space-y-0 md:divide-y divide-slate-100 dark:divide-slate-800">
                     {isLoading ? (
                         <div className="flex items-center justify-center py-20">
                             <Loader2 className="h-8 w-8 animate-spin text-rsg-navy dark:text-rsg-gold" />
@@ -399,7 +399,7 @@ export default function PaymentsPage() {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ delay: index * 0.02 }}
-                                    className="relative"
+                                    className="relative bg-white dark:bg-slate-900 md:bg-transparent md:dark:bg-transparent rounded-xl md:rounded-none border border-slate-200 dark:border-slate-800 md:border-none shadow-sm md:shadow-none"
                                     onMouseEnter={() => setHoveredRow(payment.id)}
                                     onMouseLeave={() => setHoveredRow(null)}
                                 >
