@@ -62,13 +62,12 @@ export default function Page() {
               elements: {
                 rootBox: "w-full",
                 card: "bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl p-6 md:p-8",
+                formFieldLabel: "text-white/70 text-xs uppercase tracking-wider font-semibold",
+                footerActionText: "text-white/80 text-base",
+                footerActionLink: "text-rsg-gold hover:text-white transition-colors font-bold text-lg underline decoration-2 underline-offset-4 ml-1",
+                socialButtonsBlockButton: "bg-white text-rsg-navy hover:bg-white/90 border-none transition-colors",
                 headerTitle: "hidden",
                 headerSubtitle: "hidden",
-                formButtonPrimary: "bg-rsg-gold hover:bg-[#B08D55] text-white transition-all h-10 shadow-lg font-bold tracking-wide uppercase text-xs w-full",
-                formFieldInput: "bg-black/20 border-white/10 text-white placeholder:text-white/30 focus:border-rsg-gold focus:ring-rsg-gold/50 rounded-lg",
-                formFieldLabel: "text-white/70 text-xs uppercase tracking-wider font-semibold",
-                footerActionLink: "text-rsg-gold hover:text-white transition-colors",
-                socialButtonsBlockButton: "bg-white text-rsg-navy hover:bg-white/90 border-none transition-colors",
                 dividerLine: "bg-white/10",
                 dividerText: "text-white/40",
                 formFieldAction: "text-rsg-gold hover:text-white"
