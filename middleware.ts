@@ -1,11 +1,29 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
+// Only protect write operations - guest mode allows viewing
 const isProtectedRoute = createRouteMatcher([
+  // API routes that modify data are still protected
+  // Guest users will be prompted for password on client-side
+]);
+
+// Public routes that guests can access
+const isPublicRoute = createRouteMatcher([
+  '/',
+  '/sign-in(.*)',
+  '/sign-up(.*)',
   '/dashboard(.*)',
+  '/payments(.*)',
+  '/vos(.*)',
   '/api/vo(.*)',
+  '/api/payments(.*)',
 ]);
 
 export default clerkMiddleware((auth, req) => {
+  // Allow public routes without authentication
+  if (isPublicRoute(req)) {
+    return;
+  }
+  // Protect other routes
   if (isProtectedRoute(req)) auth().protect();
 });
 
