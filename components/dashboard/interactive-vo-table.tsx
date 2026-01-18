@@ -28,6 +28,8 @@ import { useVOs } from '@/lib/hooks/use-vos';
 import { PaymentRegister } from '@/components/dashboard/payment-register';
 import { PaymentStats } from './payment-stats';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useUser } from '@clerk/nextjs';
+import { DemoDisclaimer } from '@/components/ui/demo-disclaimer';
 
 // --- Configurations ---
 
@@ -123,6 +125,116 @@ const PAYMENT_STATUS_CONFIG: Record<string, {
     gradient: 'from-emerald-500 to-emerald-600',
   },
 };
+
+// --- Demo Data for Guest Mode ---
+
+const DEMO_VOS = [
+  {
+    id: 1,
+    subject: 'Additional MEP Works - Building A',
+    status: 'DVORRIssued',
+    submissionDate: '2024-10-15',
+    proposalValue: 450000,
+    approvedAmount: 425000,
+    submissionReference: 'VO-2024-001',
+    vorReference: 'VOR-001',
+    dvoReference: 'DVO-001',
+    remarks: 'Extension of mechanical and electrical installations for new office wing',
+  },
+  {
+    id: 2,
+    subject: 'Structural Modifications - Level 3',
+    status: 'ApprovedAwaitingDVO',
+    submissionDate: '2024-11-05',
+    proposalValue: 680000,
+    approvedAmount: 680000,
+    submissionReference: 'VO-2024-002',
+    vorReference: 'VOR-002',
+    dvoReference: null,
+    remarks: 'Steel reinforcement and column additions for load bearing requirements',
+  },
+  {
+    id: 3,
+    subject: 'Facade Enhancement - South Wing',
+    status: 'PendingWithRSGFFC',
+    submissionDate: '2024-12-10',
+    proposalValue: 920000,
+    approvedAmount: null,
+    submissionReference: 'VO-2024-003',
+    vorReference: null,
+    dvoReference: null,
+    remarks: 'Premium glass cladding upgrade as per revised architectural specifications',
+  },
+  {
+    id: 4,
+    subject: 'HVAC System Upgrade',
+    status: 'PendingWithRSG',
+    submissionDate: '2025-01-05',
+    proposalValue: 350000,
+    approvedAmount: null,
+    submissionReference: 'VO-2025-001',
+    vorReference: null,
+    dvoReference: null,
+    remarks: 'High-efficiency cooling system for server room and data center',
+  },
+  {
+    id: 5,
+    subject: 'Landscape Works Extension',
+    status: 'PendingWithFFC',
+    submissionDate: '2025-01-12',
+    proposalValue: 180000,
+    approvedAmount: null,
+    submissionReference: 'VO-2025-002',
+    vorReference: null,
+    dvoReference: null,
+    remarks: 'Additional landscaping for outdoor amenity areas',
+  },
+];
+
+const DEMO_PAYMENTS = [
+  {
+    id: 1,
+    paymentNo: 'IPC-001',
+    status: 'Paid',
+    description: 'Monthly Progress Certification - December 2024',
+    grossAmount: 1250000,
+    advancePaymentRecovery: 62500,
+    retention: 62500,
+    vatRecovery: 12500,
+    vat: 157500,
+    netPayment: 1270000,
+    submittedDate: '2024-12-01',
+    invoiceDate: '2024-12-15',
+  },
+  {
+    id: 2,
+    paymentNo: 'IPC-002',
+    status: 'Certified',
+    description: 'Monthly Progress Certification - January 2025',
+    grossAmount: 980000,
+    advancePaymentRecovery: 49000,
+    retention: 49000,
+    vatRecovery: 9000,
+    vat: 124950,
+    netPayment: 997950,
+    submittedDate: '2024-12-20',
+    invoiceDate: null,
+  },
+  {
+    id: 3,
+    paymentNo: 'IPC-003',
+    status: 'Submitted',
+    description: 'Monthly Progress Certification - February 2025',
+    grossAmount: 1500000,
+    advancePaymentRecovery: 75000,
+    retention: 75000,
+    vatRecovery: 15000,
+    vat: 191250,
+    netPayment: 1526250,
+    submittedDate: '2025-01-10',
+    invoiceDate: null,
+  },
+];
 
 // --- Types ---
 
@@ -614,7 +726,14 @@ function PaymentRow({ payment, index, isExpanded, onToggle }: PaymentRowProps) {
 
 export function InteractiveVOTable({ filterStatus }: { filterStatus: string | null }) {
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
-  const { data, isLoading, refetch } = useVOs({});
+  const { isSignedIn, isLoaded } = useUser();
+
+  // Demo mode check
+  const isDemo = isLoaded && !isSignedIn;
+
+  // Only fetch real data when authenticated - skip API call in demo mode
+  const { data, isLoading: apiLoading, refetch } = useVOs({}, { enabled: isLoaded && isSignedIn === true });
+  const isLoading = !isLoaded || (!isDemo && apiLoading);
 
   const toggleRow = (id: number) => {
     setExpandedRows((prev) => {
@@ -633,8 +752,12 @@ export function InteractiveVOTable({ filterStatus }: { filterStatus: string | nu
   const [payments, setPayments] = useState<any[]>([]);
   const [loadingPayments, setLoadingPayments] = useState(false);
 
-  // Fetch payments logic
+  // Fetch payments logic - only for authenticated users
   const fetchPayments = async () => {
+    if (isDemo) {
+      setPayments(DEMO_PAYMENTS);
+      return;
+    }
     setLoadingPayments(true);
     try {
       const res = await fetch('/api/payments');
@@ -647,13 +770,17 @@ export function InteractiveVOTable({ filterStatus }: { filterStatus: string | nu
     }
   };
 
-  const allVOs = data?.data || [];
+  // Use demo data for guests, real data for authenticated users
+  const allVOs = isDemo ? DEMO_VOS : (data?.data || []);
   const vos = filterStatus
     ? allVOs.filter(vo => vo.status === filterStatus)
     : allVOs;
 
   return (
     <div className="space-y-4">
+      {/* Demo Mode Disclaimer */}
+      {isDemo && <DemoDisclaimer type="banner" />}
+
       {/* Header & Tabs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
