@@ -370,7 +370,7 @@ export default function LandingPage() {
               </Button>
             </Link>
             <Link href="/vos/new">
-              <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-2 border-white/30 text-white hover:bg-white/10 rounded-xl font-medium backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-white/50">
+              <Button size="lg" className="h-14 px-8 text-lg bg-transparent border-2 border-white/30 text-white hover:bg-white/10 rounded-xl font-medium backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-white/50">
                 <Plus className="mr-2 h-5 w-5" />
                 New Variation Order
               </Button>

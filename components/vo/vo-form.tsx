@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CalendarIcon, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
+import { useUser } from '@clerk/nextjs';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,6 +24,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/components/ui/use-toast';
+import { DemoDisclaimer } from '@/components/ui/demo-disclaimer';
 import { cn } from '@/lib/utils';
 import {
   createVOSchema,
@@ -42,8 +44,12 @@ interface VOFormProps {
 export function VOForm({ vo, mode }: VOFormProps) {
   const router = useRouter();
   const { toast } = useToast();
+  const { isSignedIn, isLoaded } = useUser();
   const createMutation = useCreateVO();
   const updateMutation = useUpdateVO();
+
+  // Demo mode check
+  const isDemo = isLoaded && !isSignedIn;
 
   const {
     register,
@@ -83,6 +89,16 @@ export function VOForm({ vo, mode }: VOFormProps) {
   const status = watch('status');
 
   const onSubmit = async (data: CreateVOInput) => {
+    // Demo mode - simulate success without saving
+    if (isDemo) {
+      toast({
+        title: mode === 'create' ? 'VO Created (Demo)' : 'VO Updated (Demo)',
+        description: 'Demo mode: Changes are not saved. Sign in to save real data.',
+      });
+      router.push('/vos');
+      return;
+    }
+
     try {
       if (mode === 'create') {
         await createMutation.mutateAsync(data as any);
@@ -115,6 +131,9 @@ export function VOForm({ vo, mode }: VOFormProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
+      {/* Demo Mode Disclaimer */}
+      {isDemo && <DemoDisclaimer type="card" />}
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <Card>
           <CardHeader>
