@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { PaymentApplication } from '@prisma/client';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useUser } from '@clerk/nextjs';
 import {
     CreditCard,
     RefreshCw,
@@ -45,6 +46,8 @@ import { format } from 'date-fns';
 import { exportPaymentsToExcel } from '@/lib/excel-export';
 import { PaymentForm } from '@/components/dashboard/payment-form';
 import { PaymentDashboard } from '@/components/dashboard/payment-dashboard';
+import { DemoDisclaimer } from '@/components/ui/demo-disclaimer';
+import { dummyPayments } from '@/lib/dummy-data';
 
 type SortField = 'paymentNo' | 'grossAmount' | 'netPayment' | 'submittedDate';
 type SortOrder = 'asc' | 'desc';
@@ -82,8 +85,35 @@ const statusConfig: { [key: string]: { bg: string; text: string; border: string;
     },
 };
 
+// Convert dummy data to match PaymentApplication structure for demo mode
+const convertDummyPayments = (): PaymentApplication[] => {
+    return dummyPayments.map((dp, index) => ({
+        id: index + 1,
+        paymentNo: dp.ipcNumber,
+        description: `Demo Payment Application ${dp.ipcNumber}`,
+        grossAmount: dp.grossAmount,
+        netPayment: dp.netAmount,
+        advancePaymentRecovery: dp.lessAdvance,
+        retention: dp.lessRetention,
+        vatRecovery: dp.lessRecovery,
+        vat: dp.vatAmount,
+        paymentStatus: dp.status === 'PAID' ? 'Paid' : dp.status === 'CERTIFIED' ? 'Certified' : dp.status === 'SUBMITTED' ? 'Submitted' : 'Draft',
+        submittedDate: dp.submittedDate,
+        certifiedDate: dp.certifiedDate,
+        invoiceDate: dp.paidDate,
+        ffcLiveAction: null,
+        rsgLiveAction: null,
+        approvalStatus: null,
+        remarks: null,
+        createdAt: dp.createdAt,
+        updatedAt: dp.updatedAt,
+    })) as unknown as PaymentApplication[];
+};
+
 export default function PaymentsPage() {
+    const { isSignedIn, isLoaded } = useUser();
     const [payments, setPayments] = useState<PaymentApplication[]>([]);
+    const [demoPayments, setDemoPayments] = useState<PaymentApplication[]>(convertDummyPayments());
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -96,7 +126,15 @@ export default function PaymentsPage() {
     const [editingPayment, setEditingPayment] = useState<PaymentApplication | null>(null);
     const [updatingStatusId, setUpdatingStatusId] = useState<number | null>(null);
 
+    // Use real data if signed in, demo data if not
+    const isDemo = isLoaded && !isSignedIn;
+    const activePayments = isDemo ? demoPayments : payments;
+
     const fetchPayments = async (showRefreshIndicator = false) => {
+        if (isDemo) {
+            setIsLoading(false);
+            return;
+        }
         if (showRefreshIndicator) setIsRefreshing(true);
         try {
             const res = await fetch('/api/payments');
@@ -114,11 +152,17 @@ export default function PaymentsPage() {
     };
 
     useEffect(() => {
-        fetchPayments();
-    }, []);
+        if (isLoaded) {
+            if (isSignedIn) {
+                fetchPayments();
+            } else {
+                setIsLoading(false);
+            }
+        }
+    }, [isLoaded, isSignedIn]);
 
     // Filter and sort payments
-    const filteredPayments = payments
+    const filteredPayments = activePayments
         .filter(p => {
             const matchesSearch = !searchQuery ||
                 p.paymentNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -179,6 +223,14 @@ export default function PaymentsPage() {
 
     const handleDelete = async (id: number) => {
         if (!confirm("Delete this payment?")) return;
+
+        if (isDemo) {
+            // Demo mode - just remove from local state
+            setDemoPayments(prev => prev.filter(p => p.id !== id));
+            toast.success("Payment deleted (Demo Mode - not saved)");
+            return;
+        }
+
         try {
             const res = await fetch(`/api/payments/${id}`, { method: "DELETE" });
             if (!res.ok) throw new Error();
@@ -191,6 +243,19 @@ export default function PaymentsPage() {
 
     const handleStatusUpdate = async (id: number, newStatus: string) => {
         setUpdatingStatusId(id);
+
+        if (isDemo) {
+            // Demo mode - update local state only
+            setTimeout(() => {
+                setDemoPayments(prev => prev.map(p =>
+                    p.id === id ? { ...p, paymentStatus: newStatus } : p
+                ));
+                toast.success("Status updated (Demo Mode - not saved)");
+                setUpdatingStatusId(null);
+            }, 500);
+            return;
+        }
+
         try {
             const res = await fetch(`/api/payments/${id}`, {
                 method: "PUT",
@@ -208,6 +273,36 @@ export default function PaymentsPage() {
     };
 
     const handleCreate = async (data: any) => {
+        if (isDemo) {
+            // Demo mode - add to local state only
+            const newPayment = {
+                id: Math.max(...demoPayments.map(p => p.id)) + 1,
+                paymentNo: data.paymentNo || `IPC-00${demoPayments.length + 1}`,
+                description: data.description || 'Demo Payment',
+                grossAmount: data.grossAmount || 0,
+                netPayment: data.netPayment || 0,
+                advancePaymentRecovery: data.advancePaymentRecovery || 0,
+                retention: data.retention || 0,
+                vatRecovery: data.vatRecovery || 0,
+                vat: data.vat || 0,
+                paymentStatus: data.paymentStatus || 'Draft',
+                submittedDate: data.submittedDate || new Date(),
+                certifiedDate: null,
+                invoiceDate: null,
+                ffcLiveAction: null,
+                rsgLiveAction: null,
+                approvalStatus: null,
+                remarks: null,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            } as unknown as PaymentApplication;
+
+            setDemoPayments(prev => [...prev, newPayment]);
+            toast.success("Payment created (Demo Mode - not saved to database)");
+            setIsFormOpen(false);
+            return;
+        }
+
         try {
             const res = await fetch("/api/payments", {
                 method: "POST",
@@ -225,6 +320,18 @@ export default function PaymentsPage() {
 
     const handleUpdate = async (data: any) => {
         if (!editingPayment) return;
+
+        if (isDemo) {
+            // Demo mode - update local state only
+            setDemoPayments(prev => prev.map(p =>
+                p.id === editingPayment.id ? { ...p, ...data, updatedAt: new Date() } : p
+            ));
+            toast.success("Payment updated (Demo Mode - not saved)");
+            setIsFormOpen(false);
+            setEditingPayment(null);
+            return;
+        }
+
         try {
             const res = await fetch(`/api/payments/${editingPayment.id}`, {
                 method: "PUT",
@@ -241,7 +348,7 @@ export default function PaymentsPage() {
         }
     };
 
-    const sortedPayments = [...payments].sort((a, b) => b.id - a.id);
+    const sortedPayments = [...activePayments].sort((a, b) => b.id - a.id);
     const lastPayment = sortedPayments.length > 0 ? sortedPayments[0] : null;
 
     const SortHeader = ({ field, label, align = 'left' }: { field: SortField; label: string; align?: 'left' | 'right' }) => (
@@ -263,6 +370,9 @@ export default function PaymentsPage() {
 
     return (
         <div className="space-y-6">
+            {/* Demo Mode Disclaimer */}
+            {isDemo && <DemoDisclaimer type="card" />}
+
             {/* Header */}
             <motion.div
                 initial={{ opacity: 0, y: -10 }}
@@ -308,8 +418,8 @@ export default function PaymentsPage() {
             </motion.div>
 
             {/* Dashboard Stats & Charts */}
-            {!isLoading && payments.length > 0 && (
-                <PaymentDashboard payments={payments} />
+            {!isLoading && activePayments.length > 0 && (
+                <PaymentDashboard payments={activePayments} />
             )}
 
             {/* Filters */}
