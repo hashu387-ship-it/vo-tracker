@@ -370,7 +370,7 @@ export default function LandingPage() {
               </Button>
             </Link>
             <Link href="/vos/new">
-              <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-2 border-white/30 text-white hover:bg-white/10 rounded-xl font-medium backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-white/50">
+              <Button size="lg" className="h-14 px-8 text-lg bg-transparent border-2 border-white/30 text-white hover:bg-white/10 rounded-xl font-medium backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-white/50">
                 <Plus className="mr-2 h-5 w-5" />
                 New Variation Order
               </Button>
@@ -526,8 +526,8 @@ export default function LandingPage() {
               <div className="h-4 w-px bg-slate-300 dark:bg-zinc-700" />
               <img src="/firstfix-v2.png" alt="FirstFix" className="h-6 w-auto dark:brightness-0 dark:invert opacity-50" />
             </div>
-            <p className="text-sm text-slate-500 dark:text-zinc-500">
-              © 2025 VO Tracker | Developed by Mohamed Roomy
+            <p className="text-sm text-slate-500 dark:text-zinc-500 text-center md:text-right">
+              © 2025 VO Tracker | All Rights Reserved | Mohamed Roomy Mohamed Hassan | Sr. Quantity Surveyor - FFC
             </p>
           </div>
         </div>
