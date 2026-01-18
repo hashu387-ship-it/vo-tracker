@@ -526,8 +526,8 @@ export default function LandingPage() {
               <div className="h-4 w-px bg-slate-300 dark:bg-zinc-700" />
               <img src="/firstfix-v2.png" alt="FirstFix" className="h-6 w-auto dark:brightness-0 dark:invert opacity-50" />
             </div>
-            <p className="text-sm text-slate-500 dark:text-zinc-500">
-              © 2025 VO Tracker | Developed by Mohamed Roomy
+            <p className="text-sm text-slate-500 dark:text-zinc-500 text-center md:text-right">
+              © 2025 VO Tracker | All Rights Reserved | Mohamed Roomy Mohamed Hassan | Sr. Quantity Surveyor - FFC
             </p>
           </div>
         </div>
