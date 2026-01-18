@@ -113,10 +113,11 @@ async function deleteVO(id: number): Promise<void> {
   }
 }
 
-export function useVOs(params: VOQueryParams = {}) {
+export function useVOs(params: VOQueryParams = {}, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ['vos', params],
     queryFn: () => fetchVOs(params),
+    enabled: options?.enabled ?? true,
   });
 }
 
