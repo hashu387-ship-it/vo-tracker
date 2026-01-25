@@ -89,7 +89,7 @@ export function VOList({ isAdmin = false }: VOListProps) {
     sortOrder,
     page,
     limit: 20,
-  });
+  }, { enabled: isLoaded && isSignedIn === true });
 
   // Filter demo data for demo mode
   const filteredDemoVOs = useMemo(() => {
@@ -141,7 +141,7 @@ export function VOList({ isAdmin = false }: VOListProps) {
 
   // Use demo data or real data
   const activeVOs = isDemo ? filteredDemoVOs : (data?.data || []);
-  const activeLoading = isDemo ? false : isLoading;
+  const activeLoading = !isLoaded || (isDemo ? false : isLoading);
 
   // Update URL params
   useEffect(() => {
