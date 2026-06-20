@@ -12,6 +12,7 @@ import {
   Filter,
   ArrowUpDown,
   ExternalLink,
+  Link2,
   User2,
   CalendarDays,
 } from 'lucide-react';
@@ -37,6 +38,19 @@ import { cn } from '@/lib/utils';
 type SortKey = 'recent' | 'value-desc' | 'value-asc';
 
 const voValue = (v: VORecord) => v.value ?? v.rsgAssessment ?? v.costProposal ?? 0;
+
+// Aconex is the system of record for submissions/correspondence. We surface the
+// document references and deep-link out to the Aconex portal (docs live there).
+const ACONEX_URL = 'https://login.aconex.com';
+
+const expandContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.06, delayChildren: 0.04 } },
+};
+const expandItem = {
+  hidden: { opacity: 0, y: 10 },
+  show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 26 } },
+};
 
 /**
  * Next-generation VO Log — fully self-contained and data-driven (no auth or
@@ -236,37 +250,77 @@ export function VOLogPremium() {
                         transition={{ duration: 0.25 }}
                         className="overflow-hidden border-t border-slate-100 dark:border-white/5"
                       >
-                        <div className="grid grid-cols-1 gap-3 p-4 pl-5 md:grid-cols-3">
-                          <Detail title="Financials" tint="#10b981">
-                            <Row k="Cost Proposal" v={formatSAR(vo.costProposal)} />
-                            <Row k="RSG Assessment" v={formatSAR(vo.rsgAssessment)} />
-                            <Row k="Final Value" v={formatSAR(vo.value)} strong />
-                          </Detail>
-                          <Detail title="References" tint="#3b82f6">
-                            <Row k="Submission" v={vo.submissionRef ?? '—'} mono />
-                            <Row k="VOR" v={vo.vor ?? '—'} mono />
-                            <Row k="DVO" v={vo.dvoRef ?? '—'} mono />
-                          </Detail>
-                          <Detail title="Status & Owner" tint={cfg.hex}>
-                            <Row k="Status" v={cfg.label} />
-                            <Row k="Assigned" v={vo.assignedTo ?? '—'} />
-                            <Row k="Logged" v={formatDateShort(vo.dateIn)} />
-                          </Detail>
+                        <motion.div
+                          variants={expandContainer}
+                          initial="hidden"
+                          animate="show"
+                          className="grid grid-cols-1 gap-3 p-4 pl-5 md:grid-cols-3"
+                        >
+                          <motion.div variants={expandItem}>
+                            <Detail title="Financials" tint="#10b981">
+                              <Row k="Cost Proposal" v={formatSAR(vo.costProposal)} />
+                              <Row k="RSG Assessment" v={formatSAR(vo.rsgAssessment)} />
+                              <Row k="Final Value" v={formatSAR(vo.value)} strong />
+                            </Detail>
+                          </motion.div>
+                          <motion.div variants={expandItem}>
+                            <Detail title="References" tint="#3b82f6">
+                              <Row k="Submission" v={vo.submissionRef ?? '—'} mono />
+                              <Row k="Response" v={vo.responseRef ?? '—'} mono />
+                              <Row k="VOR" v={vo.vor ?? '—'} mono />
+                              <Row k="DVO" v={vo.dvoRef ?? '—'} mono />
+                            </Detail>
+                          </motion.div>
+                          <motion.div variants={expandItem}>
+                            <Detail title="Status & Owner" tint={cfg.hex}>
+                              <Row k="Status" v={cfg.label} />
+                              <Row k="Type" v={vo.type} />
+                              <Row k="Assigned" v={vo.assignedTo ?? '—'} />
+                              <Row k="Logged" v={formatDateShort(vo.dateIn)} />
+                              <Row k="Submitted" v={formatDateShort(vo.submissionDate)} />
+                            </Detail>
+                          </motion.div>
+
+                          {/* Documents & Aconex links */}
+                          <motion.div
+                            variants={expandItem}
+                            className="md:col-span-3 rounded-xl border border-blue-200/50 bg-blue-50/40 p-3 dark:border-blue-500/15 dark:bg-blue-500/[0.04]"
+                          >
+                            <p className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">
+                              <Link2 className="h-3.5 w-3.5" /> Documents &amp; Aconex
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                              {vo.submissionRef && <AconexLink label="View Submission" reference={vo.submissionRef} />}
+                              {vo.responseRef && <AconexLink label="View Response" reference={vo.responseRef} />}
+                              {vo.vor && <AconexLink label="View VOR" reference={vo.vor} />}
+                              {vo.dvoRef && <AconexLink label="View DVO" reference={vo.dvoRef} />}
+                              <a
+                                href={ACONEX_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group inline-flex items-center gap-1.5 rounded-lg bg-rsg-navy px-3 py-1.5 text-xs font-medium text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md dark:bg-rsg-gold dark:text-zinc-900"
+                              >
+                                <ExternalLink className="h-3.5 w-3.5 transition-transform group-hover:rotate-12" />
+                                Open in Aconex
+                              </a>
+                            </div>
+                          </motion.div>
+
                           {(vo.ffcRemarks || vo.rsgRemarks) && (
-                            <div className="md:col-span-3 grid grid-cols-1 gap-2 md:grid-cols-2">
+                            <motion.div variants={expandItem} className="md:col-span-3 grid grid-cols-1 gap-2 md:grid-cols-2">
                               {vo.ffcRemarks && <Remark label="FFC Remarks" text={vo.ffcRemarks} />}
                               {vo.rsgRemarks && <Remark label="RSG Remarks" text={vo.rsgRemarks} />}
-                            </div>
+                            </motion.div>
                           )}
-                          <div className="md:col-span-3 flex flex-wrap gap-2 pt-1">
+                          <motion.div variants={expandItem} className="md:col-span-3 flex flex-wrap gap-2 pt-1">
                             <button
                               onClick={() => askAssistant(`${vo.voNumber ?? vo.subject}`)}
                               className="inline-flex items-center gap-1.5 rounded-lg bg-rsg-navy/10 px-3 py-1.5 text-xs font-medium text-rsg-navy transition-colors hover:bg-rsg-navy/15 dark:bg-rsg-gold/10 dark:text-rsg-gold"
                             >
                               <TrendingUp className="h-3.5 w-3.5" /> Ask AI about this VO
                             </button>
-                          </div>
-                        </div>
+                          </motion.div>
+                        </motion.div>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -326,5 +380,21 @@ function Remark({ label, text }: { label: string; text: string }) {
       <p className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>
       <p className="text-xs leading-relaxed text-slate-600 dark:text-zinc-300">{text}</p>
     </div>
+  );
+}
+
+function AconexLink({ label, reference }: { label: string; reference: string }) {
+  return (
+    <a
+      href={ACONEX_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      title={`Open in Aconex — ${reference}`}
+      className="group inline-flex items-center gap-1.5 rounded-lg border border-blue-200/70 bg-blue-50/70 px-3 py-1.5 text-xs font-medium text-blue-700 transition-all hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-100 hover:shadow-sm dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-300 dark:hover:bg-blue-500/20"
+    >
+      <ExternalLink className="h-3.5 w-3.5 transition-transform group-hover:rotate-12" />
+      {label}
+      <span className="font-mono text-[10px] opacity-60">{reference}</span>
+    </a>
   );
 }
