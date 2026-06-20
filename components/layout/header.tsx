@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 import {
-  LayoutDashboard,
   FileText,
   CreditCard,
   Sun,
@@ -39,7 +38,6 @@ import { useGuestMode } from "@/components/providers/guest-mode-provider";
 
 const navigation = [
   { name: "Command Center", href: "/intelligence", icon: Gauge },
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Variation Orders", href: "/vos", icon: FileText },
   { name: "Payments", href: "/payments", icon: CreditCard },
 ];
@@ -79,7 +77,7 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo Section */}
           <div className="flex items-center gap-6">
-            <Link href="/dashboard" className="flex items-center gap-3 group">
+            <Link href="/intelligence" className="flex items-center gap-3 group">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-rsg-navy to-rsg-blue rounded-xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
                 <div className="relative p-2 rounded-xl bg-gradient-to-br from-rsg-navy to-rsg-blue shadow-lg shadow-rsg-navy/20">
@@ -96,30 +94,30 @@ export function Header() {
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-1">
+            {/* Desktop Navigation — pill segmented control */}
+            <nav className="hidden md:flex items-center gap-1 rounded-full border border-slate-200/70 bg-slate-100/70 p-1 dark:border-zinc-800 dark:bg-zinc-900/60">
               {navigation.map((item) => {
                 const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
                 return (
                   <Link key={item.name} href={item.href}>
-                    <Button
-                      variant="ghost"
-                      className={`relative px-4 h-9 gap-2 rounded-xl ${
+                    <motion.div
+                      whileTap={{ scale: 0.97 }}
+                      className={`relative flex h-9 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors ${
                         isActive
-                          ? "text-rsg-navy dark:text-rsg-gold bg-rsg-navy/5 dark:bg-rsg-gold/10"
-                          : "text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800"
+                          ? "text-rsg-navy dark:text-rsg-gold"
+                          : "text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
                       }`}
                     >
-                      <item.icon className="h-4 w-4" />
-                      <span className="hidden lg:inline">{item.name}</span>
                       {isActive && (
                         <motion.div
-                          layoutId="nav-indicator"
-                          className="absolute bottom-0 left-2 right-2 h-0.5 bg-gradient-to-r from-rsg-navy to-rsg-blue dark:from-rsg-gold dark:to-amber-400 rounded-full"
+                          layoutId="nav-pill"
+                          className="absolute inset-0 -z-10 rounded-full bg-white shadow-sm dark:bg-zinc-800"
                           transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                         />
                       )}
-                    </Button>
+                      <item.icon className="h-4 w-4" />
+                      <span className="hidden lg:inline">{item.name}</span>
+                    </motion.div>
                   </Link>
                 );
               })}

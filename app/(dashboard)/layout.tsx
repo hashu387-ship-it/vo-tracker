@@ -8,7 +8,7 @@ import { AuroraBackground } from '@/components/ui/aurora-background';
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <WorkspaceProvider>
-      <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 relative overflow-hidden font-sans selection:bg-primary/20 text-slate-900 dark:text-white transition-colors duration-300">
+      <div className="min-h-screen bg-background relative overflow-hidden font-sans selection:bg-primary/20 text-foreground transition-colors duration-300">
         {/* Aurora ambient background */}
         <AuroraBackground />
 
