@@ -1,5 +1,5 @@
 import { ClerkProvider } from '@clerk/nextjs';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { DM_Sans } from 'next/font/google';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { QueryProvider } from '@/components/providers/query-provider';
@@ -14,8 +14,38 @@ import './globals.css';
 const dmSans = DM_Sans({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'VO Tracker - Variation Orders Management',
-  description: 'Track and manage Variation Orders for construction projects',
+  title: {
+    default: 'VO Tracker · Commercial Intelligence Command Center',
+    template: '%s · VO Tracker',
+  },
+  description:
+    'A next-generation commercial command center for the HW2 MEP project — AI-assisted variation order tracking, payment register analytics, forecasting, and live KPIs.',
+  keywords: [
+    'variation orders',
+    'payment register',
+    'commercial management',
+    'construction',
+    'quantity surveying',
+    'RSG',
+    'First Fix',
+    'analytics dashboard',
+  ],
+  applicationName: 'VO Tracker',
+  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'VO Tracker' },
+  openGraph: {
+    title: 'VO Tracker · Commercial Intelligence',
+    description: 'AI-assisted variation order & payment intelligence for HW2 MEP.',
+    type: 'website',
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f8fafc' },
+    { media: '(prefers-color-scheme: dark)', color: '#09090b' },
+  ],
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

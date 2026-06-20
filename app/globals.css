@@ -313,6 +313,42 @@
 .animate-shimmer { animation: shimmer 2s linear infinite; background-size: 200% 100%; }
 .animate-spin-slow { animation: spin-slow 8s linear infinite; }
 
+/* Aurora drift */
+@keyframes aurora-1 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(6%, 8%, 0) scale(1.12); }
+  66% { transform: translate3d(-5%, 4%, 0) scale(0.95); }
+}
+@keyframes aurora-2 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(-8%, 5%, 0) scale(1.08); }
+  66% { transform: translate3d(5%, -6%, 0) scale(1.15); }
+}
+@keyframes aurora-3 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.05); }
+  50% { transform: translate3d(7%, -8%, 0) scale(0.92); }
+}
+.animate-aurora-1 { animation: aurora-1 22s ease-in-out infinite; }
+.animate-aurora-2 { animation: aurora-2 26s ease-in-out infinite; }
+.animate-aurora-3 { animation: aurora-3 30s ease-in-out infinite; }
+
+/* Liquid glass surface */
+.liquid-glass {
+  background: linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25));
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.6);
+}
+.dark .liquid-glass {
+  background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Conic gradient ring border */
+.ring-conic {
+  background: conic-gradient(from 180deg, #002D56, #3b82f6, #06b6d4, #C5A065, #002D56);
+}
+
 /* Loading skeleton */
 .skeleton {
   @apply bg-slate-200 dark:bg-zinc-800 animate-pulse rounded;
