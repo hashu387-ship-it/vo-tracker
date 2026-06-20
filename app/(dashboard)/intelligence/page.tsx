@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { Sparkles, Bot, FileBarChart, TrendingUp, Activity, PieChart as PieIcon, LineChart, BarChart3 } from 'lucide-react';
 import { useWorkspace } from '@/components/providers/workspace-provider';
@@ -19,6 +20,10 @@ import {
 } from '@/lib/data/commercial';
 import { cn } from '@/lib/utils';
 
+const Hero3D = dynamic(() => import('@/components/intelligence/hero-3d').then((m) => m.Hero3D), {
+  ssr: false,
+});
+
 export default function IntelligencePage() {
   const { askAssistant } = useWorkspace();
   const kpis = headlineKpis();
@@ -34,6 +39,7 @@ export default function IntelligencePage() {
         animate={{ opacity: 1, y: 0 }}
         className="relative overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-br from-rsg-navy via-rsg-blue to-slate-900 p-6 text-white shadow-2xl sm:p-8 dark:from-zinc-900 dark:via-zinc-900 dark:to-black"
       >
+        <Hero3D />
         <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-rsg-gold/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 left-1/3 h-64 w-64 rounded-full bg-sky-500/20 blur-3xl" />
         <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
