@@ -20,8 +20,12 @@ import {
   Lock,
   LogIn,
   Unlock,
+  Gauge,
+  Search,
+  Bot,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useWorkspace } from "@/components/providers/workspace-provider";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +38,7 @@ import { UserButton, useUser, SignInButton } from "@clerk/nextjs";
 import { useGuestMode } from "@/components/providers/guest-mode-provider";
 
 const navigation = [
+  { name: "Command Center", href: "/intelligence", icon: Gauge },
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Variation Orders", href: "/vos", icon: FileText },
   { name: "Payments", href: "/payments", icon: CreditCard },
@@ -47,6 +52,7 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const { user, isLoaded, isSignedIn } = useUser();
   const { isGuest, isEditAuthorized, requestEditAccess } = useGuestMode();
+  const { togglePalette, toggleAssistant } = useWorkspace();
 
   useEffect(() => {
     setMounted(true);
@@ -122,6 +128,27 @@ export function Header() {
 
           {/* Right Section */}
           <div className="flex items-center gap-2">
+            {/* Command palette trigger */}
+            <button
+              onClick={togglePalette}
+              className="hidden md:flex items-center gap-2 h-9 px-3 rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50/60 dark:bg-zinc-800/60 text-slate-500 dark:text-zinc-400 hover:border-rsg-navy/40 dark:hover:border-rsg-gold/40 hover:text-slate-700 dark:hover:text-white transition-colors"
+            >
+              <Search className="h-3.5 w-3.5" />
+              <span className="text-xs">Search</span>
+              <kbd className="text-[10px] rounded border border-slate-300 dark:border-zinc-600 px-1">⌘K</kbd>
+            </button>
+
+            {/* AI assistant trigger */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleAssistant}
+              title="Ask the AI assistant (⌘J)"
+              className="w-9 h-9 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 text-rsg-navy dark:text-rsg-gold"
+            >
+              <Bot className="h-4 w-4" />
+            </Button>
+
             {/* Quick Add Button */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
