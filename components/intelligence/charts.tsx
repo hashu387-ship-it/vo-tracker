@@ -3,6 +3,8 @@
 import {
   Area,
   AreaChart,
+  Bar,
+  BarChart,
   ComposedChart,
   Cell,
   Line,
@@ -16,6 +18,7 @@ import {
 } from 'recharts';
 import {
   cashflowSeries,
+  commercialSummary,
   forecastNet,
   voStatusBreakdown,
   formatCompact,
@@ -122,6 +125,65 @@ export function SCurveChart() {
         <Area type="monotone" dataKey="Certified" stroke="#0ea5e9" strokeWidth={2} fill="url(#certFill)" />
         <Area type="monotone" dataKey="Received" stroke="#10b981" strokeWidth={2} fill="url(#recvFill)" />
       </AreaChart>
+    </ResponsiveContainer>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Contract value waterfall                                          */
+/* ------------------------------------------------------------------ */
+
+const WF_COLORS = { total: '#1f7a52', increase: '#10b981', decrease: '#f97316' } as const;
+
+export function ContractWaterfallChart() {
+  const s = commercialSummary;
+  const variations = s.revisedContract - s.originalContract;
+  const grossCertified = s.totalClaimedGross;
+  const uncertified = s.revisedContract - grossCertified;
+  const retentionOutstanding = grossCertified - s.received;
+
+  // Each step: `base` is an invisible spacer, `bar` is the visible segment.
+  const steps = [
+    { label: 'Original', full: 'Original Contract', base: 0, bar: s.originalContract, total: s.originalContract, kind: 'total' as const },
+    { label: 'Variations', full: 'Approved Variations', base: s.originalContract, bar: variations, total: s.revisedContract, kind: 'increase' as const },
+    { label: 'Revised', full: 'Revised Contract', base: 0, bar: s.revisedContract, total: s.revisedContract, kind: 'total' as const },
+    { label: 'Uncertified', full: 'Not Yet Certified', base: grossCertified, bar: uncertified, total: grossCertified, kind: 'decrease' as const },
+    { label: 'Certified', full: 'Gross Certified', base: 0, bar: grossCertified, total: grossCertified, kind: 'total' as const },
+    { label: 'Retention', full: 'Retention & Outstanding', base: s.received, bar: retentionOutstanding, total: s.received, kind: 'decrease' as const },
+    { label: 'Received', full: 'Cash Received', base: 0, bar: s.received, total: s.received, kind: 'total' as const },
+  ];
+
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <BarChart data={steps} margin={{ top: 12, right: 8, left: 0, bottom: 0 }} className="text-slate-400" barCategoryGap="22%">
+        <CartesianGrid strokeDasharray="3 3" stroke="currentColor" strokeOpacity={0.08} vertical={false} />
+        <XAxis dataKey="label" {...axisProps} interval={0} />
+        <YAxis {...axisProps} tickFormatter={(v) => `${(v / 1_000_000).toFixed(0)}M`} width={40} />
+        <Tooltip
+          cursor={{ fill: 'currentColor', fillOpacity: 0.04 }}
+          content={({ active, payload }: any) => {
+            if (!active || !payload?.length) return null;
+            const d = payload[0].payload;
+            const sign = d.kind === 'increase' ? '+' : d.kind === 'decrease' ? '−' : '';
+            return (
+              <div className="rounded-xl border border-white/15 bg-white/90 px-3 py-2 text-xs shadow-xl backdrop-blur-xl dark:bg-zinc-900/90">
+                <p className="font-semibold text-slate-700 dark:text-zinc-200">{d.full}</p>
+                <p className="text-slate-500 dark:text-zinc-400">
+                  {sign}
+                  {formatSAR(d.bar)}
+                </p>
+                <p className="mt-0.5 text-[10px] text-slate-400">Running total · {formatCompact(d.total)}</p>
+              </div>
+            );
+          }}
+        />
+        <Bar dataKey="base" stackId="wf" fill="transparent" isAnimationActive={false} />
+        <Bar dataKey="bar" stackId="wf" radius={[6, 6, 0, 0]} animationDuration={950} animationBegin={120}>
+          {steps.map((st, i) => (
+            <Cell key={i} fill={WF_COLORS[st.kind]} />
+          ))}
+        </Bar>
+      </BarChart>
     </ResponsiveContainer>
   );
 }

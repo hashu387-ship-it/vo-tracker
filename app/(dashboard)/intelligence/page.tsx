@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Bot, FileBarChart, TrendingUp, Activity, PieChart as PieIcon, LineChart } from 'lucide-react';
+import { Sparkles, Bot, FileBarChart, TrendingUp, Activity, PieChart as PieIcon, LineChart, BarChart3 } from 'lucide-react';
 import { useWorkspace } from '@/components/providers/workspace-provider';
 import { MagneticButton } from '@/components/ui/magnetic-button';
 import { TiltCard } from '@/components/ui/tilt-card';
 import { KpiCard, ProgressRing, InsightsPanel, VoTimeline } from '@/components/intelligence/widgets';
-import { CashflowForecastChart, SCurveChart, VoStatusDonut } from '@/components/intelligence/charts';
+import { CashflowForecastChart, SCurveChart, VoStatusDonut, ContractWaterfallChart } from '@/components/intelligence/charts';
 import {
   commercialSummary,
   headlineKpis,
@@ -72,6 +72,24 @@ export default function IntelligencePage() {
 
       {/* Bento grid */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        {/* Contract value waterfall — full width headline */}
+        <Panel
+          className="lg:col-span-3"
+          icon={BarChart3}
+          title="Contract Value Flow"
+          subtitle="Original → variations → revised → certified → cash received"
+          delay={0.06}
+        >
+          <div className="h-72 text-slate-400">
+            <ContractWaterfallChart />
+          </div>
+          <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-slate-500">
+            <Legend color="#1f7a52" label="Contract milestone" />
+            <Legend color="#10b981" label="Increase (variations)" />
+            <Legend color="#f97316" label="Deduction" />
+          </div>
+        </Panel>
+
         {/* Cashflow + forecast — wide */}
         <Panel
           className="lg:col-span-2"
