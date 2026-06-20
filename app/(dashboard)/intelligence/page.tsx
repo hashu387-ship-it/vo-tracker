@@ -8,6 +8,7 @@ import { MagneticButton } from '@/components/ui/magnetic-button';
 import { TiltCard } from '@/components/ui/tilt-card';
 import { KpiCard, ProgressRing, InsightsPanel, VoTimeline } from '@/components/intelligence/widgets';
 import { CashflowForecastChart, SCurveChart, VoStatusDonut, ContractWaterfallChart } from '@/components/intelligence/charts';
+import { VoGantt } from '@/components/intelligence/vo-gantt';
 import {
   commercialSummary,
   headlineKpis,
@@ -180,6 +181,17 @@ export default function IntelligencePage() {
         {/* Timeline */}
         <Panel icon={Activity} title="Recent Activity" subtitle="Latest variation orders logged" delay={0.32}>
           <VoTimeline />
+        </Panel>
+
+        {/* VO lifecycle Gantt — full width */}
+        <Panel
+          className="lg:col-span-3"
+          icon={LineChart}
+          title="VO Lifecycle Timeline"
+          subtitle="Every variation order from logged → submitted · filter by status"
+          delay={0.36}
+        >
+          <VoGantt />
         </Panel>
       </div>
 
