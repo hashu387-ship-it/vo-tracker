@@ -11,6 +11,7 @@ import { KpiCard, ProgressRing, InsightsPanel, VoTimeline } from '@/components/i
 import { CashflowForecastChart, SCurveChart, VoStatusDonut, ContractWaterfallChart } from '@/components/intelligence/charts';
 import { VoGantt } from '@/components/intelligence/vo-gantt';
 import { VoForceGraph } from '@/components/intelligence/vo-force-graph';
+import { PaymentTiles } from '@/components/intelligence/payment-tiles';
 import {
   commercialSummary,
   headlineKpis,
@@ -211,6 +212,9 @@ export default function IntelligencePage() {
         >
           <VoForceGraph />
         </Panel>
+
+        {/* Full payment register — all tiles, all details, Excel export */}
+        <PaymentTiles />
       </div>
 
       {/* Footnote */}
