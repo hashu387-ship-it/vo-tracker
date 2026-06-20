@@ -12,38 +12,8 @@ import { useVOs, VO } from '@/lib/hooks/use-vos';
 import { useToast } from '@/components/ui/use-toast';
 import { useUser } from '@clerk/nextjs';
 import { DemoDisclaimer } from '@/components/ui/demo-disclaimer';
-import { dummyVOs } from '@/lib/dummy-data';
+import { realDemoVOs } from '@/lib/data/demo-records';
 import Link from 'next/link';
-
-// Convert dummy VOs to match VO interface
-const convertDummyVOs = (): VO[] => {
-  return dummyVOs.map((dvo, index) => ({
-    id: index + 1,
-    subject: dvo.title,
-    submissionType: 'RFI' as const,
-    submissionReference: `REF-${dvo.voNumber}`,
-    responseReference: dvo.status === 'APPROVED' ? `RSP-${dvo.voNumber}` : null,
-    submissionDate: dvo.submittedDate?.toISOString() || new Date().toISOString(),
-    assessmentValue: dvo.submittedAmount * 0.9,
-    proposalValue: dvo.submittedAmount,
-    approvedAmount: dvo.approvedAmount,
-    status: dvo.status === 'APPROVED' ? 'Approved' : dvo.status === 'PENDING' ? 'Pending' : dvo.status === 'SUBMITTED' ? 'Submitted' : 'Draft' as any,
-    vorReference: dvo.voNumber,
-    dvoReference: dvo.status === 'APPROVED' ? `DVO-${dvo.voNumber}` : null,
-    dvoIssuedDate: dvo.approvedDate?.toISOString() || null,
-    remarks: dvo.description,
-    actionNotes: null,
-    ffcRsgProposedFile: null,
-    rsgAssessedFile: null,
-    dvoRrApprovedFile: null,
-    proposedFileUrl: null,
-    assessmentFileUrl: null,
-    approvalFileUrl: null,
-    dvoFileUrl: null,
-    createdAt: dvo.createdAt?.toISOString() || new Date().toISOString(),
-    updatedAt: dvo.updatedAt?.toISOString() || new Date().toISOString(),
-  }));
-};
 
 interface VOListProps {
   isAdmin?: boolean;
@@ -57,7 +27,7 @@ export function VOList({ isAdmin = false }: VOListProps) {
 
   // Demo mode check
   const isDemo = isLoaded && !isSignedIn;
-  const demoVOs = useMemo(() => convertDummyVOs(), []);
+  const demoVOs = realDemoVOs;
 
   // Initialize state from URL params
   const [search, setSearch] = useState(searchParams.get('search') || '');
@@ -91,10 +61,8 @@ export function VOList({ isAdmin = false }: VOListProps) {
     limit: 20,
   }, { enabled: isLoaded && isSignedIn === true });
 
-  // Filter demo data for demo mode
+  // Filter the embedded real dataset (used for guests and as an empty-DB fallback)
   const filteredDemoVOs = useMemo(() => {
-    if (!isDemo) return [];
-
     let filtered = [...demoVOs];
 
     // Apply search filter
@@ -139,8 +107,16 @@ export function VOList({ isAdmin = false }: VOListProps) {
     return filtered;
   }, [isDemo, demoVOs, debouncedSearch, status, submissionType, sortBy, sortOrder]);
 
-  // Use demo data or real data
-  const activeVOs = isDemo ? filteredDemoVOs : (data?.data || []);
+  // Use demo data for guests; for signed-in users use live data, falling back
+  // to the embedded real dataset when the database returns nothing.
+  const liveVOs = data?.data || [];
+  const activeVOs = isDemo
+    ? filteredDemoVOs
+    : isLoading
+      ? []
+      : liveVOs.length > 0
+        ? liveVOs
+        : filteredDemoVOs;
   const activeLoading = !isLoaded || (isDemo ? false : isLoading);
 
   // Update URL params
