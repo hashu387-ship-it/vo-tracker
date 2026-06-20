@@ -89,7 +89,7 @@ export default function PaymentsPage() {
     const { isSignedIn, isLoaded } = useUser();
     const [payments, setPayments] = useState<PaymentApplication[]>([]);
     const [demoPayments, setDemoPayments] = useState<PaymentApplication[]>(realDemoPayments);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -101,10 +101,10 @@ export default function PaymentsPage() {
     const [editingPayment, setEditingPayment] = useState<PaymentApplication | null>(null);
     const [updatingStatusId, setUpdatingStatusId] = useState<number | null>(null);
 
-    // Use real data if signed in; fall back to the embedded dataset when the
-    // database is empty so the register is never blank.
+    // Always render data: live rows for signed-in users when present, otherwise
+    // the embedded real dataset. Never block on Clerk finishing.
     const isDemo = isLoaded && !isSignedIn;
-    const activePayments = isDemo ? demoPayments : payments.length > 0 ? payments : demoPayments;
+    const activePayments = isSignedIn && payments.length > 0 ? payments : demoPayments;
 
     const fetchPayments = async (showRefreshIndicator = false) => {
         if (isDemo) {
@@ -128,12 +128,9 @@ export default function PaymentsPage() {
     };
 
     useEffect(() => {
-        if (isLoaded) {
-            if (isSignedIn) {
-                fetchPayments();
-            } else {
-                setIsLoading(false);
-            }
+        if (isLoaded && isSignedIn) {
+            setIsLoading(true);
+            fetchPayments();
         }
     }, [isLoaded, isSignedIn]);
 

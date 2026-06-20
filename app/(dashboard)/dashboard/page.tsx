@@ -47,10 +47,11 @@ export default function DashboardPage() {
   const [isExporting, setIsExporting] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string | null>(null);
 
-  // Demo mode check
-  const isDemo = isLoaded && !isSignedIn;
-  const activeStats = isDemo ? demoStats : stats;
-  const activeLoading = isDemo ? false : isLoading;
+  // Show demo stats by default (incl. while Clerk is still resolving); swap to
+  // live stats only once the user is confirmed signed in. Never hang on auth.
+  const isDemo = isSignedIn !== true;
+  const activeStats = isSignedIn === true ? stats : demoStats;
+  const activeLoading = isSignedIn === true ? isLoading : false;
 
   const handleExport = async () => {
     try {
