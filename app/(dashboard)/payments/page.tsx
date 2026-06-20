@@ -47,7 +47,7 @@ import { exportPaymentsToExcel } from '@/lib/excel-export';
 import { PaymentForm } from '@/components/dashboard/payment-form';
 import { PaymentDashboard } from '@/components/dashboard/payment-dashboard';
 import { DemoDisclaimer } from '@/components/ui/demo-disclaimer';
-import { dummyPayments } from '@/lib/dummy-data';
+import { realDemoPayments } from '@/lib/data/demo-records';
 
 type SortField = 'paymentNo' | 'grossAmount' | 'netPayment' | 'submittedDate';
 type SortOrder = 'asc' | 'desc';
@@ -85,35 +85,10 @@ const statusConfig: { [key: string]: { bg: string; text: string; border: string;
     },
 };
 
-// Convert dummy data to match PaymentApplication structure for demo mode
-const convertDummyPayments = (): PaymentApplication[] => {
-    return dummyPayments.map((dp, index) => ({
-        id: index + 1,
-        paymentNo: dp.ipcNumber,
-        description: `Demo Payment Application ${dp.ipcNumber}`,
-        grossAmount: dp.grossAmount,
-        netPayment: dp.netAmount,
-        advancePaymentRecovery: dp.lessAdvance,
-        retention: dp.lessRetention,
-        vatRecovery: dp.lessRecovery,
-        vat: dp.vatAmount,
-        paymentStatus: dp.status === 'PAID' ? 'Paid' : dp.status === 'CERTIFIED' ? 'Certified' : dp.status === 'SUBMITTED' ? 'Submitted' : 'Draft',
-        submittedDate: dp.submittedDate,
-        certifiedDate: dp.certifiedDate,
-        invoiceDate: dp.paidDate,
-        ffcLiveAction: null,
-        rsgLiveAction: null,
-        approvalStatus: null,
-        remarks: null,
-        createdAt: dp.createdAt,
-        updatedAt: dp.updatedAt,
-    })) as unknown as PaymentApplication[];
-};
-
 export default function PaymentsPage() {
     const { isSignedIn, isLoaded } = useUser();
     const [payments, setPayments] = useState<PaymentApplication[]>([]);
-    const [demoPayments, setDemoPayments] = useState<PaymentApplication[]>(convertDummyPayments());
+    const [demoPayments, setDemoPayments] = useState<PaymentApplication[]>(realDemoPayments);
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -126,9 +101,10 @@ export default function PaymentsPage() {
     const [editingPayment, setEditingPayment] = useState<PaymentApplication | null>(null);
     const [updatingStatusId, setUpdatingStatusId] = useState<number | null>(null);
 
-    // Use real data if signed in, demo data if not
+    // Use real data if signed in; fall back to the embedded dataset when the
+    // database is empty so the register is never blank.
     const isDemo = isLoaded && !isSignedIn;
-    const activePayments = isDemo ? demoPayments : payments;
+    const activePayments = isDemo ? demoPayments : payments.length > 0 ? payments : demoPayments;
 
     const fetchPayments = async (showRefreshIndicator = false) => {
         if (isDemo) {
