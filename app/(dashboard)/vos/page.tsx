@@ -1,6 +1,5 @@
-import { VOList } from '@/components/vo/vo-list';
+import { VOLogPremium } from '@/components/vo/vo-log-premium';
 
 export default function VOsPage() {
-  // Demo mode - always admin
-  return <VOList isAdmin={true} />;
+  return <VOLogPremium />;
 }
