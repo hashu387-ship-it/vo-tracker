@@ -9,6 +9,7 @@ import { TiltCard } from '@/components/ui/tilt-card';
 import { KpiCard, ProgressRing, InsightsPanel, VoTimeline } from '@/components/intelligence/widgets';
 import { CashflowForecastChart, SCurveChart, VoStatusDonut, ContractWaterfallChart } from '@/components/intelligence/charts';
 import { VoGantt } from '@/components/intelligence/vo-gantt';
+import { VoForceGraph } from '@/components/intelligence/vo-force-graph';
 import {
   commercialSummary,
   headlineKpis,
@@ -192,6 +193,17 @@ export default function IntelligencePage() {
           delay={0.36}
         >
           <VoGantt />
+        </Panel>
+
+        {/* Force-directed VO graph — full width */}
+        <Panel
+          className="lg:col-span-3"
+          icon={Activity}
+          title="VO Relationship Graph"
+          subtitle="Status hubs with their variations · physics-driven, reacts to your cursor"
+          delay={0.4}
+        >
+          <VoForceGraph />
         </Panel>
       </div>
 
