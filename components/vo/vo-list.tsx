@@ -107,17 +107,13 @@ export function VOList({ isAdmin = false }: VOListProps) {
     return filtered;
   }, [isDemo, demoVOs, debouncedSearch, status, submissionType, sortBy, sortOrder]);
 
-  // Use demo data for guests; for signed-in users use live data, falling back
-  // to the embedded real dataset when the database returns nothing.
+  // Always render data: live DB rows for signed-in users when present,
+  // otherwise the embedded real dataset. Never block the page on Clerk
+  // finishing — only show a skeleton while a signed-in fetch is genuinely
+  // in flight and has no data yet.
   const liveVOs = data?.data || [];
-  const activeVOs = isDemo
-    ? filteredDemoVOs
-    : isLoading
-      ? []
-      : liveVOs.length > 0
-        ? liveVOs
-        : filteredDemoVOs;
-  const activeLoading = !isLoaded || (isDemo ? false : isLoading);
+  const activeVOs = isSignedIn && liveVOs.length > 0 ? liveVOs : filteredDemoVOs;
+  const activeLoading = isSignedIn === true && isLoading && liveVOs.length === 0;
 
   // Update URL params
   useEffect(() => {
