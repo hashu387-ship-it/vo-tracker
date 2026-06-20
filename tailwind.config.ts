@@ -51,10 +51,12 @@ const config: Config = {
           foreground: 'hsl(var(--card-foreground))',
         },
         rsg: {
-          navy: '#002D56',
-          gold: '#C5A065',
-          blue: '#003366',
-          light: '#E6F0F9',
+          // Theme-aware brand colors. Light mode = fresh green + coral
+          // (see :root), dark mode = RSG navy + gold (see .dark).
+          navy: 'hsl(var(--rsg-navy) / <alpha-value>)',
+          gold: 'hsl(var(--rsg-gold) / <alpha-value>)',
+          blue: 'hsl(var(--rsg-blue) / <alpha-value>)',
+          light: 'hsl(var(--rsg-light) / <alpha-value>)',
         },
       },
       borderRadius: {

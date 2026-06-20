@@ -3,44 +3,45 @@
 @tailwind utilities;
 
 :root {
-  /* Premium Light Theme - Clean & Modern */
-  --background: 0 0% 99%;
-  --foreground: 222 47% 11%;
+  /* Premium Light Theme - Fresh, soft & organic (AgriVision-inspired) */
+  --background: 140 16% 96%;
+  --foreground: 160 22% 12%;
 
   --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
+  --card-foreground: 160 22% 12%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
+  --popover-foreground: 160 22% 12%;
 
-  /* Primary: RSG Navy inspired */
-  --primary: 213 100% 17%;
+  /* Primary: fresh green */
+  --primary: 150 46% 31%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 220 14% 96%;
-  --secondary-foreground: 222 47% 11%;
+  --secondary: 140 16% 94%;
+  --secondary-foreground: 160 22% 12%;
 
-  --muted: 220 14% 96%;
-  --muted-foreground: 220 9% 46%;
+  --muted: 140 14% 95%;
+  --muted-foreground: 155 8% 42%;
 
-  --accent: 213 100% 96%;
-  --accent-foreground: 213 100% 17%;
+  --accent: 145 42% 93%;
+  --accent-foreground: 150 46% 24%;
 
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --border: 220 13% 91%;
-  --input: 220 13% 91%;
-  --ring: 213 100% 17%;
+  --border: 150 14% 90%;
+  --input: 150 14% 90%;
+  --ring: 150 46% 31%;
 
-  --radius: 0.75rem;
+  --radius: 1rem;
 
-  /* Custom RSG Theme Variables */
-  --rsg-navy: 213 100% 17%;
-  --rsg-gold: 36 54% 58%;
-  --rsg-blue: 213 100% 20%;
-  --gradient-start: 213 100% 17%;
-  --gradient-end: 213 100% 25%;
+  /* Brand colors mapped to the green + coral palette in light mode */
+  --rsg-navy: 150 46% 31%;
+  --rsg-blue: 152 44% 24%;
+  --rsg-gold: 16 83% 56%;
+  --rsg-light: 145 44% 93%;
+  --gradient-start: 150 46% 31%;
+  --gradient-end: 152 44% 24%;
 }
 
 .dark {
@@ -74,9 +75,11 @@
   --input: 240 6% 15%;
   --ring: 36 54% 58%;
 
-  /* Dark mode RSG variables */
+  /* Dark mode RSG variables (unchanged navy + gold) */
   --rsg-navy: 213 100% 17%;
   --rsg-gold: 36 54% 58%;
+  --rsg-blue: 213 100% 20%;
+  --rsg-light: 240 6% 15%;
   --gradient-start: 240 10% 4%;
   --gradient-end: 240 10% 8%;
 }
