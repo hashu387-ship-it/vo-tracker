@@ -3,14 +3,13 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
-import { Sparkles, Bot, FileBarChart, TrendingUp, Activity, PieChart as PieIcon, LineChart, BarChart3 } from 'lucide-react';
+import { Sparkles, Bot, FileBarChart, TrendingUp, Activity, PieChart as PieIcon, LineChart } from 'lucide-react';
 import { useWorkspace } from '@/components/providers/workspace-provider';
 import { MagneticButton } from '@/components/ui/magnetic-button';
 import { TiltCard } from '@/components/ui/tilt-card';
 import { KpiCard, ProgressRing, InsightsPanel, VoTimeline } from '@/components/intelligence/widgets';
-import { CashflowForecastChart, SCurveChart, VoStatusDonut, ContractWaterfallChart } from '@/components/intelligence/charts';
+import { CashflowForecastChart, SCurveChart, VoStatusDonut } from '@/components/intelligence/charts';
 import { VoGantt } from '@/components/intelligence/vo-gantt';
-import { VoForceGraph } from '@/components/intelligence/vo-force-graph';
 import { PaymentTiles } from '@/components/intelligence/payment-tiles';
 import {
   commercialSummary,
@@ -81,24 +80,6 @@ export default function IntelligencePage() {
 
       {/* Bento grid */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        {/* Contract value waterfall — full width headline */}
-        <Panel
-          className="lg:col-span-3"
-          icon={BarChart3}
-          title="Contract Value Flow"
-          subtitle="Original → variations → revised → certified → cash received"
-          delay={0.06}
-        >
-          <div className="h-72 text-slate-400">
-            <ContractWaterfallChart />
-          </div>
-          <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-slate-500">
-            <Legend color="#1f7a52" label="Contract milestone" />
-            <Legend color="#10b981" label="Increase (variations)" />
-            <Legend color="#f97316" label="Deduction" />
-          </div>
-        </Panel>
-
         {/* Cashflow + forecast — wide */}
         <Panel
           className="lg:col-span-2"
@@ -200,17 +181,6 @@ export default function IntelligencePage() {
           delay={0.36}
         >
           <VoGantt />
-        </Panel>
-
-        {/* Force-directed VO graph — full width */}
-        <Panel
-          className="lg:col-span-3"
-          icon={Activity}
-          title="VO Relationship Graph"
-          subtitle="Status hubs with their variations · physics-driven, reacts to your cursor"
-          delay={0.4}
-        >
-          <VoForceGraph />
         </Panel>
 
         {/* Full payment register — all tiles, all details, Excel export */}

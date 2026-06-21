@@ -10,10 +10,13 @@ import {
   PAYMENT_STATE_CONFIG,
   formatSAR,
   formatCompact,
+  formatPct,
   formatDateShort,
   type PaymentRecord,
 } from '@/lib/data/commercial';
 import { exportPaymentsToExcel } from '@/lib/excel-export';
+import { CountUp } from '@/components/ui/count-up';
+import { SpotlightCard } from '@/components/ui/spotlight-card';
 import { cn } from '@/lib/utils';
 
 /**
@@ -26,6 +29,7 @@ export function PaymentTiles() {
   const [done, setDone] = useState(false);
 
   const rows = useMemo(() => payments, []);
+  const s = commercialSummary;
   const totals = useMemo(
     () =>
       rows.reduce(
@@ -38,6 +42,16 @@ export function PaymentTiles() {
       ),
     [rows],
   );
+
+  // Headline info cards (big numbers, in millions).
+  const infoCards = [
+    { label: 'Work Done', value: s.totalClaimedGross, caption: `${formatPct(s.workDonePct)} complete` },
+    { label: 'Cash Received', value: s.received, caption: `${formatPct(s.receivedPct)} of contract` },
+    { label: 'Revised Contract', value: s.revisedContract, caption: `${formatPct(s.variancePct)} vs original` },
+    { label: 'Retention Held', value: s.totalRetention, caption: `${formatPct(s.retentionPct)} retention` },
+    { label: 'Advance Recovered', value: s.advanceDeducted, caption: `of ${formatCompact(s.totalAdvance)}` },
+    { label: 'Balance to Complete', value: s.balanceToComplete, caption: 'remaining to bill' },
+  ];
 
   const handleExport = async () => {
     setExporting(true);
@@ -104,6 +118,27 @@ export function PaymentTiles() {
           )}
           {exporting ? 'Exporting…' : done ? 'Downloaded' : 'Export Excel'}
         </button>
+      </div>
+
+      {/* Headline info cards */}
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
+        {infoCards.map((c, i) => (
+          <motion.div
+            key={c.label}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.05 }}
+          >
+            <SpotlightCard className="h-full p-4">
+              <p className="text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-zinc-400">{c.label}</p>
+              <p className="mt-1.5 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+                <CountUp value={c.value} mode="compact" />
+              </p>
+              <p className="mt-1 text-[11px] text-slate-400">{c.caption}</p>
+            </SpotlightCard>
+          </motion.div>
+        ))}
       </div>
 
       {/* Tiles */}
