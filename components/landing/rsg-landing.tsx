@@ -104,7 +104,14 @@ export function RsgLanding() {
 
         {/* HERO */}
         <section style={{ position: 'relative', minHeight: '90vh', display: 'flex', alignItems: 'center', padding: '90px 24px 60px' }}>
-          <div style={{ maxWidth: 1320, margin: '0 auto', width: '100%' }}>
+          {/* hero background image (Red Sea) with cream scrim for legibility */}
+          <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/hero/redsea-1.jpg" alt="Red Sea waterfront" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(244,234,217,.97) 0%, rgba(244,234,217,.88) 34%, rgba(244,234,217,.55) 62%, rgba(244,234,217,.22) 100%)' }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(244,234,217,.5) 0%, transparent 24%, transparent 64%, rgba(244,234,217,.92) 100%)' }} />
+          </div>
+          <div style={{ position: 'relative', zIndex: 1, maxWidth: 1320, margin: '0 auto', width: '100%' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '8px 16px 8px 12px', borderRadius: 999, marginBottom: 30, ...glass }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#2f8a82', boxShadow: '0 0 10px #2f8a82' }} />
               <span style={{ font: `600 11.5px ${SANS}`, letterSpacing: 2, textTransform: 'uppercase', color: 'rgba(45,38,28,.78)' }}>HW2 · Commercial Register System</span>
@@ -167,14 +174,14 @@ export function RsgLanding() {
             <p style={{ margin: '0 0 44px', font: `400 16px/1.7 ${SANS}`, color: 'rgba(45,38,28,.6)', maxWidth: '64ch' }}>The latest variations, certifications and payment milestones recorded across the HW2 MEP scope.</p>
             <div className="grid3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 18 }}>
               {[
-                { tag: 'Variation Order', title: 'VO‑148 approved for MEP rework at SW Hotel 02 podium level', grad: 'linear-gradient(150deg,#3f9d93,#0f5a54 65%,#0a3b37)' },
-                { tag: 'Payment', title: 'IPC‑22 certified — cumulative value passes SAR 180M milestone', grad: 'linear-gradient(150deg,#5d8595,#2e4a58 65%,#1d3140)' },
-                { tag: 'Forecast', title: 'Q3 final-account projection updated with 99% calculation accuracy', grad: 'linear-gradient(150deg,#d3744f,#b0512f 65%,#7c3a22)' },
+                { tag: 'Variation Order', title: 'VO‑148 approved for MEP rework at SW Hotel 02 podium level', grad: 'linear-gradient(150deg,#3f9d93,#0f5a54 65%,#0a3b37)', img: '/hero/redsea-2.jpg' },
+                { tag: 'Payment', title: 'IPC‑22 certified — cumulative value passes SAR 180M milestone', grad: 'linear-gradient(150deg,#5d8595,#2e4a58 65%,#1d3140)', img: '/hero/redsea-3.jpg' },
+                { tag: 'Forecast', title: 'Q3 final-account projection updated with 99% calculation accuracy', grad: 'linear-gradient(150deg,#d3744f,#b0512f 65%,#7c3a22)', img: '/hero/redsea-4.jpg' },
               ].map((c) => (
                 <Link key={c.title} href="/intelligence" className="tile" style={{ display: 'block', paddingBottom: 26, borderRadius: 24, overflow: 'hidden', ...statGlass, boxShadow: '0 12px 40px rgba(74,48,30,.12), inset 0 1px 0 rgba(255,255,255,.8)' }}>
                   <div style={{ height: 200, position: 'relative', overflow: 'hidden' }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/rsg-new-hero.png" alt="Red Sea project" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={c.img} alt="Red Sea project" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                     <div style={{ position: 'absolute', inset: 0, background: c.grad, opacity: 0.62, mixBlendMode: 'multiply' }} />
                   </div>
                   <div style={{ padding: '24px 26px 0' }}>
@@ -224,12 +231,16 @@ export function RsgLanding() {
             </div>
             <div className="grid2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
               {[
-                { n: 'Module 01', t: 'Variation Orders', d: 'Complete VO lifecycle management with real-time tracking. 150+ VOs tracked across the project.', g: 'linear-gradient(150deg,#3f9d93,#0f5a54)', s: 'rgba(15,90,84,.28)', href: '/vos' },
-                { n: 'Module 02', t: 'Payment Register', d: 'Advanced payment tracking with automated calculations against SAR 232M contract value.', g: 'linear-gradient(150deg,#cf8a52,#9c5a2f)', s: 'rgba(156,90,47,.28)', href: '/payments' },
-                { n: 'Module 03', t: 'Analytics', d: 'Interactive charts and real-time financial insight with 24/7 live updates.', g: 'linear-gradient(150deg,#5d8595,#2e4a58)', s: 'rgba(46,74,88,.28)', href: '/intelligence' },
-                { n: 'Module 04', t: 'Forecasting', d: 'AI-assisted projections and final-account modelling to keep the project on track.', g: 'linear-gradient(150deg,#d8b06a,#a87a3c)', s: 'rgba(168,122,60,.28)', href: '/intelligence' },
+                { n: 'Module 01', t: 'Variation Orders', d: 'Complete VO lifecycle management with real-time tracking. 150+ VOs tracked across the project.', g: 'linear-gradient(150deg,#3f9d93,#0f5a54)', s: 'rgba(15,90,84,.28)', href: '/vos', img: '/hero/module-vo.jpg' },
+                { n: 'Module 02', t: 'Payment Register', d: 'Advanced payment tracking with automated calculations against SAR 232M contract value.', g: 'linear-gradient(150deg,#cf8a52,#9c5a2f)', s: 'rgba(156,90,47,.28)', href: '/payments', img: '/hero/module-pay.jpg' },
+                { n: 'Module 03', t: 'Analytics', d: 'Interactive charts and real-time financial insight with 24/7 live updates.', g: 'linear-gradient(150deg,#5d8595,#2e4a58)', s: 'rgba(46,74,88,.28)', href: '/intelligence', img: '/hero/module-analytics.jpg' },
+                { n: 'Module 04', t: 'Forecasting', d: 'AI-assisted projections and final-account modelling to keep the project on track.', g: 'linear-gradient(150deg,#d8b06a,#a87a3c)', s: 'rgba(168,122,60,.28)', href: '/intelligence', img: '/hero/module-forecast.jpg' },
               ].map((m) => (
                 <Link key={m.t} href={m.href} className="tile" style={{ position: 'relative', minHeight: 300, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: 34, borderRadius: 26, overflow: 'hidden', background: m.g, border: '1px solid rgba(255,255,255,.22)', boxShadow: `0 16px 48px ${m.s}, inset 0 1px 0 rgba(255,255,255,.35)` }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={m.img} alt={m.t} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <div style={{ position: 'absolute', inset: 0, background: m.g, opacity: 0.78, mixBlendMode: 'multiply' }} />
+                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg,transparent 35%,rgba(10,10,12,.55) 100%)' }} />
                   <div style={{ position: 'absolute', top: '-40%', right: '-10%', width: '60%', height: '120%', background: 'radial-gradient(circle,rgba(255,255,255,.28),transparent 60%)', filter: 'blur(30px)' }} />
                   <div style={{ position: 'relative' }}>
                     <div style={{ font: `600 11px ${SANS}`, letterSpacing: 2, textTransform: 'uppercase', color: 'rgba(255,255,255,.8)' }}>{m.n}</div>
