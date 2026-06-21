@@ -248,7 +248,7 @@ function GraphCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200/70 bg-white/70 p-5 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.03]">
+    <div className="rounded-2xl border border-slate-200/70 bg-white/70 p-5 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.05]">
       <div className="mb-3 flex items-center gap-2.5">
         <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-rsg-navy/5 text-rsg-navy dark:bg-rsg-gold/10 dark:text-rsg-gold">
           <Icon className="h-4 w-4" />
@@ -312,7 +312,7 @@ function PaymentTile({ p, index }: { p: PaymentRecord; index: number }) {
       exit={{ opacity: 0, scale: 0.96 }}
       transition={{ delay: Math.min(index * 0.015, 0.3) }}
       whileHover={{ y: -3 }}
-      className="group relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white/70 p-4 shadow-sm backdrop-blur-xl transition-shadow hover:shadow-lg dark:border-white/10 dark:bg-white/[0.03]"
+      className="group relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white/70 p-4 shadow-sm backdrop-blur-xl transition-shadow hover:shadow-lg dark:border-white/10 dark:bg-white/[0.05]"
     >
       <span className="absolute inset-x-0 top-0 h-1" style={{ backgroundColor: cfg.hex }} />
 

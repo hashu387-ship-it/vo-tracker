@@ -213,7 +213,7 @@ function Panel({
       className={cn('group', className)}
     >
       <TiltCard max={4} className="h-full" glare={false}>
-        <div className="h-full rounded-2xl border border-slate-200/70 bg-white/70 p-5 shadow-sm backdrop-blur-xl transition-shadow duration-300 hover:shadow-xl dark:border-white/10 dark:bg-white/[0.03]">
+        <div className="h-full rounded-2xl border border-white/40 bg-white/50 p-5 shadow-lg backdrop-blur-2xl transition-all duration-300 hover:bg-white/60 hover:shadow-2xl dark:border-white/10 dark:bg-white/[0.05]">
           {!bare && (
             <div className="mb-4 flex items-center gap-2.5">
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-rsg-navy/5 text-rsg-navy dark:bg-rsg-gold/10 dark:text-rsg-gold">

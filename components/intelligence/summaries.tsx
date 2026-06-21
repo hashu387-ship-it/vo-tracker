@@ -20,8 +20,8 @@ export function IpaSummary() {
   return (
     <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
       {/* Summary of IPAs */}
-      <div className="overflow-hidden rounded-2xl border border-slate-200/70 bg-white/70 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.03] lg:col-span-2">
-        <div className="bg-rsg-navy px-4 py-2.5 text-center text-sm font-bold uppercase tracking-wide text-white dark:bg-zinc-800">
+      <div className="overflow-hidden rounded-2xl border border-white/40 bg-white/50 backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.05] lg:col-span-2">
+        <div className="bg-rsg-navy/85 backdrop-blur-md px-4 py-2.5 text-center text-sm font-bold uppercase tracking-wide text-white dark:bg-zinc-800">
           Summary of IPA&apos;s (without VAT)
         </div>
         <div className="p-4">
@@ -140,8 +140,8 @@ function RecoveryCard({
   rows: { label: string; value: number; pct: number; highlight?: boolean; danger?: boolean }[];
 }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200/70 bg-white/70 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.03]">
-      <div className="bg-rsg-navy px-4 py-2 text-center text-xs font-bold uppercase tracking-wide text-white dark:bg-zinc-800">
+    <div className="overflow-hidden rounded-2xl border border-white/40 bg-white/50 backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.05]">
+      <div className="bg-rsg-navy/85 backdrop-blur-md px-4 py-2 text-center text-xs font-bold uppercase tracking-wide text-white dark:bg-zinc-800">
         {title}
       </div>
       <div className="space-y-1 p-3">
@@ -174,8 +174,8 @@ export function VoStatusSummary() {
   const { rows, totalCount, totalValue } = voSummary();
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200/70 bg-white/70 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.03]">
-      <div className="bg-rsg-navy px-4 py-2.5 text-sm font-bold uppercase tracking-wide text-white dark:bg-zinc-800">
+    <div className="overflow-hidden rounded-2xl border border-white/40 bg-white/50 backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.05]">
+      <div className="bg-rsg-navy/85 backdrop-blur-md px-4 py-2.5 text-sm font-bold uppercase tracking-wide text-white dark:bg-zinc-800">
         Submitted Variation Orders — Status Summary
       </div>
       <div className="divide-y divide-slate-100 dark:divide-white/5">

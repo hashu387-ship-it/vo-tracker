@@ -309,7 +309,7 @@ function MessageBubble({
             {message.text}
           </div>
         ) : (
-          <div className="w-full space-y-3 rounded-2xl rounded-tl-sm border border-slate-200/70 bg-white/70 px-3.5 py-3 dark:border-white/10 dark:bg-white/[0.03]">
+          <div className="w-full space-y-3 rounded-2xl rounded-tl-sm border border-slate-200/70 bg-white/70 px-3.5 py-3 dark:border-white/10 dark:bg-white/[0.05]">
             {r && (
               <>
                 <p className="text-sm font-semibold text-slate-900 dark:text-white">{r.title}</p>
@@ -367,7 +367,7 @@ function ThinkingBubble() {
       <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-rsg-navy to-sky-500 text-white dark:from-rsg-gold dark:to-amber-500">
         <Bot className="h-4 w-4" />
       </div>
-      <div className="flex items-center gap-1 rounded-2xl rounded-tl-sm border border-slate-200/70 bg-white/70 px-4 py-3 dark:border-white/10 dark:bg-white/[0.03]">
+      <div className="flex items-center gap-1 rounded-2xl rounded-tl-sm border border-slate-200/70 bg-white/70 px-4 py-3 dark:border-white/10 dark:bg-white/[0.05]">
         {[0, 1, 2].map((i) => (
           <motion.span
             key={i}

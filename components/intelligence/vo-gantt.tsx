@@ -115,7 +115,7 @@ export function VoGantt() {
               <span className="w-[80px] shrink-0 truncate text-right font-mono text-[10px] text-slate-400 group-hover:text-slate-600 dark:group-hover:text-zinc-200">
                 {d.v.voNumber ?? `#${d.v.sno}`}
               </span>
-              <div className="relative h-[18px] flex-1 rounded bg-slate-100/60 dark:bg-white/[0.03]">
+              <div className="relative h-[18px] flex-1 rounded bg-slate-100/60 dark:bg-white/[0.05]">
                 <motion.div
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}

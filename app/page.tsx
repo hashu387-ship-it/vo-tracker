@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
+import { useUser, useClerk } from '@clerk/nextjs';
 
 // Animated counter component
 function AnimatedCounter({ value, suffix = '', prefix = '' }: { value: number; suffix?: string; prefix?: string }) {
@@ -127,6 +128,8 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  const { isSignedIn, isLoaded } = useUser();
+  const { openSignIn } = useClerk();
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll();
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
@@ -135,6 +138,16 @@ export default function LandingPage() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Show the sign-in popup automatically on first entry (signed-out visitors).
+  useEffect(() => {
+    if (isLoaded && !isSignedIn && typeof window !== 'undefined') {
+      if (!sessionStorage.getItem('signin-prompted')) {
+        sessionStorage.setItem('signin-prompted', '1');
+        openSignIn({ forceRedirectUrl: '/intelligence' });
+      }
+    }
+  }, [isLoaded, isSignedIn, openSignIn]);
 
   const features = [
     {
@@ -198,7 +211,7 @@ export default function LandingPage() {
 
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center gap-2">
-                <Link href="/dashboard">
+                <Link href="/intelligence">
                   <Button variant="ghost" className="text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white">
                     Dashboard
                   </Button>
@@ -237,7 +250,7 @@ export default function LandingPage() {
                   </Button>
                 </Link>
 
-                <Link href="/dashboard">
+                <Link href="/intelligence">
                   <Button className="bg-gradient-to-r from-rsg-navy to-rsg-blue hover:from-rsg-blue hover:to-rsg-navy text-white shadow-lg shadow-rsg-navy/25 rounded-xl px-6 transition-all duration-300 hover:scale-105 hover:shadow-xl">
                     <span className="hidden sm:inline">Open Register</span>
                     <span className="sm:hidden">Enter</span>
@@ -266,7 +279,7 @@ export default function LandingPage() {
                 className="md:hidden pt-4 pb-2 border-t border-slate-200/50 dark:border-zinc-800/50 mt-4"
               >
                 <div className="flex flex-col gap-2">
-                  <Link href="/dashboard">
+                  <Link href="/intelligence">
                     <Button variant="ghost" className="w-full justify-start">Dashboard</Button>
                   </Link>
                   <Link href="/vos">
@@ -363,7 +376,7 @@ export default function LandingPage() {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
           >
-            <Link href="/dashboard">
+            <Link href="/intelligence">
               <Button size="lg" className="h-14 px-8 text-lg bg-white text-rsg-navy hover:bg-white/90 rounded-xl font-semibold shadow-2xl shadow-black/20 transition-all duration-300 hover:scale-105 group">
                 <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                 Open Dashboard
@@ -501,7 +514,7 @@ export default function LandingPage() {
               Access the complete variation order management system and streamline your construction workflow
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/dashboard">
+              <Link href="/intelligence">
                 <Button size="lg" className="h-14 px-10 text-lg bg-white text-rsg-navy hover:bg-white/90 rounded-xl font-semibold shadow-2xl transition-all duration-300 hover:scale-105">
                   Access Dashboard
                   <ArrowRight className="ml-2 h-5 w-5" />
