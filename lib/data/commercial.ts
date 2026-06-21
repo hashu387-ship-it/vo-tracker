@@ -188,6 +188,48 @@ export function voStatusBreakdown(records: VORecord[] = variationOrders): VOStat
   return VO_STATUS_ORDER.map((k) => map.get(k)!).filter((a) => a.count > 0);
 }
 
+/** Live VO status summary incl. totals (matches the "Submitted VO" sheet). */
+export function voSummary(records: VORecord[] = variationOrders) {
+  const rows = voStatusBreakdown(records);
+  const totalCount = rows.reduce((n, r) => n + r.count, 0);
+  const totalValue = rows.reduce((n, r) => n + r.value, 0);
+  return { rows, totalCount, totalValue };
+}
+
+/** Live IPA summary (matches the "Summary of IPA's" sheet) — values + ratios. */
+export function ipaSummary() {
+  const s = commercialSummary;
+  const base = s.revisedContract || 1;
+  return {
+    statuses: [
+      { label: 'Under Review', value: s.underReview, pct: s.underReview / base, hex: '#c4694e' },
+      { label: 'Submitted on ACONEX', value: s.submittedAconex, pct: s.submittedAconex / base, hex: '#b08d57' },
+      { label: 'Approved via Aconex', value: s.approvedAconex, pct: s.approvedAconex / base, hex: '#5aa6b0' },
+      { label: 'Received', value: s.received, pct: s.received / base, hex: '#1f4e5f' },
+    ],
+    originalContract: s.originalContract,
+    revisedContract: s.revisedContract,
+    totalWorkDone: { value: s.totalClaimedGross, pct: s.totalClaimedGross / base },
+    balanceWorkDone: { value: s.balanceGross, pct: s.balanceGross / base },
+    advance: {
+      total: s.totalAdvance,
+      totalPct: s.advancePct,
+      deducted: s.advanceDeducted,
+      deductedPct: s.totalAdvance ? s.advanceDeducted / s.totalAdvance : 0,
+      balance: s.advanceBalance,
+      balancePct: s.totalAdvance ? s.advanceBalance / s.totalAdvance : 0,
+    },
+    retention: {
+      total: s.totalRetention,
+      totalPct: s.retentionPct,
+      deducted: s.retentionDeducted,
+      deductedPct: s.totalRetention ? s.retentionDeducted / s.totalRetention : 0,
+      balance: s.retentionBalance,
+      balancePct: s.totalRetention ? s.retentionBalance / s.totalRetention : 0,
+    },
+  };
+}
+
 export interface CashflowPoint {
   no: string;
   label: string;

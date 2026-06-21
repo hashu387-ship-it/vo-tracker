@@ -3,6 +3,90 @@
 import ExcelJS from "exceljs";
 import { PaymentApplication } from "@prisma/client";
 import { format } from "date-fns";
+import { ipaSummary, voSummary, commercialSummary } from "@/lib/data/commercial";
+
+const RSG_NAVY = "002D56";
+const SAR_FMT = '#,##0.00 "SAR"';
+
+/** Adds a live "IPA Summary" sheet (status + advance recovery + retention). */
+function addIpaSummarySheet(workbook: ExcelJS.Workbook) {
+  const d = ipaSummary();
+  const ws = workbook.addWorksheet("IPA Summary");
+  ws.columns = [{ width: 34 }, { width: 22 }, { width: 12 }];
+
+  const title = (text: string) => {
+    const r = ws.addRow([text]);
+    ws.mergeCells(`A${r.number}:C${r.number}`);
+    r.getCell(1).font = { name: "Arial", size: 12, bold: true, color: { argb: "FFFFFF" } };
+    r.getCell(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: RSG_NAVY } };
+    r.getCell(1).alignment = { horizontal: "center", vertical: "middle" };
+    r.height = 24;
+  };
+  const money = (label: string, value: number, pct?: number, bold = false) => {
+    const r = ws.addRow([label, value, pct ?? null]);
+    r.getCell(1).font = { name: "Arial", size: 10, bold };
+    r.getCell(2).numFmt = SAR_FMT;
+    r.getCell(2).font = { name: "Arial", size: 10, bold };
+    r.getCell(2).alignment = { horizontal: "right" };
+    if (pct != null) {
+      r.getCell(3).numFmt = "0.00%";
+      r.getCell(3).alignment = { horizontal: "right" };
+    }
+    r.height = 18;
+  };
+
+  title("SUMMARY OF IPA'S (without VAT)");
+  money("Original Contract Value", d.originalContract);
+  money("Revised Contract Value", d.revisedContract);
+  ws.addRow([]);
+  d.statuses.forEach((s) => money(s.label, s.value, s.pct));
+  money("Total Work Done", d.totalWorkDone.value, d.totalWorkDone.pct, true);
+  money("Balance Work Done", d.balanceWorkDone.value, d.balanceWorkDone.pct, true);
+  ws.addRow([]);
+  title("SUMMARY OF ADVANCE PAYMENT RECOVERY");
+  money("Advance Payment", d.advance.total, d.advance.totalPct);
+  money("Deducted till Date", d.advance.deducted, d.advance.deductedPct);
+  money("Balance", d.advance.balance, d.advance.balancePct);
+  ws.addRow([]);
+  title("SUMMARY OF RETENTION");
+  money("Total Retention", d.retention.total, d.retention.totalPct);
+  money("Deducted till Date", d.retention.deducted, d.retention.deductedPct);
+  money("Balance", d.retention.balance, d.retention.balancePct);
+}
+
+/** Adds a live "VO Status Summary" sheet (counts + values + total). */
+function addVoStatusSheet(workbook: ExcelJS.Workbook) {
+  const { rows, totalCount, totalValue } = voSummary();
+  const ws = workbook.addWorksheet("VO Status Summary");
+  ws.columns = [{ width: 34 }, { width: 12 }, { width: 22 }];
+
+  const header = ws.addRow(["Status", "Count", "Value (SAR)"]);
+  header.eachCell((c) => {
+    c.font = { name: "Arial", size: 11, bold: true, color: { argb: "FFFFFF" } };
+    c.fill = { type: "pattern", pattern: "solid", fgColor: { argb: RSG_NAVY } };
+    c.alignment = { horizontal: "center", vertical: "middle" };
+  });
+  header.height = 22;
+
+  rows.forEach((r) => {
+    const row = ws.addRow([r.config.label, r.count, r.value]);
+    row.getCell(1).font = { name: "Arial", size: 10, bold: true };
+    row.getCell(2).alignment = { horizontal: "center" };
+    row.getCell(3).numFmt = SAR_FMT;
+    row.getCell(3).alignment = { horizontal: "right" };
+    row.height = 18;
+  });
+
+  const total = ws.addRow(["Total Submitted VO", totalCount, totalValue]);
+  total.eachCell((c) => {
+    c.font = { name: "Arial", size: 11, bold: true, color: { argb: "FFFFFF" } };
+    c.fill = { type: "pattern", pattern: "solid", fgColor: { argb: RSG_NAVY } };
+  });
+  total.getCell(2).alignment = { horizontal: "center" };
+  total.getCell(3).numFmt = SAR_FMT;
+  total.getCell(3).alignment = { horizontal: "right" };
+  total.height = 22;
+}
 
 interface ExportOptions {
     filename?: string;
@@ -311,6 +395,9 @@ export async function exportPaymentsToExcel(
         row.height = 22;
     });
 
+    // Live IPA summary sheet (status + advance recovery + retention)
+    addIpaSummarySheet(workbook);
+
     // Generate buffer and trigger download
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], {
@@ -446,6 +533,9 @@ export async function exportVOsToExcel(
 
         row.height = 22;
     });
+
+    // Live VO status summary sheet
+    addVoStatusSheet(workbook);
 
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], {

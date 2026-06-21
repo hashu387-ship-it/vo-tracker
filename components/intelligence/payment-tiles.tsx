@@ -27,6 +27,7 @@ import { exportPaymentsToExcel } from '@/lib/excel-export';
 import { CountUp } from '@/components/ui/count-up';
 import { SpotlightCard } from '@/components/ui/spotlight-card';
 import { SCurveChart, PaymentNetBars } from '@/components/intelligence/charts';
+import { IpaSummary } from '@/components/intelligence/summaries';
 import { cn } from '@/lib/utils';
 
 const STATE_ORDER = ['received', 'approved', 'submitted', 'review', 'draft'] as const;
@@ -149,6 +150,9 @@ export function PaymentTiles() {
           {exporting ? 'Exporting…' : done ? 'Downloaded' : 'Export Excel'}
         </button>
       </div>
+
+      {/* Live IPA summary (status + advance recovery + retention) */}
+      <IpaSummary />
 
       {/* Info cards */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
