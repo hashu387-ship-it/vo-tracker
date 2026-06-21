@@ -68,7 +68,25 @@ export function RsgLanding() {
         .rsg .btn-glass{transition:background .2s}.rsg .btn-glass:hover{background:rgba(255,255,255,.72)}
         .rsg .tile{transition:transform .35s,box-shadow .35s}.rsg .tile:hover{transform:translateY(-6px)}
         .rsg input::placeholder{color:rgba(45,38,28,.45)}
-        @media(max-width:900px){.rsg .grid4{grid-template-columns:repeat(2,1fr)!important}.rsg .grid2{grid-template-columns:1fr!important}.rsg .grid3{grid-template-columns:1fr!important}.rsg .navlinks{display:none!important}}
+        @media(max-width:900px){
+          .rsg .grid4{grid-template-columns:repeat(2,1fr)!important}
+          .rsg .grid2{grid-template-columns:1fr!important;gap:32px!important}
+          .rsg .grid3{grid-template-columns:1fr!important}
+          .rsg .navlinks{display:none!important}
+          .rsg .panel-pad{padding:36px 26px!important}
+          .rsg .foot-pad{padding:40px 26px 28px!important}
+        }
+        @media(max-width:560px){
+          .rsg .grid4{grid-template-columns:1fr 1fr!important}
+          .rsg .hdr{gap:10px!important;padding:0 12px 0 16px!important}
+          .rsg .hide-sm{display:none!important}
+          .rsg .hero-pad{padding:70px 20px 48px!important}
+          .rsg .panel-pad{padding:28px 20px!important}
+          .rsg .foot-pad{padding:34px 22px 24px!important}
+          .rsg .foot-grid{grid-template-columns:1fr 1fr!important;gap:24px!important}
+          .rsg .logo-rsg{height:24px!important}
+          .rsg .logo-ffc{height:20px!important}
+        }
       `}</style>
 
       {/* Atmospheric backdrop blobs */}
@@ -81,13 +99,13 @@ export function RsgLanding() {
       <div className="rsg" style={{ position: 'relative', zIndex: 2 }}>
         {/* HEADER */}
         <header style={{ position: 'sticky', top: 18, zIndex: 50, padding: '0 24px' }}>
-          <div style={{ maxWidth: 1320, margin: '0 auto', height: 66, padding: '0 16px 0 26px', display: 'flex', alignItems: 'center', gap: 30, borderRadius: 999, ...glass, boxShadow: '0 12px 40px rgba(74,48,30,.14), inset 0 1px 0 rgba(255,255,255,.85)' }}>
+          <div className="hdr" style={{ maxWidth: 1320, margin: '0 auto', height: 66, padding: '0 16px 0 26px', display: 'flex', alignItems: 'center', gap: 30, borderRadius: 999, ...glass, boxShadow: '0 12px 40px rgba(74,48,30,.14), inset 0 1px 0 rgba(255,255,255,.85)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/rsg-logo.png" alt="Red Sea Global" style={{ height: 30, width: 'auto' }} />
+              <img className="logo-rsg" src="/rsg-logo.png" alt="Red Sea Global" style={{ height: 30, width: 'auto' }} />
               <span style={{ width: 1, height: 22, background: 'rgba(34,28,20,.2)' }} />
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/firstfix-v2.png" alt="FirstFix" style={{ height: 24, width: 'auto' }} />
+              <img className="logo-ffc" src="/firstfix-v2.png" alt="FirstFix" style={{ height: 24, width: 'auto' }} />
             </div>
             <nav className="navlinks" style={{ marginLeft: 14, display: 'flex', gap: 26, font: `500 13.5px ${SANS}`, color: 'rgba(45,38,28,.72)' }}>
               <Link className="lnk" href="/intelligence">Dashboard</Link>
@@ -96,14 +114,14 @@ export function RsgLanding() {
               <Link className="lnk" href="/intelligence">Analytics</Link>
             </nav>
             <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 16 }}>
-              <button onClick={signIn} className="lnk" style={{ font: `600 13px ${SANS}`, color: 'rgba(45,38,28,.8)', background: 'none', border: 'none', cursor: 'pointer' }}>Sign In</button>
+              <button onClick={signIn} className="lnk hide-sm" style={{ font: `600 13px ${SANS}`, color: 'rgba(45,38,28,.8)', background: 'none', border: 'none', cursor: 'pointer' }}>Sign In</button>
               <Link href="/intelligence" className="btn-dark" style={{ font: `600 13px ${SANS}`, letterSpacing: 0.3, color: '#fff', background: '#221c14', padding: '11px 24px', borderRadius: 999, boxShadow: '0 4px 16px rgba(34,28,20,.25), inset 0 1px 0 rgba(255,255,255,.18)' }}>Open Register</Link>
             </div>
           </div>
         </header>
 
         {/* HERO */}
-        <section style={{ position: 'relative', minHeight: '90vh', display: 'flex', alignItems: 'center', padding: '90px 24px 60px' }}>
+        <section className="hero-pad" style={{ position: 'relative', minHeight: '90vh', display: 'flex', alignItems: 'center', padding: '90px 24px 60px' }}>
           {/* hero background image (Red Sea) with cream scrim for legibility */}
           <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -142,7 +160,7 @@ export function RsgLanding() {
 
         {/* READY / NEWSLETTER */}
         <section style={{ padding: '60px 24px 30px' }}>
-          <div className="grid2" style={{ maxWidth: 1320, margin: '0 auto', padding: '64px 56px', borderRadius: 30, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 70, alignItems: 'center', ...glass, boxShadow: '0 20px 60px rgba(74,48,30,.14), inset 0 1px 0 rgba(255,255,255,.85)' }}>
+          <div className="grid2 panel-pad" style={{ maxWidth: 1320, margin: '0 auto', padding: '64px 56px', borderRadius: 30, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 70, alignItems: 'center', ...glass, boxShadow: '0 20px 60px rgba(74,48,30,.14), inset 0 1px 0 rgba(255,255,255,.85)' }}>
             <div>
               <h2 style={{ font: `300 clamp(28px,3.4vw,42px) ${SERIF}`, margin: '0 0 16px', color: '#221c14', lineHeight: 1.1 }}>Ready to access the register?</h2>
               <p style={{ margin: '0 0 26px', font: `400 16px/1.7 ${SANS}`, color: 'rgba(45,38,28,.66)', maxWidth: '44ch' }}>Streamline the complete variation order and payment workflow for R06‑HW2 SW Hotel 02.</p>
@@ -203,16 +221,22 @@ export function RsgLanding() {
             <p style={{ margin: '0 0 48px', font: `400 16px/1.7 ${SANS}`, color: 'rgba(45,38,28,.6)', maxWidth: '58ch' }}>From the first instruction to final certification — every variation, claim and payment captured in one auditable register.</p>
             <div className="grid4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 18 }}>
               {[
-                { n: '01', t: 'Capture', d: 'Log variation orders with scope, rate and reference in seconds.', g: 'linear-gradient(150deg,#4aa89f,#0f5a54)', s: 'rgba(15,90,84,.4)' },
-                { n: '02', t: 'Track', d: 'Real-time status across submission, review and certification.', g: 'linear-gradient(150deg,#e3c486,#bb9056)', s: 'rgba(187,144,86,.4)' },
-                { n: '03', t: 'Certify', d: 'Lock certified value with a clean, auditable approval trail.', g: 'linear-gradient(150deg,#7fa9b8,#3a6172)', s: 'rgba(58,97,114,.4)' },
-                { n: '04', t: 'Report', d: 'Board-ready KPIs and live financial insight on demand.', g: 'linear-gradient(150deg,#d3744f,#b0512f)', s: 'rgba(176,81,47,.4)' },
+                { n: '01', t: 'Capture', d: 'Log variation orders with scope, rate and reference in seconds.', g: 'linear-gradient(150deg,#4aa89f,#0f5a54)', s: 'rgba(15,90,84,.4)', img: '/hero/step-capture.jpg' },
+                { n: '02', t: 'Track', d: 'Real-time status across submission, review and certification.', g: 'linear-gradient(150deg,#e3c486,#bb9056)', s: 'rgba(187,144,86,.4)', img: '/hero/step-track.jpg' },
+                { n: '03', t: 'Certify', d: 'Lock certified value with a clean, auditable approval trail.', g: 'linear-gradient(150deg,#7fa9b8,#3a6172)', s: 'rgba(58,97,114,.4)', img: '/hero/step-certify.jpg' },
+                { n: '04', t: 'Report', d: 'Board-ready KPIs and live financial insight on demand.', g: 'linear-gradient(150deg,#d3744f,#b0512f)', s: 'rgba(176,81,47,.4)', img: '/hero/step-report.jpg' },
               ].map((step) => (
-                <div key={step.n} className="tile" style={{ position: 'relative', padding: '30px 26px 34px', borderRadius: 24, overflow: 'hidden', ...statGlass, boxShadow: '0 12px 40px rgba(74,48,30,.12), inset 0 1px 0 rgba(255,255,255,.8)' }}>
-                  <div style={{ width: 54, height: 54, borderRadius: 16, background: step.g, boxShadow: `0 6px 18px ${step.s}, inset 0 1px 0 rgba(255,255,255,.5)`, marginBottom: 22 }} />
-                  <div style={{ font: `300 24px ${SERIF}`, color: 'rgba(45,38,28,.4)' }}>{step.n}</div>
-                  <div style={{ font: `500 19px ${SERIF}`, margin: '6px 0 10px', color: '#221c14' }}>{step.t}</div>
-                  <p style={{ margin: 0, font: `400 13.5px/1.6 ${SANS}`, color: 'rgba(45,38,28,.62)' }}>{step.d}</p>
+                <div key={step.n} className="tile" style={{ position: 'relative', padding: '0 0 30px', borderRadius: 24, overflow: 'hidden', ...statGlass, boxShadow: '0 12px 40px rgba(74,48,30,.12), inset 0 1px 0 rgba(255,255,255,.8)' }}>
+                  <div style={{ position: 'relative', height: 120, overflow: 'hidden' }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={step.img} alt={step.t} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <div style={{ position: 'absolute', inset: 0, background: step.g, opacity: 0.62, mixBlendMode: 'multiply' }} />
+                    <div style={{ position: 'absolute', left: 24, bottom: 8, font: `300 30px ${SERIF}`, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,.4)' }}>{step.n}</div>
+                  </div>
+                  <div style={{ padding: '16px 26px 0' }}>
+                    <div style={{ font: `500 19px ${SERIF}`, margin: '0 0 10px', color: '#221c14' }}>{step.t}</div>
+                    <p style={{ margin: 0, font: `400 13.5px/1.6 ${SANS}`, color: 'rgba(45,38,28,.62)' }}>{step.d}</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -256,7 +280,7 @@ export function RsgLanding() {
 
         {/* FOOTER */}
         <footer style={{ padding: '0 24px 30px' }}>
-          <div style={{ maxWidth: 1320, margin: '0 auto', padding: '60px 56px 36px', borderRadius: 30, background: 'linear-gradient(150deg,rgba(40,30,20,.82),rgba(22,16,10,.88))', backdropFilter: 'blur(24px) saturate(150%)', WebkitBackdropFilter: 'blur(24px) saturate(150%)', border: '1px solid rgba(255,255,255,.12)', boxShadow: '0 20px 60px rgba(34,24,14,.3), inset 0 1px 0 rgba(255,255,255,.16)' }}>
+          <div className="foot-pad" style={{ maxWidth: 1320, margin: '0 auto', padding: '60px 56px 36px', borderRadius: 30, background: 'linear-gradient(150deg,rgba(40,30,20,.82),rgba(22,16,10,.88))', backdropFilter: 'blur(24px) saturate(150%)', WebkitBackdropFilter: 'blur(24px) saturate(150%)', border: '1px solid rgba(255,255,255,.12)', boxShadow: '0 20px 60px rgba(34,24,14,.3), inset 0 1px 0 rgba(255,255,255,.16)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap', paddingBottom: 40, borderBottom: '1px solid rgba(255,255,255,.12)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -269,7 +293,7 @@ export function RsgLanding() {
                 <span>in</span><span>▶</span><span>◎</span><span>𝕏</span><span>f</span>
               </div>
             </div>
-            <div className="grid4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 40, padding: '44px 0' }}>
+            <div className="grid4 foot-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 40, padding: '44px 0' }}>
               {[
                 { h: 'The System', items: [['Dashboard', '/intelligence'], ['VO Register', '/vos'], ['Payments', '/payments']] },
                 { h: 'Analytics', items: [['Dashboards', '/intelligence'], ['Forecasting', '/intelligence'], ['Reports', '/intelligence']] },
