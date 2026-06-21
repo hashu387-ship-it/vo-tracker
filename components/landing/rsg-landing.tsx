@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { useUser, useClerk } from '@clerk/nextjs';
+import { commercialSummary, variationOrders, ipaPayments } from '@/lib/data/commercial';
 
 /**
  * VO Tracker — RSG Redesign landing/cover page.
@@ -29,6 +30,14 @@ const statGlass = {
   border: '1px solid rgba(255,255,255,.65)',
   boxShadow: '0 10px 36px rgba(74,48,30,.12), inset 0 1px 0 rgba(255,255,255,.8)',
 } as const;
+
+/* Live headline figures sourced from the commercial register (lib/data). */
+const fM = (n: number) => `SAR ${(n / 1_000_000).toFixed(1)}M`;
+const STAT_CONTRACT = fM(commercialSummary.revisedContract); // SAR 232.7M
+const STAT_VO_COUNT = String(variationOrders.length); // 76
+const STAT_IPA_COUNT = String(ipaPayments.length); // 30
+const STAT_WORK_DONE = `${Math.round(commercialSummary.workDonePct * 100)}%`; // 95%
+const STAT_RECEIVED = fM(commercialSummary.received); // SAR 214.7M
 
 export function RsgLanding() {
   const { isLoaded, isSignedIn } = useUser();
@@ -144,10 +153,10 @@ export function RsgLanding() {
             {/* stat strip */}
             <div className="grid4" style={{ marginTop: 64, display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16 }}>
               {[
-                { v: 'SAR 232M', l: 'Contract Value', c: '#0f5a54' },
-                { v: '150+', l: 'Variation Orders', c: '#0f5a54' },
-                { v: '300+', l: 'Payment Applications', c: '#0f5a54' },
-                { v: '99%', l: 'Accuracy Rate', c: '#b0512f' },
+                { v: STAT_CONTRACT, l: 'Contract Value', c: '#0f5a54' },
+                { v: STAT_VO_COUNT, l: 'Variation Orders', c: '#0f5a54' },
+                { v: STAT_IPA_COUNT, l: 'Payment Applications', c: '#0f5a54' },
+                { v: STAT_WORK_DONE, l: 'Work Completed', c: '#b0512f' },
               ].map((s) => (
                 <div key={s.l} style={{ padding: 26, borderRadius: 22, ...statGlass }}>
                   <div style={{ font: `300 40px ${SERIF}`, color: s.c }}>{s.v}</div>
@@ -192,9 +201,9 @@ export function RsgLanding() {
             <p style={{ margin: '0 0 44px', font: `400 16px/1.7 ${SANS}`, color: 'rgba(45,38,28,.6)', maxWidth: '64ch' }}>The latest variations, certifications and payment milestones recorded across the HW2 MEP scope.</p>
             <div className="grid3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 18 }}>
               {[
-                { tag: 'Variation Order', title: 'VO‑148 approved for MEP rework at SW Hotel 02 podium level', grad: 'linear-gradient(150deg,#3f9d93,#0f5a54 65%,#0a3b37)', img: '/hero/redsea-2.jpg' },
-                { tag: 'Payment', title: 'IPC‑22 certified — cumulative value passes SAR 180M milestone', grad: 'linear-gradient(150deg,#5d8595,#2e4a58 65%,#1d3140)', img: '/hero/redsea-3.jpg' },
-                { tag: 'Forecast', title: 'Q3 final-account projection updated with 99% calculation accuracy', grad: 'linear-gradient(150deg,#d3744f,#b0512f 65%,#7c3a22)', img: '/hero/redsea-4.jpg' },
+                { tag: 'Variation Order', title: `${STAT_VO_COUNT} variation orders now logged across the HW2 MEP scope`, grad: 'linear-gradient(150deg,#3f9d93,#0f5a54 65%,#0a3b37)', img: '/hero/redsea-2.jpg' },
+                { tag: 'Payment', title: `Cumulative certifications pass ${STAT_RECEIVED} received across ${STAT_IPA_COUNT} IPAs`, grad: 'linear-gradient(150deg,#5d8595,#2e4a58 65%,#1d3140)', img: '/hero/redsea-3.jpg' },
+                { tag: 'Forecast', title: `Final-account projection updated — ${STAT_WORK_DONE} of works now certified`, grad: 'linear-gradient(150deg,#d3744f,#b0512f 65%,#7c3a22)', img: '/hero/redsea-4.jpg' },
               ].map((c) => (
                 <Link key={c.title} href="/intelligence" className="tile" style={{ display: 'block', paddingBottom: 26, borderRadius: 24, overflow: 'hidden', ...statGlass, boxShadow: '0 12px 40px rgba(74,48,30,.12), inset 0 1px 0 rgba(255,255,255,.8)' }}>
                   <div style={{ height: 200, position: 'relative', overflow: 'hidden' }}>
@@ -255,8 +264,8 @@ export function RsgLanding() {
             </div>
             <div className="grid2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
               {[
-                { n: 'Module 01', t: 'Variation Orders', d: 'Complete VO lifecycle management with real-time tracking. 150+ VOs tracked across the project.', g: 'linear-gradient(150deg,#3f9d93,#0f5a54)', s: 'rgba(15,90,84,.28)', href: '/vos', img: '/hero/module-vo.jpg' },
-                { n: 'Module 02', t: 'Payment Register', d: 'Advanced payment tracking with automated calculations against SAR 232M contract value.', g: 'linear-gradient(150deg,#cf8a52,#9c5a2f)', s: 'rgba(156,90,47,.28)', href: '/payments', img: '/hero/module-pay.jpg' },
+                { n: 'Module 01', t: 'Variation Orders', d: `Complete VO lifecycle management with real-time tracking. ${STAT_VO_COUNT} VOs tracked across the project.`, g: 'linear-gradient(150deg,#3f9d93,#0f5a54)', s: 'rgba(15,90,84,.28)', href: '/vos', img: '/hero/module-vo.jpg' },
+                { n: 'Module 02', t: 'Payment Register', d: `Advanced payment tracking with automated calculations against the ${STAT_CONTRACT} contract value.`, g: 'linear-gradient(150deg,#cf8a52,#9c5a2f)', s: 'rgba(156,90,47,.28)', href: '/payments', img: '/hero/module-pay.jpg' },
                 { n: 'Module 03', t: 'Analytics', d: 'Interactive charts and real-time financial insight with 24/7 live updates.', g: 'linear-gradient(150deg,#5d8595,#2e4a58)', s: 'rgba(46,74,88,.28)', href: '/intelligence', img: '/hero/module-analytics.jpg' },
                 { n: 'Module 04', t: 'Forecasting', d: 'AI-assisted projections and final-account modelling to keep the project on track.', g: 'linear-gradient(150deg,#d8b06a,#a87a3c)', s: 'rgba(168,122,60,.28)', href: '/intelligence', img: '/hero/module-forecast.jpg' },
               ].map((m) => (
