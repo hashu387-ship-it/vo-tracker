@@ -9,7 +9,6 @@ import { MagneticButton } from '@/components/ui/magnetic-button';
 import { TiltCard } from '@/components/ui/tilt-card';
 import { KpiCard, ProgressRing, InsightsPanel, VoTimeline } from '@/components/intelligence/widgets';
 import { CashflowForecastChart, SCurveChart, VoStatusDonut } from '@/components/intelligence/charts';
-import { VoGantt } from '@/components/intelligence/vo-gantt';
 import { PaymentTiles } from '@/components/intelligence/payment-tiles';
 import {
   commercialSummary,
@@ -172,18 +171,7 @@ export default function IntelligencePage() {
           <VoTimeline />
         </Panel>
 
-        {/* VO lifecycle Gantt — full width */}
-        <Panel
-          className="lg:col-span-3"
-          icon={LineChart}
-          title="VO Lifecycle Timeline"
-          subtitle="Every variation order from logged → submitted · filter by status"
-          delay={0.36}
-        >
-          <VoGantt />
-        </Panel>
-
-        {/* Full payment register — all tiles, all details, Excel export */}
+        {/* Full payment register — cards, graphs, all tiles, Excel export */}
         <PaymentTiles />
       </div>
 

@@ -241,7 +241,7 @@ export function Header() {
                   }}
                 />
               ) : (
-                <SignInButton mode="modal">
+                <SignInButton mode="modal" forceRedirectUrl="/intelligence">
                   <Button
                     variant="outline"
                     size="sm"
@@ -373,7 +373,7 @@ export function Header() {
                       )}
 
                       {/* Sign In Button */}
-                      <SignInButton mode="modal">
+                      <SignInButton mode="modal" forceRedirectUrl="/intelligence">
                         <Button
                           onClick={() => setMobileMenuOpen(false)}
                           className="w-full justify-center gap-2 h-11 rounded-xl bg-gradient-to-r from-rsg-navy to-rsg-blue text-white"
