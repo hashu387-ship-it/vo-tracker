@@ -33,8 +33,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UserButton, useUser, SignInButton } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 import { useGuestMode } from "@/components/providers/guest-mode-provider";
+import { useAuthDialog } from "@/components/auth/auth-dialog";
 
 const navigation = [
   { name: "Command Center", href: "/intelligence", icon: Gauge },
@@ -51,6 +52,7 @@ export function Header() {
   const { user, isLoaded, isSignedIn } = useUser();
   const { isGuest, isEditAuthorized, requestEditAccess } = useGuestMode();
   const { togglePalette, toggleAssistant } = useWorkspace();
+  const { openAuth } = useAuthDialog();
 
   useEffect(() => {
     setMounted(true);
@@ -241,16 +243,15 @@ export function Header() {
                   }}
                 />
               ) : (
-                <SignInButton mode="modal" forceRedirectUrl="/intelligence">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-9 px-3 rounded-xl border-slate-200 dark:border-zinc-700 hover:border-rsg-gold/50 hover:bg-rsg-gold/5"
-                  >
-                    <LogIn className="w-4 h-4 mr-2" />
-                    Sign In
-                  </Button>
-                </SignInButton>
+                <Button
+                  onClick={openAuth}
+                  variant="outline"
+                  size="sm"
+                  className="h-9 px-3 rounded-xl border-slate-200 dark:border-zinc-700 hover:border-rsg-gold/50 hover:bg-rsg-gold/5"
+                >
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Sign In
+                </Button>
               )}
             </div>
 
@@ -373,15 +374,16 @@ export function Header() {
                       )}
 
                       {/* Sign In Button */}
-                      <SignInButton mode="modal" forceRedirectUrl="/intelligence">
-                        <Button
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="w-full justify-center gap-2 h-11 rounded-xl bg-gradient-to-r from-rsg-navy to-rsg-blue text-white"
-                        >
-                          <LogIn className="w-4 h-4" />
-                          Sign In
-                        </Button>
-                      </SignInButton>
+                      <Button
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          openAuth();
+                        }}
+                        className="w-full justify-center gap-2 h-11 rounded-xl bg-gradient-to-r from-rsg-navy to-rsg-blue text-white"
+                      >
+                        <LogIn className="w-4 h-4" />
+                        Sign In
+                      </Button>
                     </div>
                   )}
                 </div>

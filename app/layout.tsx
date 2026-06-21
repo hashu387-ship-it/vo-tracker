@@ -4,6 +4,7 @@ import { DM_Sans, Newsreader, Hanken_Grotesk } from 'next/font/google';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { QueryProvider } from '@/components/providers/query-provider';
 import { GuestModeProvider } from '@/components/providers/guest-mode-provider';
+import { AuthDialogProvider } from '@/components/auth/auth-dialog';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { PasswordDialog } from '@/components/ui/password-dialog';
@@ -69,14 +70,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           >
             <QueryProvider>
               <GuestModeProvider>
-                <TooltipProvider>
-                  <div className="flex-1 flex flex-col">
-                    {children}
-                  </div>
-                  <Footer />
-                  <Toaster />
-                  <PasswordDialog />
-                </TooltipProvider>
+                <AuthDialogProvider>
+                  <TooltipProvider>
+                    <div className="flex-1 flex flex-col">
+                      {children}
+                    </div>
+                    <Footer />
+                    <Toaster />
+                    <PasswordDialog />
+                  </TooltipProvider>
+                </AuthDialogProvider>
               </GuestModeProvider>
             </QueryProvider>
           </ThemeProvider>
