@@ -1,6 +1,6 @@
 import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata, Viewport } from 'next';
-import { DM_Sans } from 'next/font/google';
+import { DM_Sans, Newsreader, Hanken_Grotesk } from 'next/font/google';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { QueryProvider } from '@/components/providers/query-provider';
 import { GuestModeProvider } from '@/components/providers/guest-mode-provider';
@@ -12,6 +12,8 @@ import { Footer } from '@/components/layout/footer';
 import './globals.css';
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
+const newsreader = Newsreader({ subsets: ['latin'], weight: ['300', '400', '500'], variable: '--font-newsreader' });
+const hanken = Hanken_Grotesk({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-hanken' });
 
 export const metadata: Metadata = {
   title: {
@@ -57,7 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       signUpForceRedirectUrl="/intelligence"
     >
       <html lang="en" suppressHydrationWarning>
-        <body className={`${dmSans.className} min-h-screen font-sans antialiased flex flex-col`}>
+        <body className={`${dmSans.className} ${newsreader.variable} ${hanken.variable} min-h-screen font-sans antialiased flex flex-col`}>
           <LiquidBackground />
           <ThemeProvider
             attribute="class"
