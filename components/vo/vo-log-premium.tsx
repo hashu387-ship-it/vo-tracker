@@ -32,6 +32,7 @@ import {
 } from '@/lib/data/commercial';
 import { CountUp } from '@/components/ui/count-up';
 import { SpotlightCard } from '@/components/ui/spotlight-card';
+import { VoStatusSummary } from '@/components/intelligence/summaries';
 import { useWorkspace } from '@/components/providers/workspace-provider';
 import { cn } from '@/lib/utils';
 
@@ -141,6 +142,9 @@ export function VOLogPremium() {
           </motion.div>
         ))}
       </div>
+
+      {/* Live status summary */}
+      <VoStatusSummary />
 
       {/* Controls */}
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
