@@ -112,7 +112,7 @@ export function VOLogPremium() {
       <motion.div
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-br from-rsg-navy via-rsg-blue to-emerald-950 p-6 text-white shadow-2xl sm:p-7 dark:from-zinc-900 dark:via-zinc-900 dark:to-black"
+        className="relative overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-br from-rsg-navy via-rsg-blue to-stone-900 p-6 text-white shadow-2xl sm:p-7 dark:from-zinc-900 dark:via-zinc-900 dark:to-black"
       >
         <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-rsg-gold/20 blur-3xl" />
         <div className="relative flex flex-wrap items-end justify-between gap-4">
