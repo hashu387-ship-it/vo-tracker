@@ -3,45 +3,46 @@
 @tailwind utilities;
 
 :root {
-  /* Premium Light Theme - warm tan/gold primary on a soft grey canvas */
-  --background: 40 10% 95%;
-  --foreground: 40 14% 14%;
+  /* Premium Light Theme - RSG Cream glassmorphism (app-wide) */
+  --background: 39 46% 90%;
+  --foreground: 36 26% 11%;
 
-  --card: 0 0% 100%;
-  --card-foreground: 40 14% 14%;
+  --card: 40 52% 97%;
+  --card-foreground: 36 26% 11%;
 
-  --popover: 0 0% 100%;
-  --popover-foreground: 40 14% 14%;
+  --popover: 40 52% 97%;
+  --popover-foreground: 36 26% 11%;
 
-  /* Primary: muted tan / gold-bronze (slightly dark) */
-  --primary: 40 26% 44%;
-  --primary-foreground: 0 0% 100%;
+  /* Primary: warm near-black (matches the cover's dark CTAs) */
+  --primary: 36 26% 12%;
+  --primary-foreground: 40 50% 97%;
 
-  --secondary: 40 12% 93%;
-  --secondary-foreground: 40 14% 14%;
+  --secondary: 39 34% 87%;
+  --secondary-foreground: 36 26% 12%;
 
-  --muted: 40 10% 94%;
-  --muted-foreground: 40 6% 42%;
+  --muted: 39 32% 89%;
+  --muted-foreground: 34 12% 38%;
 
-  --accent: 40 30% 90%;
-  --accent-foreground: 40 30% 28%;
+  --accent: 18 55% 91%;
+  --accent-foreground: 16 58% 36%;
 
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --border: 40 12% 88%;
-  --input: 40 12% 88%;
-  --ring: 40 26% 44%;
+  --border: 38 26% 82%;
+  --input: 38 26% 82%;
+  --ring: 16 58% 44%;
 
   --radius: 1rem;
 
-  /* Brand colors mapped to the tan/gold palette in light mode */
-  --rsg-navy: 40 26% 44%;
-  --rsg-blue: 38 28% 34%;
-  --rsg-gold: 16 83% 56%;
-  --rsg-light: 40 35% 92%;
-  --gradient-start: 40 26% 44%;
-  --gradient-end: 38 28% 34%;
+  /* Brand colors mapped to the RSG Cream palette in light mode:
+     navy → warm near-black, blue → teal, gold → terracotta. */
+  --rsg-navy: 36 26% 12%;
+  --rsg-blue: 173 71% 20%;
+  --rsg-gold: 16 58% 44%;
+  --rsg-light: 39 46% 90%;
+  --gradient-start: 36 26% 12%;
+  --gradient-end: 173 71% 20%;
 }
 
 .dark {

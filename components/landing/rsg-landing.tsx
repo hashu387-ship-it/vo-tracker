@@ -83,9 +83,11 @@ export function RsgLanding() {
         <header style={{ position: 'sticky', top: 18, zIndex: 50, padding: '0 24px' }}>
           <div style={{ maxWidth: 1320, margin: '0 auto', height: 66, padding: '0 16px 0 26px', display: 'flex', alignItems: 'center', gap: 30, borderRadius: 999, ...glass, boxShadow: '0 12px 40px rgba(74,48,30,.14), inset 0 1px 0 rgba(255,255,255,.85)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-              <span style={{ font: `400 18px ${SERIF}`, letterSpacing: 3.5, color: '#221c14' }}>RED SEA GLOBAL</span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/rsg-logo.png" alt="Red Sea Global" style={{ height: 30, width: 'auto' }} />
               <span style={{ width: 1, height: 22, background: 'rgba(34,28,20,.2)' }} />
-              <span style={{ font: `700 12px ${SANS}`, letterSpacing: 2, color: '#b0512f' }}>FIRSTFIX</span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/firstfix-v2.png" alt="FirstFix" style={{ height: 24, width: 'auto' }} />
             </div>
             <nav className="navlinks" style={{ marginLeft: 14, display: 'flex', gap: 26, font: `500 13.5px ${SANS}`, color: 'rgba(45,38,28,.72)' }}>
               <Link className="lnk" href="/intelligence">Dashboard</Link>
@@ -170,7 +172,11 @@ export function RsgLanding() {
                 { tag: 'Forecast', title: 'Q3 final-account projection updated with 99% calculation accuracy', grad: 'linear-gradient(150deg,#d3744f,#b0512f 65%,#7c3a22)' },
               ].map((c) => (
                 <Link key={c.title} href="/intelligence" className="tile" style={{ display: 'block', paddingBottom: 26, borderRadius: 24, overflow: 'hidden', ...statGlass, boxShadow: '0 12px 40px rgba(74,48,30,.12), inset 0 1px 0 rgba(255,255,255,.8)' }}>
-                  <div style={{ height: 200, background: c.grad }} />
+                  <div style={{ height: 200, position: 'relative', overflow: 'hidden' }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/rsg-new-hero.png" alt="Red Sea project" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <div style={{ position: 'absolute', inset: 0, background: c.grad, opacity: 0.62, mixBlendMode: 'multiply' }} />
+                  </div>
                   <div style={{ padding: '24px 26px 0' }}>
                     <div style={{ font: `600 11px ${SANS}`, letterSpacing: 1.5, textTransform: 'uppercase', color: '#b0512f', margin: '0 0 10px' }}>{c.tag}</div>
                     <h3 style={{ font: `400 21px/1.3 ${SERIF}`, margin: '0 0 14px', color: '#221c14' }}>{c.title}</h3>
@@ -242,9 +248,11 @@ export function RsgLanding() {
           <div style={{ maxWidth: 1320, margin: '0 auto', padding: '60px 56px 36px', borderRadius: 30, background: 'linear-gradient(150deg,rgba(40,30,20,.82),rgba(22,16,10,.88))', backdropFilter: 'blur(24px) saturate(150%)', WebkitBackdropFilter: 'blur(24px) saturate(150%)', border: '1px solid rgba(255,255,255,.12)', boxShadow: '0 20px 60px rgba(34,24,14,.3), inset 0 1px 0 rgba(255,255,255,.16)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap', paddingBottom: 40, borderBottom: '1px solid rgba(255,255,255,.12)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                <span style={{ font: `400 18px ${SERIF}`, letterSpacing: 3.5, color: '#fff' }}>RED SEA GLOBAL</span>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/rsg-logo.png" alt="Red Sea Global" style={{ height: 28, width: 'auto', filter: 'brightness(0) invert(1)' }} />
                 <span style={{ width: 1, height: 20, background: 'rgba(255,255,255,.28)' }} />
-                <span style={{ font: `700 12px ${SANS}`, letterSpacing: 2, color: '#e3a884' }}>FIRSTFIX</span>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/firstfix-v2.png" alt="FirstFix" style={{ height: 22, width: 'auto', filter: 'brightness(0) invert(1)' }} />
               </div>
               <div style={{ display: 'flex', gap: 16, color: 'rgba(255,255,255,.6)', font: '600 12px sans-serif' }}>
                 <span>in</span><span>▶</span><span>◎</span><span>𝕏</span><span>f</span>
