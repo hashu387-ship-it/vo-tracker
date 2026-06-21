@@ -57,6 +57,8 @@ export default function SignUpPage() {
         {/* Sign Up Component */}
         <div className="animate-in fade-in zoom-in-95 duration-700 delay-200 w-full max-w-[400px]">
           <SignUp
+            forceRedirectUrl="/intelligence"
+            fallbackRedirectUrl="/intelligence"
             appearance={{
               layout: { socialButtonsPlacement: "bottom" },
               elements: {

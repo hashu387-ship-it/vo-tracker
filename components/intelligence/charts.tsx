@@ -21,6 +21,9 @@ import {
   commercialSummary,
   forecastNet,
   voStatusBreakdown,
+  payments,
+  paymentState,
+  PAYMENT_STATE_CONFIG,
   formatCompact,
   formatSAR,
   type VOStatusAgg,
@@ -181,6 +184,34 @@ export function ContractWaterfallChart() {
         <Bar dataKey="bar" stackId="wf" radius={[6, 6, 0, 0]} animationDuration={950} animationBegin={120}>
           {steps.map((st, i) => (
             <Cell key={i} fill={WF_COLORS[st.kind]} />
+          ))}
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Net payment per application (bars)                                 */
+/* ------------------------------------------------------------------ */
+
+export function PaymentNetBars() {
+  const data = payments.map((p) => ({
+    label: p.no,
+    net: Math.round(p.net ?? 0),
+    hex: PAYMENT_STATE_CONFIG[paymentState(p)].hex,
+  }));
+
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <BarChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }} className="text-slate-400">
+        <CartesianGrid strokeDasharray="3 3" stroke="currentColor" strokeOpacity={0.08} vertical={false} />
+        <XAxis dataKey="label" {...axisProps} interval={2} angle={0} />
+        <YAxis {...axisProps} tickFormatter={(v) => `${(v / 1_000_000).toFixed(0)}M`} width={40} />
+        <Tooltip content={<GlassTooltip />} cursor={{ fill: 'currentColor', fillOpacity: 0.04 }} />
+        <Bar dataKey="net" name="Net payment" radius={[4, 4, 0, 0]} animationDuration={800}>
+          {data.map((d, i) => (
+            <Cell key={i} fill={d.hex} />
           ))}
         </Bar>
       </BarChart>
