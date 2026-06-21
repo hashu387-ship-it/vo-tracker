@@ -3,45 +3,45 @@
 @tailwind utilities;
 
 :root {
-  /* Premium Light Theme - Fresh, soft & organic (AgriVision-inspired) */
-  --background: 140 16% 96%;
-  --foreground: 160 22% 12%;
+  /* Premium Light Theme - warm tan/gold primary on a soft grey canvas */
+  --background: 40 10% 95%;
+  --foreground: 40 14% 14%;
 
   --card: 0 0% 100%;
-  --card-foreground: 160 22% 12%;
+  --card-foreground: 40 14% 14%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 160 22% 12%;
+  --popover-foreground: 40 14% 14%;
 
-  /* Primary: fresh green */
-  --primary: 150 46% 31%;
+  /* Primary: muted tan / gold-bronze (slightly dark) */
+  --primary: 40 26% 44%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 140 16% 94%;
-  --secondary-foreground: 160 22% 12%;
+  --secondary: 40 12% 93%;
+  --secondary-foreground: 40 14% 14%;
 
-  --muted: 140 14% 95%;
-  --muted-foreground: 155 8% 42%;
+  --muted: 40 10% 94%;
+  --muted-foreground: 40 6% 42%;
 
-  --accent: 145 42% 93%;
-  --accent-foreground: 150 46% 24%;
+  --accent: 40 30% 90%;
+  --accent-foreground: 40 30% 28%;
 
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --border: 150 14% 90%;
-  --input: 150 14% 90%;
-  --ring: 150 46% 31%;
+  --border: 40 12% 88%;
+  --input: 40 12% 88%;
+  --ring: 40 26% 44%;
 
   --radius: 1rem;
 
-  /* Brand colors mapped to the green + coral palette in light mode */
-  --rsg-navy: 150 46% 31%;
-  --rsg-blue: 152 44% 24%;
+  /* Brand colors mapped to the tan/gold palette in light mode */
+  --rsg-navy: 40 26% 44%;
+  --rsg-blue: 38 28% 34%;
   --rsg-gold: 16 83% 56%;
-  --rsg-light: 145 44% 93%;
-  --gradient-start: 150 46% 31%;
-  --gradient-end: 152 44% 24%;
+  --rsg-light: 40 35% 92%;
+  --gradient-start: 40 26% 44%;
+  --gradient-end: 38 28% 34%;
 }
 
 .dark {
