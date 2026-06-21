@@ -2,8 +2,9 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { useUser, useClerk } from '@clerk/nextjs';
+import { useUser } from '@clerk/nextjs';
 import { commercialSummary, variationOrders, ipaPayments } from '@/lib/data/commercial';
+import { useAuthDialog } from '@/components/auth/auth-dialog';
 
 /**
  * VO Tracker — RSG Redesign landing/cover page.
@@ -41,19 +42,19 @@ const STAT_RECEIVED = fM(commercialSummary.received); // SAR 214.7M
 
 export function RsgLanding() {
   const { isLoaded, isSignedIn } = useUser();
-  const { openSignIn } = useClerk();
+  const { openAuth } = useAuthDialog();
 
-  const signIn = () => openSignIn({ forceRedirectUrl: '/intelligence' });
+  const signIn = () => openAuth();
 
-  // Auto-open the sign-in popup on first entry for signed-out visitors.
+  // Auto-open the welcome / sign-in dialog on first entry for signed-out visitors.
   useEffect(() => {
     if (isLoaded && !isSignedIn && typeof window !== 'undefined') {
       if (!sessionStorage.getItem('signin-prompted')) {
         sessionStorage.setItem('signin-prompted', '1');
-        openSignIn({ forceRedirectUrl: '/intelligence' });
+        openAuth();
       }
     }
-  }, [isLoaded, isSignedIn, openSignIn]);
+  }, [isLoaded, isSignedIn, openAuth]);
 
   return (
     <div
