@@ -209,7 +209,7 @@ export function VOLogPremium() {
               >
                 <div
                   className={cn(
-                    'group relative overflow-hidden rounded-2xl border bg-white/70 backdrop-blur-xl transition-all duration-300 dark:bg-white/[0.03]',
+                    'group relative overflow-hidden rounded-2xl border bg-white/50 backdrop-blur-2xl transition-all duration-300 dark:bg-white/[0.05]',
                     isOpen ? 'border-rsg-navy/30 shadow-lg dark:border-rsg-gold/30' : 'border-slate-200/70 hover:border-slate-300 hover:shadow-md dark:border-white/10 dark:hover:border-white/20',
                   )}
                 >
