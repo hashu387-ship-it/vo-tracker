@@ -3,8 +3,9 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { useUser } from '@clerk/nextjs';
-import { commercialSummary, variationOrders, ipaPayments } from '@/lib/data/commercial';
+import { commercialSummary, variationOrders, ipaPayments, lastUpdated, formatDateTime } from '@/lib/data/commercial';
 import { useAuthDialog } from '@/components/auth/auth-dialog';
+import { NotificationBell } from '@/components/notifications/notification-bell';
 
 /**
  * VO Tracker — RSG Redesign landing/cover page.
@@ -124,6 +125,8 @@ export function RsgLanding() {
               <Link className="lnk" href="/intelligence">Analytics</Link>
             </nav>
             <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 16 }}>
+              <span className="hide-sm" style={{ font: `500 11px ${SANS}`, color: 'rgba(45,38,28,.5)', whiteSpace: 'nowrap' }}>Updated {formatDateTime(lastUpdated)}</span>
+              <NotificationBell tone="cream" />
               <button onClick={signIn} className="lnk hide-sm" style={{ font: `600 13px ${SANS}`, color: 'rgba(45,38,28,.8)', background: 'none', border: 'none', cursor: 'pointer' }}>Sign In</button>
               <Link href="/intelligence" className="btn-dark" style={{ font: `600 13px ${SANS}`, letterSpacing: 0.3, color: '#fff', background: '#221c14', padding: '11px 24px', borderRadius: 999, boxShadow: '0 4px 16px rgba(34,28,20,.25), inset 0 1px 0 rgba(255,255,255,.18)' }}>Open Register</Link>
             </div>

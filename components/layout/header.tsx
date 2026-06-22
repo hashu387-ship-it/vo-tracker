@@ -36,6 +36,8 @@ import {
 import { UserButton, useUser } from "@clerk/nextjs";
 import { useGuestMode } from "@/components/providers/guest-mode-provider";
 import { useAuthDialog } from "@/components/auth/auth-dialog";
+import { NotificationBell } from "@/components/notifications/notification-bell";
+import { lastUpdated, formatDateTime } from "@/lib/data/commercial";
 
 const navigation = [
   { name: "Command Center", href: "/intelligence", icon: Gauge },
@@ -178,6 +180,14 @@ export function Header() {
                 </Link>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* Last updated label */}
+            <span className="hidden lg:inline text-[11px] text-slate-400 dark:text-zinc-500 whitespace-nowrap">
+              Updated {formatDateTime(lastUpdated)}
+            </span>
+
+            {/* Notifications */}
+            <NotificationBell />
 
             {/* Theme Toggle */}
             <Button

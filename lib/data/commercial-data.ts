@@ -98,6 +98,9 @@ export const commercialSummary: CommercialSummary = {
   totalSubmittedVOValue: 25281904.76534099,
 };
 
+/** When this dataset was last refreshed into the app (date & time, ISO). */
+export const lastUpdated = '2026-06-22T13:47:32+03:00';
+
 export const payments: PaymentRecord[] = [
   { no: "AP01", description: "Adv Payment Invoice", gross: 43500311.2231794, advanceRecovery: null, retention: null, vatRecovery: null, vat: 6525046.68347691, net: 43500311.2231794, received: 43500311.2231794, submittedDate: "2023-11-23", invoiceDate: "2023-04-12", dueDate: null, status: "Paid", approvalStatus: "Received", cumulative: null },
   { no: "AP02", description: "Adv Payment Invoice 2", gross: 21750155.61, advanceRecovery: null, retention: null, vatRecovery: null, vat: 3262523.3414999996, net: 21750155.61, received: 21750155.61, submittedDate: "2024-11-20", invoiceDate: "2024-11-22", dueDate: null, status: "Paid", approvalStatus: "Received", cumulative: null },
