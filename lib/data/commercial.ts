@@ -4,6 +4,7 @@
 
 import {
   commercialSummary,
+  lastUpdated,
   payments,
   variationOrders,
   type CommercialSummary,
@@ -11,7 +12,7 @@ import {
   type VORecord,
 } from './commercial-data';
 
-export { commercialSummary, payments, variationOrders };
+export { commercialSummary, lastUpdated, payments, variationOrders };
 export type { CommercialSummary, PaymentRecord, VORecord };
 
 /* ------------------------------------------------------------------ */
@@ -375,4 +376,95 @@ export function formatDateShort(date: string | null | undefined): string {
   const d = new Date(date);
   if (Number.isNaN(d.getTime())) return String(date);
   return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(d);
+}
+
+/** Last-updated as a friendly "22 Jun 2026, 13:47" string. */
+export function formatDateTime(date: string | null | undefined): string {
+  if (!date) return '—';
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) return String(date);
+  return new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(d);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Notifications / recent activity                                    */
+/* ------------------------------------------------------------------ */
+
+export interface UpdateItem {
+  id: string;
+  kind: 'data' | 'vo' | 'payment';
+  title: string;
+  subtitle: string;
+  /** ISO-ish date used for sorting + display */
+  date: string;
+  hex: string;
+  href: string;
+}
+
+/**
+ * Recent register activity for the notification bell — derived live from the
+ * dataset. A pinned "data refreshed" entry first, then the most recent IPAs
+ * and VOs interleaved by date.
+ */
+export function recentUpdates(limit = 8): UpdateItem[] {
+  const items: UpdateItem[] = [];
+
+  const recentPayments = [...ipaPayments]
+    .filter((p) => p.submittedDate)
+    .sort((a, b) => (a.submittedDate! < b.submittedDate! ? 1 : -1))
+    .slice(0, 5)
+    .map((p): UpdateItem => {
+      const st = PAYMENT_STATE_CONFIG[paymentState(p)];
+      return {
+        id: `pay-${p.no}`,
+        kind: 'payment',
+        title: `${p.no} · ${st.label}`,
+        subtitle: `${formatCompact(p.net ?? p.gross)} net — ${p.description}`,
+        date: p.submittedDate ?? p.invoiceDate ?? '',
+        hex: st.hex,
+        href: '/payments',
+      };
+    });
+
+  const recentVos = [...variationOrders]
+    .filter((v) => v.dateIn || v.submissionDate)
+    .sort((a, b) => {
+      const da = a.submissionDate ?? a.dateIn ?? '';
+      const db = b.submissionDate ?? b.dateIn ?? '';
+      return da < db ? 1 : -1;
+    })
+    .slice(0, 5)
+    .map((v): UpdateItem => {
+      const cfg = statusConfigOf(v);
+      return {
+        id: `vo-${v.sno}`,
+        kind: 'vo',
+        title: `${v.voNumber ?? 'VO'} · ${cfg.label}`,
+        subtitle: v.subject,
+        date: v.submissionDate ?? v.dateIn ?? '',
+        hex: cfg.hex,
+        href: '/vos',
+      };
+    });
+
+  const merged = [...recentPayments, ...recentVos].sort((a, b) => (a.date < b.date ? 1 : -1));
+
+  items.push({
+    id: 'data-refresh',
+    kind: 'data',
+    title: 'Commercial register refreshed',
+    subtitle: `Pay Register & VO Log updated — ${commercialSummary.asOf}`,
+    date: lastUpdated,
+    hex: '#b0512f',
+    href: '/intelligence',
+  });
+
+  return [...items, ...merged].slice(0, limit);
 }
