@@ -36,22 +36,21 @@ export default function IntelligencePage() {
       <motion.header
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-3xl border border-white/15 p-6 text-white shadow-liquid sm:p-8"
+        className="relative overflow-hidden rounded-3xl border border-bronze/25 p-6 text-foreground shadow-liquid sm:p-8"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/hero/redsea-1.jpg" alt="Red Sea project" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-br from-rsg-navy/92 via-rsg-blue/82 to-stone-900/94 dark:from-zinc-900/95 dark:via-zinc-900/90 dark:to-black/96" />
+        <img src="/hero/redsea-4.jpg" alt="Red Sea project" className="absolute inset-0 h-full w-full object-cover" />
         <Hero3D />
-        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-rsg-gold/22 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 left-1/3 h-64 w-64 rounded-full bg-tan/25 blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-r from-cream/95 via-cream/82 to-tan/55 dark:from-zinc-950/92 dark:via-zinc-950/82 dark:to-zinc-900/55" />
+        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-bronze/15 blur-3xl" />
         <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div>
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium backdrop-blur-sm">
-              <Sparkles className="h-3.5 w-3.5 text-rsg-gold" />
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-bronze/30 bg-bronze/10 px-3 py-1 text-xs font-semibold text-bronze backdrop-blur-sm">
+              <Sparkles className="h-3.5 w-3.5 text-bronze" />
               Commercial Intelligence · Command Center
             </div>
             <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{s.projectName}</h1>
-            <p className="mt-2 max-w-xl text-sm text-white/70">
+            <p className="mt-2 max-w-xl text-sm text-foreground/70">
               {s.project} · {s.contractor} · {s.client}. Live commercial position across{' '}
               {breakdown.reduce((n, b) => n + b.count, 0)} variation orders and the full payment register.
             </p>
@@ -59,13 +58,13 @@ export default function IntelligencePage() {
           <div className="flex flex-wrap gap-3">
             <MagneticButton
               onClick={() => askAssistant('Give me a commercial status report')}
-              className="rounded-2xl bg-white px-4 py-2.5 text-sm font-semibold text-rsg-navy shadow-lg"
+              className="rounded-2xl bg-foreground px-4 py-2.5 text-sm font-semibold text-background shadow-lg"
             >
               <FileBarChart className="mr-2 h-4 w-4" /> Generate report
             </MagneticButton>
             <MagneticButton
               onClick={() => askAssistant('')}
-              className="rounded-2xl border border-white/25 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white backdrop-blur-sm"
+              className="rounded-2xl border border-bronze/30 bg-white/55 px-4 py-2.5 text-sm font-semibold text-foreground backdrop-blur-sm dark:bg-white/5"
             >
               <Bot className="mr-2 h-4 w-4" /> Ask AI
             </MagneticButton>

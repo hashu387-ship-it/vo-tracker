@@ -60,19 +60,18 @@ export function PaymentRegisterPremium() {
       <motion.div
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-3xl border border-white/15 p-6 text-white shadow-liquid sm:p-7"
+        className="relative overflow-hidden rounded-3xl border border-bronze/25 p-6 text-foreground shadow-liquid sm:p-7"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/hero/module-pay.jpg" alt="Payment register" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-br from-rsg-navy/92 via-rsg-blue/80 to-stone-900/92 dark:from-zinc-900/95 dark:via-zinc-900/88 dark:to-black/95" />
-        <div className="absolute inset-0 backdrop-blur-[2px]" />
-        <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-rsg-gold/25 blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-r from-cream/95 via-cream/82 to-tan/55 dark:from-zinc-950/92 dark:via-zinc-950/82 dark:to-zinc-900/55" />
+        <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-bronze/15 blur-3xl" />
         <div className="relative">
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium backdrop-blur-sm">
-            <Wallet className="h-3.5 w-3.5 text-rsg-gold" /> Payment Register
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-bronze/30 bg-bronze/10 px-3 py-1 text-xs font-semibold text-bronze backdrop-blur-sm">
+            <Wallet className="h-3.5 w-3.5 text-bronze" /> Payment Register
           </div>
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Interim Payment Applications</h1>
-          <p className="mt-1 flex items-center gap-2 text-sm text-white/70">
+          <p className="mt-1 flex items-center gap-2 text-sm text-foreground/70">
             <Building2 className="h-3.5 w-3.5" /> {commercialSummary.project} · {payments.length} applications
           </p>
         </div>
