@@ -36,11 +36,14 @@ export default function IntelligencePage() {
       <motion.header
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-br from-rsg-navy via-rsg-blue to-slate-900 p-6 text-white shadow-2xl sm:p-8 dark:from-zinc-900 dark:via-zinc-900 dark:to-black"
+        className="relative overflow-hidden rounded-3xl border border-white/15 p-6 text-white shadow-liquid sm:p-8"
       >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/hero/redsea-1.jpg" alt="Red Sea project" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-br from-rsg-navy/92 via-rsg-blue/82 to-stone-900/94 dark:from-zinc-900/95 dark:via-zinc-900/90 dark:to-black/96" />
         <Hero3D />
-        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-rsg-gold/20 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 left-1/3 h-64 w-64 rounded-full bg-sky-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-rsg-gold/22 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 left-1/3 h-64 w-64 rounded-full bg-tan/25 blur-3xl" />
         <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div>
             <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium backdrop-blur-sm">

@@ -35,8 +35,8 @@ export function Hero3D() {
     const R = 2.15;
     const positions = new Float32Array(COUNT * 3);
     const colors = new Float32Array(COUNT * 3);
-    const cA = new THREE.Color('#10b981');
-    const cB = new THREE.Color('#C5A065');
+    const cA = new THREE.Color('#9E875D');
+    const cB = new THREE.Color('#E1CFA6');
     for (let i = 0; i < COUNT; i++) {
       const t = i / COUNT;
       const phi = Math.acos(1 - 2 * t);
@@ -68,7 +68,7 @@ export function Hero3D() {
 
     // Faint wireframe shell.
     const edgeGeo = new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(R, 1));
-    const edgeMat = new THREE.LineBasicMaterial({ color: '#38bdf8', transparent: true, opacity: 0.14 });
+    const edgeMat = new THREE.LineBasicMaterial({ color: '#C5A065', transparent: true, opacity: 0.16 });
     const shell = new THREE.LineSegments(edgeGeo, edgeMat);
     group.add(shell);
 
