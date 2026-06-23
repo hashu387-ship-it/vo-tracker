@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { PROJECTS } from '@/lib/projects';
 import { useProject } from './project-provider';
-import { PresenceStack } from './presence';
+import { LivePresence, RoomBoundary, LiveCursors } from './multiplayer';
 import { AiChatPanel } from './ai-chat-panel';
 
 const NAV = [
@@ -41,6 +41,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [chatOpen, setChatOpen] = useState(false);
 
   return (
+    <RoomBoundary roomId={`vo-register-${projectId}`}>
     <div className="mesh-bg relative flex min-h-screen text-foreground">
       {/* ------------------------------- Sidebar ------------------------------ */}
       <aside className="liquid-glass sticky top-0 z-30 hidden h-screen w-[268px] flex-col gap-6 p-4 md:flex">
@@ -113,7 +114,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         {/* presence + chat */}
         <div className="space-y-3 border-t border-border/60 pt-4">
-          <PresenceStack compact />
+          <LivePresence compact />
           <button
             onClick={() => setChatOpen(true)}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-bronze px-3 py-2.5 text-[13px] font-semibold text-white shadow-bronze transition-transform hover:-translate-y-0.5"
@@ -134,7 +135,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
           <div className="flex items-center gap-4">
             <div className="hidden md:block">
-              <PresenceStack />
+              <LivePresence />
             </div>
             <button
               onClick={() => setChatOpen(true)}
@@ -159,6 +160,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       >
         <Sparkles className="h-6 w-6" />
       </button>
+
+      {/* live multiplayer cursors (active when Liveblocks is configured) */}
+      <LiveCursors />
     </div>
+    </RoomBoundary>
   );
 }
