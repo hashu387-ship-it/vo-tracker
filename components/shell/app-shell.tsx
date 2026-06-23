@@ -23,7 +23,7 @@ const NAV = [
   { label: 'Command Center', href: '/intelligence', icon: LayoutDashboard },
   { label: 'VO Kanban', href: '/vos', icon: FileStack },
   { label: 'Payments (IPA)', href: '/payments', icon: CreditCard },
-  { label: 'Forecasting', href: '/intelligence', icon: LineChart },
+  { label: 'Forecasting', href: '/forecast', icon: LineChart },
   { label: 'BIM / IFC', href: '/platform', icon: Boxes },
   { label: 'Audit Trail', href: '/platform', icon: ShieldCheck },
 ];
