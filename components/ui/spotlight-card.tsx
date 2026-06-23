@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 export function SpotlightCard({
   children,
   className,
-  spotlightColor = 'rgba(120, 145, 255, 0.18)',
+  spotlightColor = 'rgba(158, 135, 93, 0.22)',
 }: {
   children: ReactNode;
   className?: string;
@@ -35,7 +35,7 @@ export function SpotlightCard({
       ref={ref}
       onMouseMove={handleMove}
       className={cn(
-        'group relative overflow-hidden rounded-2xl border border-white/40 bg-white/50 backdrop-blur-2xl transition-all duration-300 hover:border-white/60 hover:bg-white/60 dark:border-white/10 dark:bg-white/[0.05] dark:hover:border-white/20',
+        'group relative overflow-hidden rounded-2xl border border-white/55 bg-white/55 shadow-liquid backdrop-blur-2xl transition-all duration-300 hover:border-bronze/40 hover:bg-white/70 dark:border-white/10 dark:bg-white/[0.05] dark:hover:border-bronze/30',
         className,
       )}
     >
