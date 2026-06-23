@@ -21,7 +21,7 @@ import { AiChatPanel } from './ai-chat-panel';
 
 const NAV = [
   { label: 'Command Center', href: '/intelligence', icon: LayoutDashboard },
-  { label: 'VO Kanban', href: '/vos', icon: FileStack },
+  { label: 'VO Kanban', href: '/kanban', icon: FileStack },
   { label: 'Payments (IPA)', href: '/payments', icon: CreditCard },
   { label: 'Forecasting', href: '/forecast', icon: LineChart },
   { label: 'BIM / IFC', href: '/platform', icon: Boxes },
