@@ -51,13 +51,18 @@ const config: Config = {
           foreground: 'hsl(var(--card-foreground))',
         },
         rsg: {
-          // Theme-aware brand colors. Light mode = fresh green + coral
-          // (see :root), dark mode = RSG navy + gold (see .dark).
+          // Theme-aware brand colors, remapped to the 2026 strict palette
+          // (Bronze / Charcoal / Cream / Tan). No teal — see globals.css.
           navy: 'hsl(var(--rsg-navy) / <alpha-value>)',
           gold: 'hsl(var(--rsg-gold) / <alpha-value>)',
           blue: 'hsl(var(--rsg-blue) / <alpha-value>)',
           light: 'hsl(var(--rsg-light) / <alpha-value>)',
         },
+        // 2026 design-system palette (use directly: bg-bronze, text-charcoal, …)
+        bronze: 'hsl(var(--bronze) / <alpha-value>)',
+        charcoal: 'hsl(var(--charcoal) / <alpha-value>)',
+        cream: 'hsl(var(--cream) / <alpha-value>)',
+        tan: 'hsl(var(--tan) / <alpha-value>)',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -71,6 +76,11 @@ const config: Config = {
         'glow-md': '0 0 25px -5px',
         'glow-lg': '0 0 35px -5px',
         'inner-glow': 'inset 0 0 20px -5px',
+        // 2026 liquid-glass + neumorphic dimensional shadows
+        liquid: '0 18px 50px -12px hsl(193 9% 19% / 0.22), inset 0 1px 0 hsl(0 0% 100% / 0.6)',
+        neu: '8px 8px 20px hsl(193 9% 19% / 0.10), -8px -8px 20px hsl(0 0% 100% / 0.70)',
+        'neu-inset': 'inset 6px 6px 14px hsl(193 9% 19% / 0.12), inset -6px -6px 14px hsl(0 0% 100% / 0.70)',
+        bronze: '0 8px 30px -6px hsl(39 26% 49% / 0.45)',
       },
       keyframes: {
         'accordion-down': {

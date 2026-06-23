@@ -3,86 +3,106 @@
 @tailwind utilities;
 
 :root {
-  /* Premium Light Theme - RSG Cream glassmorphism (app-wide) */
-  --background: 39 46% 90%;
-  --foreground: 36 26% 11%;
+  /* ============================================================
+     2026 Design System — "Liquid Glass" · Bronze & Charcoal
+     Bronze  #9E875D  → 39 26% 49%
+     Charcoal #2D3436 → 193 9% 19%
+     Cream   #F5F3EE  → 43 26% 95%
+     Tan     #EDE6D3  → 44 42% 88%
+     Strict palette — NO teal, NO default Tailwind blue.
+     ============================================================ */
+  --background: 43 26% 95%;
+  --foreground: 193 9% 19%;
 
-  --card: 40 52% 97%;
-  --card-foreground: 36 26% 11%;
+  --card: 43 40% 98%;
+  --card-foreground: 193 9% 19%;
 
-  --popover: 40 52% 97%;
-  --popover-foreground: 36 26% 11%;
+  --popover: 43 40% 98%;
+  --popover-foreground: 193 9% 19%;
 
-  /* Primary: warm near-black (matches the cover's dark CTAs) */
-  --primary: 36 26% 12%;
-  --primary-foreground: 40 50% 97%;
+  /* Primary: Bronze */
+  --primary: 39 26% 49%;
+  --primary-foreground: 43 30% 97%;
 
-  --secondary: 39 34% 87%;
-  --secondary-foreground: 36 26% 12%;
+  /* Secondary: Tan */
+  --secondary: 44 42% 88%;
+  --secondary-foreground: 193 9% 19%;
 
-  --muted: 39 32% 89%;
-  --muted-foreground: 34 12% 38%;
+  --muted: 42 24% 90%;
+  --muted-foreground: 196 8% 38%;
 
-  --accent: 18 55% 91%;
-  --accent-foreground: 16 58% 36%;
+  /* Accent: soft bronze tint */
+  --accent: 42 35% 90%;
+  --accent-foreground: 39 30% 36%;
 
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 100%;
+  --destructive: 0 72% 48%;
+  --destructive-foreground: 43 30% 97%;
 
-  --border: 38 26% 82%;
-  --input: 38 26% 82%;
-  --ring: 16 58% 44%;
+  --border: 42 22% 84%;
+  --input: 42 22% 84%;
+  --ring: 39 26% 49%;
 
   --radius: 1rem;
 
-  /* Brand colors mapped to the RSG Cream palette in light mode:
-     navy → warm near-black, blue → teal, gold → terracotta. */
-  --rsg-navy: 36 26% 12%;
-  --rsg-blue: 173 71% 20%;
-  --rsg-gold: 16 58% 44%;
-  --rsg-light: 39 46% 90%;
-  --gradient-start: 36 26% 12%;
-  --gradient-end: 173 71% 20%;
+  /* Raw palette tokens (HSL channels) */
+  --bronze: 39 26% 49%;
+  --charcoal: 193 9% 19%;
+  --cream: 43 26% 95%;
+  --tan: 44 42% 88%;
+
+  /* Brand colors remapped to the strict palette (teal eliminated):
+     navy → charcoal, blue → bronze, gold → bronze, light → tan. */
+  --rsg-navy: 193 9% 19%;
+  --rsg-blue: 39 26% 49%;
+  --rsg-gold: 38 32% 52%;
+  --rsg-light: 44 42% 88%;
+  --gradient-start: 193 9% 19%;
+  --gradient-end: 39 26% 49%;
 }
 
 .dark {
-  /* Premium Dark Theme - Deep & Luxurious */
-  --background: 240 10% 4%;
-  --foreground: 0 0% 95%;
+  /* Dark variant — charcoal canvas, bronze accents (no teal/blue) */
+  --background: 195 12% 8%;
+  --foreground: 43 26% 92%;
 
-  --card: 240 10% 6%;
-  --card-foreground: 0 0% 95%;
+  --card: 195 10% 11%;
+  --card-foreground: 43 26% 92%;
 
-  --popover: 240 10% 6%;
-  --popover-foreground: 0 0% 95%;
+  --popover: 195 10% 11%;
+  --popover-foreground: 43 26% 92%;
 
-  /* Primary: RSG Gold accent for dark mode */
-  --primary: 36 54% 58%;
-  --primary-foreground: 240 10% 4%;
+  /* Primary: brighter Bronze for dark surfaces */
+  --primary: 39 36% 58%;
+  --primary-foreground: 195 12% 8%;
 
-  --secondary: 240 6% 10%;
-  --secondary-foreground: 0 0% 95%;
+  --secondary: 196 8% 16%;
+  --secondary-foreground: 43 26% 92%;
 
-  --muted: 240 6% 10%;
-  --muted-foreground: 240 5% 65%;
+  --muted: 196 8% 16%;
+  --muted-foreground: 40 10% 65%;
 
-  --accent: 240 6% 15%;
-  --accent-foreground: 0 0% 95%;
+  --accent: 196 8% 18%;
+  --accent-foreground: 43 26% 92%;
 
-  --destructive: 0 62% 30%;
-  --destructive-foreground: 0 0% 95%;
+  --destructive: 0 62% 42%;
+  --destructive-foreground: 43 26% 92%;
 
-  --border: 240 6% 15%;
-  --input: 240 6% 15%;
-  --ring: 36 54% 58%;
+  --border: 196 8% 18%;
+  --input: 196 8% 18%;
+  --ring: 39 36% 58%;
 
-  /* Dark mode RSG variables (unchanged navy + gold) */
-  --rsg-navy: 213 100% 17%;
-  --rsg-gold: 36 54% 58%;
-  --rsg-blue: 213 100% 20%;
-  --rsg-light: 240 6% 15%;
-  --gradient-start: 240 10% 4%;
-  --gradient-end: 240 10% 8%;
+  --bronze: 39 36% 58%;
+  --charcoal: 195 12% 8%;
+  --cream: 43 26% 92%;
+  --tan: 44 20% 24%;
+
+  /* Dark-mode brand variables (charcoal + bronze, no teal) */
+  --rsg-navy: 195 12% 10%;
+  --rsg-gold: 39 40% 60%;
+  --rsg-blue: 39 36% 58%;
+  --rsg-light: 196 8% 18%;
+  --gradient-start: 195 12% 8%;
+  --gradient-end: 39 36% 30%;
 }
 
 @layer base {
@@ -110,6 +130,84 @@
 }
 
 @layer utilities {
+  /* ============================================================
+     2026 Liquid Glass + Neumorphic system (Bronze / Charcoal)
+     ============================================================ */
+
+  /* Liquid glass — deep blur, translucent cream, inner highlight */
+  .liquid-glass {
+    background: hsl(var(--card) / 0.55);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid hsl(var(--cream) / 0.65);
+    box-shadow:
+      0 18px 50px -12px hsl(var(--charcoal) / 0.22),
+      inset 0 1px 0 hsl(0 0% 100% / 0.6);
+  }
+  .dark .liquid-glass {
+    background: hsl(var(--card) / 0.5);
+    border: 1px solid hsl(var(--foreground) / 0.08);
+    box-shadow:
+      0 18px 50px -12px hsl(0 0% 0% / 0.55),
+      inset 0 1px 0 hsl(0 0% 100% / 0.06);
+  }
+
+  .liquid-glass-strong {
+    background: hsl(var(--card) / 0.78);
+    backdrop-filter: blur(36px) saturate(170%);
+    -webkit-backdrop-filter: blur(36px) saturate(170%);
+    border: 1px solid hsl(var(--cream) / 0.75);
+    box-shadow:
+      0 24px 70px -16px hsl(var(--charcoal) / 0.3),
+      inset 0 1px 0 hsl(0 0% 100% / 0.7);
+  }
+
+  /* Neumorphic base — soft dimensional shadows on the cream canvas */
+  .neu {
+    background: hsl(var(--background));
+    box-shadow:
+      8px 8px 20px hsl(var(--charcoal) / 0.1),
+      -8px -8px 20px hsl(0 0% 100% / 0.7);
+  }
+  .neu-inset {
+    background: hsl(var(--background));
+    box-shadow:
+      inset 6px 6px 14px hsl(var(--charcoal) / 0.12),
+      inset -6px -6px 14px hsl(0 0% 100% / 0.7);
+  }
+  .dark .neu {
+    box-shadow:
+      8px 8px 20px hsl(0 0% 0% / 0.5),
+      -8px -8px 20px hsl(0 0% 100% / 0.03);
+  }
+  .dark .neu-inset {
+    box-shadow:
+      inset 6px 6px 14px hsl(0 0% 0% / 0.55),
+      inset -6px -6px 14px hsl(0 0% 100% / 0.03);
+  }
+
+  /* Bronze glow ring for emphasis */
+  .glow-bronze {
+    box-shadow: 0 0 0 1px hsl(var(--bronze) / 0.4), 0 8px 30px -6px hsl(var(--bronze) / 0.45);
+  }
+
+  /* Dynamic mesh-gradient backdrop (bronze / tan / cream) */
+  .mesh-bg {
+    background-color: hsl(var(--background));
+    background-image:
+      radial-gradient(at 18% 16%, hsl(var(--bronze) / 0.18) 0px, transparent 50%),
+      radial-gradient(at 82% 12%, hsl(var(--tan) / 0.45) 0px, transparent 45%),
+      radial-gradient(at 70% 78%, hsl(var(--bronze) / 0.12) 0px, transparent 50%),
+      radial-gradient(at 25% 88%, hsl(var(--tan) / 0.35) 0px, transparent 45%);
+  }
+  .dark .mesh-bg {
+    background-image:
+      radial-gradient(at 18% 16%, hsl(var(--bronze) / 0.2) 0px, transparent 50%),
+      radial-gradient(at 82% 12%, hsl(var(--charcoal) / 0.6) 0px, transparent 45%),
+      radial-gradient(at 70% 78%, hsl(var(--bronze) / 0.14) 0px, transparent 50%),
+      radial-gradient(at 25% 88%, hsl(195 12% 14% / 0.6) 0px, transparent 45%);
+  }
+
   /* Glass morphism utilities */
   .glass {
     @apply bg-white/80 dark:bg-zinc-900/80 backdrop-blur-2xl border border-slate-200/50 dark:border-zinc-800/50;
