@@ -63,7 +63,7 @@ export function RsgLanding() {
         position: 'relative',
         overflowX: 'hidden',
         minHeight: '100vh',
-        color: '#221c14',
+        color: '#2D3436',
         fontFamily: SANS,
         background: 'radial-gradient(120% 90% at 50% -10%,#faf6ee 0%,#f1e9da 52%,#e9ddc9 100%)',
       }}
@@ -73,9 +73,9 @@ export function RsgLanding() {
         @keyframes rsgFloatB{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-8%,5%) scale(1.08)}}
         @keyframes rsgFloatC{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(5%,6%) scale(1.15)}}
         .rsg a{color:inherit;text-decoration:none}
-        .rsg ::selection{background:rgba(176,81,47,.22)}
-        .rsg .lnk{transition:color .2s}.rsg .lnk:hover{color:#b0512f}
-        .rsg .btn-dark{transition:background .2s,transform .2s}.rsg .btn-dark:hover{background:#b0512f}
+        .rsg ::selection{background:rgba(158,135,93,.22)}
+        .rsg .lnk{transition:color .2s}.rsg .lnk:hover{color:#9E875D}
+        .rsg .btn-dark{transition:background .2s,transform .2s}.rsg .btn-dark:hover{background:#9E875D}
         .rsg .btn-glass{transition:background .2s}.rsg .btn-glass:hover{background:rgba(255,255,255,.72)}
         .rsg .tile{transition:transform .35s,box-shadow .35s}.rsg .tile:hover{transform:translateY(-6px)}
         .rsg input::placeholder{color:rgba(45,38,28,.45)}
@@ -103,7 +103,7 @@ export function RsgLanding() {
       {/* Atmospheric backdrop blobs */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
         <div style={{ position: 'absolute', top: '-12%', left: '-6%', width: '46vw', height: '46vw', borderRadius: '50%', background: 'radial-gradient(circle,#cdbb8e,#b6a371)', filter: 'blur(72px)', opacity: 0.6, animation: 'rsgFloatA 18s ease-in-out infinite' }} />
-        <div style={{ position: 'absolute', top: '28%', right: '-10%', width: '42vw', height: '42vw', borderRadius: '50%', background: 'radial-gradient(circle,#a9c0cf,#88a4b6)', filter: 'blur(82px)', opacity: 0.55, animation: 'rsgFloatB 22s ease-in-out infinite' }} />
+        <div style={{ position: 'absolute', top: '28%', right: '-10%', width: '42vw', height: '42vw', borderRadius: '50%', background: 'radial-gradient(circle,#cdbb8e,#b6a371)', filter: 'blur(82px)', opacity: 0.55, animation: 'rsgFloatB 22s ease-in-out infinite' }} />
         <div style={{ position: 'absolute', bottom: '-14%', left: '24%', width: '50vw', height: '50vw', borderRadius: '50%', background: 'radial-gradient(circle,#d8c8ad,#c3ad8a)', filter: 'blur(92px)', opacity: 0.5, animation: 'rsgFloatC 26s ease-in-out infinite' }} />
       </div>
 
@@ -128,7 +128,7 @@ export function RsgLanding() {
               <span className="hide-sm" style={{ font: `500 11px ${SANS}`, color: 'rgba(45,38,28,.5)', whiteSpace: 'nowrap' }}>Updated {formatDateTime(lastUpdated)}</span>
               <NotificationBell tone="cream" />
               <button onClick={signIn} className="lnk hide-sm" style={{ font: `600 13px ${SANS}`, color: 'rgba(45,38,28,.8)', background: 'none', border: 'none', cursor: 'pointer' }}>Sign In</button>
-              <Link href="/intelligence" className="btn-dark" style={{ font: `600 13px ${SANS}`, letterSpacing: 0.3, color: '#fff', background: '#221c14', padding: '11px 24px', borderRadius: 999, boxShadow: '0 4px 16px rgba(34,28,20,.25), inset 0 1px 0 rgba(255,255,255,.18)' }}>Open Register</Link>
+              <Link href="/intelligence" className="btn-dark" style={{ font: `600 13px ${SANS}`, letterSpacing: 0.3, color: '#fff', background: '#2D3436', padding: '11px 24px', borderRadius: 999, boxShadow: '0 4px 16px rgba(34,28,20,.25), inset 0 1px 0 rgba(255,255,255,.18)' }}>Open Register</Link>
             </div>
           </div>
         </header>
@@ -144,23 +144,23 @@ export function RsgLanding() {
           </div>
           <div style={{ position: 'relative', zIndex: 1, maxWidth: 1320, margin: '0 auto', width: '100%' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '8px 16px 8px 12px', borderRadius: 999, marginBottom: 30, ...glass }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#2f8a82', boxShadow: '0 0 10px #2f8a82' }} />
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#9E875D', boxShadow: '0 0 10px #9E875D' }} />
               <span style={{ font: `600 11.5px ${SANS}`, letterSpacing: 2, textTransform: 'uppercase', color: 'rgba(45,38,28,.78)' }}>HW2 · Commercial Register System</span>
             </div>
-            <h1 style={{ font: `300 clamp(44px,7vw,96px) ${SERIF}`, lineHeight: 1.02, margin: 0, maxWidth: '16ch', letterSpacing: 0.5, color: '#221c14' }}>Building the Commercial Record with Purpose</h1>
+            <h1 style={{ font: `300 clamp(44px,7vw,96px) ${SERIF}`, lineHeight: 1.02, margin: 0, maxWidth: '16ch', letterSpacing: 0.5, color: '#2D3436' }}>Building the Commercial Record with Purpose</h1>
             <p style={{ margin: '28px 0 0', maxWidth: '54ch', font: `400 18px/1.7 ${SANS}`, color: 'rgba(45,38,28,.72)' }}>We track every variation and payment to protect value and enrich outcomes across the HW2 MEP project — R06‑HW2 SW Hotel 02.</p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginTop: 38 }}>
-              <Link href="/intelligence" className="btn-dark" style={{ font: `600 14px ${SANS}`, letterSpacing: 0.3, color: '#fff', background: '#221c14', padding: '16px 34px', borderRadius: 999, boxShadow: '0 8px 28px rgba(34,28,20,.25), inset 0 1px 0 rgba(255,255,255,.18)' }}>Open Dashboard</Link>
-              <Link href="/vos/new" className="btn-glass" style={{ font: `600 14px ${SANS}`, letterSpacing: 0.3, color: '#221c14', padding: '15px 32px', borderRadius: 999, ...glass }}>New Variation Order</Link>
+              <Link href="/intelligence" className="btn-dark" style={{ font: `600 14px ${SANS}`, letterSpacing: 0.3, color: '#fff', background: '#2D3436', padding: '16px 34px', borderRadius: 999, boxShadow: '0 8px 28px rgba(34,28,20,.25), inset 0 1px 0 rgba(255,255,255,.18)' }}>Open Dashboard</Link>
+              <Link href="/vos/new" className="btn-glass" style={{ font: `600 14px ${SANS}`, letterSpacing: 0.3, color: '#2D3436', padding: '15px 32px', borderRadius: 999, ...glass }}>New Variation Order</Link>
             </div>
 
             {/* stat strip */}
             <div className="grid4" style={{ marginTop: 64, display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16 }}>
               {[
-                { v: STAT_CONTRACT, l: 'Contract Value', c: '#0f5a54' },
-                { v: STAT_VO_COUNT, l: 'Variation Orders', c: '#0f5a54' },
-                { v: STAT_IPA_COUNT, l: 'Payment Applications', c: '#0f5a54' },
-                { v: STAT_WORK_DONE, l: 'Work Completed', c: '#b0512f' },
+                { v: STAT_CONTRACT, l: 'Contract Value', c: '#6e5d3a' },
+                { v: STAT_VO_COUNT, l: 'Variation Orders', c: '#6e5d3a' },
+                { v: STAT_IPA_COUNT, l: 'Payment Applications', c: '#6e5d3a' },
+                { v: STAT_WORK_DONE, l: 'Work Completed', c: '#9E875D' },
               ].map((s) => (
                 <div key={s.l} style={{ padding: 26, borderRadius: 22, ...statGlass }}>
                   <div style={{ font: `300 40px ${SERIF}`, color: s.c }}>{s.v}</div>
@@ -175,23 +175,23 @@ export function RsgLanding() {
         <section style={{ padding: '60px 24px 30px' }}>
           <div className="grid2 panel-pad" style={{ maxWidth: 1320, margin: '0 auto', padding: '64px 56px', borderRadius: 30, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 70, alignItems: 'center', ...glass, boxShadow: '0 20px 60px rgba(74,48,30,.14), inset 0 1px 0 rgba(255,255,255,.85)' }}>
             <div>
-              <h2 style={{ font: `300 clamp(28px,3.4vw,42px) ${SERIF}`, margin: '0 0 16px', color: '#221c14', lineHeight: 1.1 }}>Ready to access the register?</h2>
+              <h2 style={{ font: `300 clamp(28px,3.4vw,42px) ${SERIF}`, margin: '0 0 16px', color: '#2D3436', lineHeight: 1.1 }}>Ready to access the register?</h2>
               <p style={{ margin: '0 0 26px', font: `400 16px/1.7 ${SANS}`, color: 'rgba(45,38,28,.66)', maxWidth: '44ch' }}>Streamline the complete variation order and payment workflow for R06‑HW2 SW Hotel 02.</p>
               <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-                <Link href="/intelligence" className="btn-dark" style={{ font: `600 14px ${SANS}`, color: '#fff', background: '#221c14', padding: '15px 32px', borderRadius: 999, boxShadow: '0 8px 24px rgba(34,28,20,.25), inset 0 1px 0 rgba(255,255,255,.18)' }}>Access Dashboard</Link>
-                <button onClick={signIn} className="btn-glass" style={{ font: `600 14px ${SANS}`, color: '#221c14', padding: '14px 30px', borderRadius: 999, cursor: 'pointer', ...glass }}>Sign In</button>
+                <Link href="/intelligence" className="btn-dark" style={{ font: `600 14px ${SANS}`, color: '#fff', background: '#2D3436', padding: '15px 32px', borderRadius: 999, boxShadow: '0 8px 24px rgba(34,28,20,.25), inset 0 1px 0 rgba(255,255,255,.18)' }}>Access Dashboard</Link>
+                <button onClick={signIn} className="btn-glass" style={{ font: `600 14px ${SANS}`, color: '#2D3436', padding: '14px 30px', borderRadius: 999, cursor: 'pointer', ...glass }}>Sign In</button>
               </div>
             </div>
             <div>
-              <div style={{ font: `600 13px ${SANS}`, letterSpacing: 0.5, color: '#221c14', marginBottom: 8 }}>Register Updates</div>
+              <div style={{ font: `600 13px ${SANS}`, letterSpacing: 0.5, color: '#2D3436', marginBottom: 8 }}>Register Updates</div>
               <p style={{ margin: '0 0 20px', font: `400 14.5px/1.6 ${SANS}`, color: 'rgba(45,38,28,.6)' }}>Subscribe to get the latest variations and payment updates right to your inbox.</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div style={{ display: 'flex', gap: 12 }}>
-                  <input placeholder="First Name" style={{ flex: 1, background: 'rgba(255,255,255,.55)', border: '1px solid rgba(255,255,255,.8)', borderRadius: 12, padding: '13px 16px', font: `400 14px ${SANS}`, color: '#221c14', outline: 'none' }} />
-                  <input placeholder="Last Name" style={{ flex: 1, background: 'rgba(255,255,255,.55)', border: '1px solid rgba(255,255,255,.8)', borderRadius: 12, padding: '13px 16px', font: `400 14px ${SANS}`, color: '#221c14', outline: 'none' }} />
+                  <input placeholder="First Name" style={{ flex: 1, background: 'rgba(255,255,255,.55)', border: '1px solid rgba(255,255,255,.8)', borderRadius: 12, padding: '13px 16px', font: `400 14px ${SANS}`, color: '#2D3436', outline: 'none' }} />
+                  <input placeholder="Last Name" style={{ flex: 1, background: 'rgba(255,255,255,.55)', border: '1px solid rgba(255,255,255,.8)', borderRadius: 12, padding: '13px 16px', font: `400 14px ${SANS}`, color: '#2D3436', outline: 'none' }} />
                 </div>
-                <input placeholder="E-mail address" style={{ background: 'rgba(255,255,255,.55)', border: '1px solid rgba(255,255,255,.8)', borderRadius: 12, padding: '13px 16px', font: `400 14px ${SANS}`, color: '#221c14', outline: 'none' }} />
-                <button onClick={signIn} className="btn-dark" style={{ alignSelf: 'flex-start', marginTop: 6, font: `600 13px ${SANS}`, letterSpacing: 0.5, color: '#fff', background: '#221c14', padding: '13px 30px', borderRadius: 999, border: 'none', cursor: 'pointer', boxShadow: '0 6px 18px rgba(34,28,20,.22), inset 0 1px 0 rgba(255,255,255,.18)' }}>Submit</button>
+                <input placeholder="E-mail address" style={{ background: 'rgba(255,255,255,.55)', border: '1px solid rgba(255,255,255,.8)', borderRadius: 12, padding: '13px 16px', font: `400 14px ${SANS}`, color: '#2D3436', outline: 'none' }} />
+                <button onClick={signIn} className="btn-dark" style={{ alignSelf: 'flex-start', marginTop: 6, font: `600 13px ${SANS}`, letterSpacing: 0.5, color: '#fff', background: '#2D3436', padding: '13px 30px', borderRadius: 999, border: 'none', cursor: 'pointer', boxShadow: '0 6px 18px rgba(34,28,20,.22), inset 0 1px 0 rgba(255,255,255,.18)' }}>Submit</button>
               </div>
             </div>
           </div>
@@ -200,14 +200,14 @@ export function RsgLanding() {
         {/* REGISTER ACTIVITY */}
         <section id="news" style={{ padding: '40px 24px 90px' }}>
           <div style={{ maxWidth: 1320, margin: '0 auto' }}>
-            <div style={{ font: `600 12px ${SANS}`, letterSpacing: 2.6, textTransform: 'uppercase', color: '#b0512f' }}>Latest Updates</div>
-            <h2 style={{ font: `300 clamp(30px,4vw,46px) ${SERIF}`, margin: '14px 0 8px', letterSpacing: 0.3, color: '#221c14' }}>Register Activity</h2>
+            <div style={{ font: `600 12px ${SANS}`, letterSpacing: 2.6, textTransform: 'uppercase', color: '#9E875D' }}>Latest Updates</div>
+            <h2 style={{ font: `300 clamp(30px,4vw,46px) ${SERIF}`, margin: '14px 0 8px', letterSpacing: 0.3, color: '#2D3436' }}>Register Activity</h2>
             <p style={{ margin: '0 0 44px', font: `400 16px/1.7 ${SANS}`, color: 'rgba(45,38,28,.6)', maxWidth: '64ch' }}>The latest variations, certifications and payment milestones recorded across the HW2 MEP scope.</p>
             <div className="grid3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 18 }}>
               {[
-                { tag: 'Variation Order', title: `${STAT_VO_COUNT} variation orders now logged across the HW2 MEP scope`, grad: 'linear-gradient(150deg,#3f9d93,#0f5a54 65%,#0a3b37)', img: '/hero/redsea-2.jpg' },
-                { tag: 'Payment', title: `Cumulative certifications pass ${STAT_RECEIVED} received across ${STAT_IPA_COUNT} IPAs`, grad: 'linear-gradient(150deg,#5d8595,#2e4a58 65%,#1d3140)', img: '/hero/redsea-3.jpg' },
-                { tag: 'Forecast', title: `Final-account projection updated — ${STAT_WORK_DONE} of works now certified`, grad: 'linear-gradient(150deg,#d3744f,#b0512f 65%,#7c3a22)', img: '/hero/redsea-4.jpg' },
+                { tag: 'Variation Order', title: `${STAT_VO_COUNT} variation orders now logged across the HW2 MEP scope`, grad: 'linear-gradient(150deg,#9E875D,#6e5d3a 65%,#4a3f28)', img: '/hero/redsea-2.jpg' },
+                { tag: 'Payment', title: `Cumulative certifications pass ${STAT_RECEIVED} received across ${STAT_IPA_COUNT} IPAs`, grad: 'linear-gradient(150deg,#7a7363,#2D3436 65%,#23282a)', img: '/hero/redsea-3.jpg' },
+                { tag: 'Forecast', title: `Final-account projection updated — ${STAT_WORK_DONE} of works now certified`, grad: 'linear-gradient(150deg,#ad9669,#9E875D 65%,#4a3f28)', img: '/hero/redsea-4.jpg' },
               ].map((c) => (
                 <Link key={c.title} href="/intelligence" className="tile" style={{ display: 'block', paddingBottom: 26, borderRadius: 24, overflow: 'hidden', ...statGlass, boxShadow: '0 12px 40px rgba(74,48,30,.12), inset 0 1px 0 rgba(255,255,255,.8)' }}>
                   <div style={{ height: 200, position: 'relative', overflow: 'hidden' }}>
@@ -216,9 +216,9 @@ export function RsgLanding() {
                     <div style={{ position: 'absolute', inset: 0, background: c.grad, opacity: 0.62, mixBlendMode: 'multiply' }} />
                   </div>
                   <div style={{ padding: '24px 26px 0' }}>
-                    <div style={{ font: `600 11px ${SANS}`, letterSpacing: 1.5, textTransform: 'uppercase', color: '#b0512f', margin: '0 0 10px' }}>{c.tag}</div>
-                    <h3 style={{ font: `400 21px/1.3 ${SERIF}`, margin: '0 0 14px', color: '#221c14' }}>{c.title}</h3>
-                    <span style={{ font: `600 12px ${SANS}`, letterSpacing: 0.8, textTransform: 'uppercase', color: '#221c14', borderBottom: '1.5px solid rgba(34,28,20,.4)', paddingBottom: 3 }}>Read more</span>
+                    <div style={{ font: `600 11px ${SANS}`, letterSpacing: 1.5, textTransform: 'uppercase', color: '#9E875D', margin: '0 0 10px' }}>{c.tag}</div>
+                    <h3 style={{ font: `400 21px/1.3 ${SERIF}`, margin: '0 0 14px', color: '#2D3436' }}>{c.title}</h3>
+                    <span style={{ font: `600 12px ${SANS}`, letterSpacing: 0.8, textTransform: 'uppercase', color: '#2D3436', borderBottom: '1.5px solid rgba(34,28,20,.4)', paddingBottom: 3 }}>Read more</span>
                   </div>
                 </Link>
               ))}
@@ -229,15 +229,15 @@ export function RsgLanding() {
         {/* END-TO-END SOLUTIONS */}
         <section id="modules" style={{ padding: '60px 24px' }}>
           <div style={{ maxWidth: 1320, margin: '0 auto' }}>
-            <div style={{ font: `600 12px ${SANS}`, letterSpacing: 2.6, textTransform: 'uppercase', color: '#b0512f' }}>Full Project Lifecycle</div>
-            <h2 style={{ font: `300 clamp(32px,4.4vw,52px) ${SERIF}`, margin: '16px 0 8px', letterSpacing: 0.3, color: '#221c14' }}>End-to-End Solutions</h2>
+            <div style={{ font: `600 12px ${SANS}`, letterSpacing: 2.6, textTransform: 'uppercase', color: '#9E875D' }}>Full Project Lifecycle</div>
+            <h2 style={{ font: `300 clamp(32px,4.4vw,52px) ${SERIF}`, margin: '16px 0 8px', letterSpacing: 0.3, color: '#2D3436' }}>End-to-End Solutions</h2>
             <p style={{ margin: '0 0 48px', font: `400 16px/1.7 ${SANS}`, color: 'rgba(45,38,28,.6)', maxWidth: '58ch' }}>From the first instruction to final certification — every variation, claim and payment captured in one auditable register.</p>
             <div className="grid4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 18 }}>
               {[
-                { n: '01', t: 'Capture', d: 'Log variation orders with scope, rate and reference in seconds.', g: 'linear-gradient(150deg,#4aa89f,#0f5a54)', s: 'rgba(15,90,84,.4)', img: '/hero/step-capture.jpg' },
+                { n: '01', t: 'Capture', d: 'Log variation orders with scope, rate and reference in seconds.', g: 'linear-gradient(150deg,#ad9669,#6e5d3a)', s: 'rgba(110,93,58,.4)', img: '/hero/step-capture.jpg' },
                 { n: '02', t: 'Track', d: 'Real-time status across submission, review and certification.', g: 'linear-gradient(150deg,#e3c486,#bb9056)', s: 'rgba(187,144,86,.4)', img: '/hero/step-track.jpg' },
-                { n: '03', t: 'Certify', d: 'Lock certified value with a clean, auditable approval trail.', g: 'linear-gradient(150deg,#7fa9b8,#3a6172)', s: 'rgba(58,97,114,.4)', img: '/hero/step-certify.jpg' },
-                { n: '04', t: 'Report', d: 'Board-ready KPIs and live financial insight on demand.', g: 'linear-gradient(150deg,#d3744f,#b0512f)', s: 'rgba(176,81,47,.4)', img: '/hero/step-report.jpg' },
+                { n: '03', t: 'Certify', d: 'Lock certified value with a clean, auditable approval trail.', g: 'linear-gradient(150deg,#a59f8f,#514f46)', s: 'rgba(81,79,70,.4)', img: '/hero/step-certify.jpg' },
+                { n: '04', t: 'Report', d: 'Board-ready KPIs and live financial insight on demand.', g: 'linear-gradient(150deg,#ad9669,#9E875D)', s: 'rgba(158,135,93,.4)', img: '/hero/step-report.jpg' },
               ].map((step) => (
                 <div key={step.n} className="tile" style={{ position: 'relative', padding: '0 0 30px', borderRadius: 24, overflow: 'hidden', ...statGlass, boxShadow: '0 12px 40px rgba(74,48,30,.12), inset 0 1px 0 rgba(255,255,255,.8)' }}>
                   <div style={{ position: 'relative', height: 120, overflow: 'hidden' }}>
@@ -247,7 +247,7 @@ export function RsgLanding() {
                     <div style={{ position: 'absolute', left: 24, bottom: 8, font: `300 30px ${SERIF}`, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,.4)' }}>{step.n}</div>
                   </div>
                   <div style={{ padding: '16px 26px 0' }}>
-                    <div style={{ font: `500 19px ${SERIF}`, margin: '0 0 10px', color: '#221c14' }}>{step.t}</div>
+                    <div style={{ font: `500 19px ${SERIF}`, margin: '0 0 10px', color: '#2D3436' }}>{step.t}</div>
                     <p style={{ margin: 0, font: `400 13.5px/1.6 ${SANS}`, color: 'rgba(45,38,28,.62)' }}>{step.d}</p>
                   </div>
                 </div>
@@ -261,16 +261,16 @@ export function RsgLanding() {
           <div style={{ maxWidth: 1320, margin: '0 auto' }}>
             <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap', marginBottom: 40 }}>
               <div>
-                <div style={{ font: `600 12px ${SANS}`, letterSpacing: 2.6, textTransform: 'uppercase', color: '#b0512f' }}>The System</div>
-                <h2 style={{ font: `300 clamp(30px,4vw,46px) ${SERIF}`, margin: '14px 0 0', letterSpacing: 0.3, color: '#221c14' }}>Everything You Need to Manage Variations</h2>
+                <div style={{ font: `600 12px ${SANS}`, letterSpacing: 2.6, textTransform: 'uppercase', color: '#9E875D' }}>The System</div>
+                <h2 style={{ font: `300 clamp(30px,4vw,46px) ${SERIF}`, margin: '14px 0 0', letterSpacing: 0.3, color: '#2D3436' }}>Everything You Need to Manage Variations</h2>
               </div>
-              <Link href="/intelligence" className="btn-glass" style={{ font: `600 13px ${SANS}`, letterSpacing: 0.4, color: '#221c14', padding: '13px 26px', borderRadius: 999, ...glass }}>Open Dashboard</Link>
+              <Link href="/intelligence" className="btn-glass" style={{ font: `600 13px ${SANS}`, letterSpacing: 0.4, color: '#2D3436', padding: '13px 26px', borderRadius: 999, ...glass }}>Open Dashboard</Link>
             </div>
             <div className="grid2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
               {[
-                { n: 'Module 01', t: 'Variation Orders', d: `Complete VO lifecycle management with real-time tracking. ${STAT_VO_COUNT} VOs tracked across the project.`, g: 'linear-gradient(150deg,#3f9d93,#0f5a54)', s: 'rgba(15,90,84,.28)', href: '/vos', img: '/hero/module-vo.jpg' },
-                { n: 'Module 02', t: 'Payment Register', d: `Advanced payment tracking with automated calculations against the ${STAT_CONTRACT} contract value.`, g: 'linear-gradient(150deg,#cf8a52,#9c5a2f)', s: 'rgba(156,90,47,.28)', href: '/payments', img: '/hero/module-pay.jpg' },
-                { n: 'Module 03', t: 'Analytics', d: 'Interactive charts and real-time financial insight with 24/7 live updates.', g: 'linear-gradient(150deg,#5d8595,#2e4a58)', s: 'rgba(46,74,88,.28)', href: '/intelligence', img: '/hero/module-analytics.jpg' },
+                { n: 'Module 01', t: 'Variation Orders', d: `Complete VO lifecycle management with real-time tracking. ${STAT_VO_COUNT} VOs tracked across the project.`, g: 'linear-gradient(150deg,#9E875D,#6e5d3a)', s: 'rgba(110,93,58,.28)', href: '/vos', img: '/hero/module-vo.jpg' },
+                { n: 'Module 02', t: 'Payment Register', d: `Advanced payment tracking with automated calculations against the ${STAT_CONTRACT} contract value.`, g: 'linear-gradient(150deg,#b3a079,#6e5d3a)', s: 'rgba(110,93,58,.28)', href: '/payments', img: '/hero/module-pay.jpg' },
+                { n: 'Module 03', t: 'Analytics', d: 'Interactive charts and real-time financial insight with 24/7 live updates.', g: 'linear-gradient(150deg,#7a7363,#2D3436)', s: 'rgba(45,52,54,.28)', href: '/intelligence', img: '/hero/module-analytics.jpg' },
                 { n: 'Module 04', t: 'Forecasting', d: 'AI-assisted projections and final-account modelling to keep the project on track.', g: 'linear-gradient(150deg,#d8b06a,#a87a3c)', s: 'rgba(168,122,60,.28)', href: '/intelligence', img: '/hero/module-forecast.jpg' },
               ].map((m) => (
                 <Link key={m.t} href={m.href} className="tile" style={{ position: 'relative', minHeight: 300, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: 34, borderRadius: 26, overflow: 'hidden', background: m.g, border: '1px solid rgba(255,255,255,.22)', boxShadow: `0 16px 48px ${m.s}, inset 0 1px 0 rgba(255,255,255,.35)` }}>
