@@ -1,0 +1,16 @@
+{
+  "code": "R06-HW2C05-5020",
+  "name": "Shura West Hotel 02 \u2014 MEP Package",
+  "contractor": "First Fix",
+  "client": "Red Sea Global",
+  "contractDate": "2023-09-20",
+  "currency": "SAR",
+  "originalContractValue": 217501556.12,
+  "revisedContractValue": 232860904.0,
+  "advancePaymentTotal": 65250466.83,
+  "advancePaymentPercent": 0.3,
+  "retentionCapPercent": 0.05,
+  "vatRate": 0.15,
+  "dataAsOf": "2026-07-29",
+  "sourceWorkbook": "Pay Reg & VO LOG HW2 MEP 12May2026.xlsx"
+}

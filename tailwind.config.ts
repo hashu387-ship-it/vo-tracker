@@ -1,19 +1,26 @@
 import type { Config } from 'tailwindcss';
+import animate from 'tailwindcss-animate';
 
+/**
+ * Design system for the HW2C05 Commercial Register.
+ *
+ * Built on the Red Sea Global corporate palette — Deep Navy #0A2533,
+ * Lagoon Teal #008C95, Sand Gold #C5A065, Light Sand #F7F5F0 — extended into a
+ * full UI scale. Every colour is exposed as an HSL CSS variable in globals.css so
+ * light and dark are two selected sets of steps rather than an automatic flip.
+ */
 const config: Config = {
   darkMode: ['class'],
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './lib/**/*.{ts,tsx}',
   ],
   theme: {
     container: {
       center: true,
-      padding: '2rem',
-      screens: {
-        '2xl': '1400px',
-      },
+      padding: '1.5rem',
+      screens: { '2xl': '1600px' },
     },
     extend: {
       colors: {
@@ -22,6 +29,7 @@ const config: Config = {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        canvas: 'hsl(var(--canvas))',
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
@@ -29,10 +37,6 @@ const config: Config = {
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
         },
         muted: {
           DEFAULT: 'hsl(var(--muted))',
@@ -42,45 +46,79 @@ const config: Config = {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))',
         },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
         },
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
-        rsg: {
-          // Theme-aware brand colors, remapped to the 2026 strict palette
-          // (Bronze / Charcoal / Cream / Tan). No teal — see globals.css.
-          navy: 'hsl(var(--rsg-navy) / <alpha-value>)',
-          gold: 'hsl(var(--rsg-gold) / <alpha-value>)',
-          blue: 'hsl(var(--rsg-blue) / <alpha-value>)',
-          light: 'hsl(var(--rsg-light) / <alpha-value>)',
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
         },
-        // 2026 design-system palette (use directly: bg-bronze, text-charcoal, …)
-        bronze: 'hsl(var(--bronze) / <alpha-value>)',
-        charcoal: 'hsl(var(--charcoal) / <alpha-value>)',
-        cream: 'hsl(var(--cream) / <alpha-value>)',
-        tan: 'hsl(var(--tan) / <alpha-value>)',
+        // Brand anchors, available directly where a literal brand colour is wanted.
+        navy: {
+          50: '#eef3f6',
+          100: '#d3e0e6',
+          200: '#a6c1cd',
+          300: '#6e94a6',
+          400: '#3f6a80',
+          500: '#1d4358',
+          600: '#123448',
+          700: '#0d2b3b',
+          800: '#0a2533',
+          900: '#071b26',
+          950: '#04121a',
+        },
+        lagoon: {
+          50: '#e6f6f7',
+          100: '#c0e9ec',
+          200: '#8ad7dd',
+          300: '#4dc2cb',
+          400: '#22a0aa',
+          500: '#00949e',
+          600: '#008c95',
+          700: '#00727c',
+          800: '#005c65',
+          900: '#004a52',
+        },
+        sand: {
+          50: '#faf7f1',
+          100: '#f2ead9',
+          200: '#e5d3b2',
+          300: '#d5b986',
+          400: '#c5a065',
+          500: '#b98430',
+          600: '#a8792f',
+          700: '#8a6226',
+          800: '#6d4d1f',
+          900: '#523a17',
+        },
+        // Status semantics — reserved, never reused as a chart series colour.
+        good: 'hsl(var(--status-good))',
+        warning: 'hsl(var(--status-warning))',
+        serious: 'hsl(var(--status-serious))',
+        critical: 'hsl(var(--status-critical))',
+        neutral: 'hsl(var(--status-neutral))',
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
-        '2xl': '1rem',
-        '3xl': '1.5rem',
+      },
+      fontFamily: {
+        sans: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+      },
+      fontSize: {
+        '2xs': ['0.6875rem', { lineHeight: '1rem', letterSpacing: '0.02em' }],
       },
       boxShadow: {
-        'glow-sm': '0 0 15px -3px',
-        'glow-md': '0 0 25px -5px',
-        'glow-lg': '0 0 35px -5px',
-        'inner-glow': 'inset 0 0 20px -5px',
-        // 2026 liquid-glass + neumorphic dimensional shadows
-        liquid: '0 18px 50px -12px hsl(193 9% 19% / 0.22), inset 0 1px 0 hsl(0 0% 100% / 0.6)',
-        neu: '8px 8px 20px hsl(193 9% 19% / 0.10), -8px -8px 20px hsl(0 0% 100% / 0.70)',
-        'neu-inset': 'inset 6px 6px 14px hsl(193 9% 19% / 0.12), inset -6px -6px 14px hsl(0 0% 100% / 0.70)',
-        bronze: '0 8px 30px -6px hsl(39 26% 49% / 0.45)',
+        card: '0 1px 2px 0 rgb(10 37 51 / 0.04), 0 1px 3px 0 rgb(10 37 51 / 0.06)',
+        lift: '0 4px 12px -2px rgb(10 37 51 / 0.10), 0 2px 6px -2px rgb(10 37 51 / 0.06)',
+        pop: '0 12px 32px -8px rgb(10 37 51 / 0.22)',
       },
       keyframes: {
         'accordion-down': {
@@ -91,137 +129,23 @@ const config: Config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        fadeInUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        fadeInDown: {
-          '0%': { opacity: '0', transform: 'translateY(-20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        fadeInLeft: {
-          '0%': { opacity: '0', transform: 'translateX(-20px)' },
-          '100%': { opacity: '1', transform: 'translateX(0)' },
-        },
-        fadeInRight: {
-          '0%': { opacity: '0', transform: 'translateX(20px)' },
-          '100%': { opacity: '1', transform: 'translateX(0)' },
-        },
-        slideUp: {
-          '0%': { transform: 'translateY(10px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        slideDown: {
-          '0%': { transform: 'translateY(-10px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        'scale-in': {
-          '0%': { transform: 'scale(0.95)', opacity: '0' },
-          '100%': { transform: 'scale(1)', opacity: '1' },
-        },
-        'scale-in-center': {
-          '0%': { transform: 'scale(0)', opacity: '0' },
-          '100%': { transform: 'scale(1)', opacity: '1' },
-        },
-        'pulse-subtle': {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.8' },
-        },
-        'pulse-ring': {
-          '0%': { transform: 'scale(1)', opacity: '0.8' },
-          '50%': { transform: 'scale(1.05)', opacity: '0.4' },
-          '100%': { transform: 'scale(1)', opacity: '0.8' },
-        },
-        blob: {
-          '0%': {
-            transform: 'translate(0px, 0px) scale(1)',
-          },
-          '33%': {
-            transform: 'translate(30px, -50px) scale(1.1)',
-          },
-          '66%': {
-            transform: 'translate(-20px, 20px) scale(0.9)',
-          },
-          '100%': {
-            transform: 'translate(0px, 0px) scale(1)',
-          },
+        'fade-up': {
+          from: { opacity: '0', transform: 'translateY(6px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
         },
         shimmer: {
-          '0%': {
-            backgroundPosition: '0% 50%',
-          },
-          '100%': {
-            backgroundPosition: '200% 50%',
-          },
-        },
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-10px)' },
-        },
-        wiggle: {
-          '0%, 100%': { transform: 'rotate(-3deg)' },
-          '50%': { transform: 'rotate(3deg)' },
-        },
-        spin360: {
-          '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(360deg)' },
-        },
-        bounce: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-20%)' },
-        },
-        glow: {
-          '0%, 100%': { opacity: '0.4' },
-          '50%': { opacity: '0.8' },
-        },
-        ripple: {
-          '0%': { transform: 'scale(1)', opacity: '0.5' },
-          '100%': { transform: 'scale(2)', opacity: '0' },
-        },
-        'counter-spin': {
-          '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(-360deg)' },
+          '100%': { transform: 'translateX(100%)' },
         },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        fadeIn: 'fadeIn 0.5s ease-out forwards',
-        fadeInUp: 'fadeInUp 0.5s ease-out forwards',
-        fadeInDown: 'fadeInDown 0.5s ease-out forwards',
-        fadeInLeft: 'fadeInLeft 0.5s ease-out forwards',
-        fadeInRight: 'fadeInRight 0.5s ease-out forwards',
-        slideUp: 'slideUp 0.5s ease-out forwards',
-        slideDown: 'slideDown 0.5s ease-out forwards',
-        scaleIn: 'scale-in 0.2s ease-out forwards',
-        scaleInCenter: 'scale-in-center 0.3s ease-out forwards',
-        'pulse-subtle': 'pulse-subtle 2s ease-in-out infinite',
-        'pulse-ring': 'pulse-ring 2s ease-in-out infinite',
-        blob: 'blob 7s infinite',
-        shimmer: 'shimmer 8s linear infinite',
-        float: 'float 3s ease-in-out infinite',
-        wiggle: 'wiggle 0.5s ease-in-out',
-        spin360: 'spin360 1s linear infinite',
-        'spin-slow': 'spin360 3s linear infinite',
-        bounce: 'bounce 1s ease-in-out infinite',
-        glow: 'glow 2s ease-in-out infinite',
-        ripple: 'ripple 0.6s ease-out',
-        'counter-spin': 'counter-spin 6s linear infinite',
-      },
-      backdropBlur: {
-        xs: '2px',
-      },
-      transitionTimingFunction: {
-        'bounce-in': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-        'smooth-out': 'cubic-bezier(0.23, 1, 0.32, 1)',
+        'fade-up': 'fade-up 0.35s cubic-bezier(0.16, 1, 0.3, 1) both',
+        shimmer: 'shimmer 1.8s infinite',
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [animate],
 };
 
 export default config;

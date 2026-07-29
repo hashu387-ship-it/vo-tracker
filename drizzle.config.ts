@@ -1,17 +1,11 @@
 import type { Config } from 'drizzle-kit';
 
-/**
- * Drizzle Kit config — generates/pushes the enterprise schema to Postgres
- * (Supabase). Requires DATABASE_URL. Run `create extension if not exists vector;`
- * on the database before the first push so the pgvector column type resolves.
- */
 export default {
   schema: './lib/db/schema.ts',
-  out: './lib/db/migrations',
-  dialect: 'postgresql',
+  out: './drizzle',
+  dialect: 'turso',
   dbCredentials: {
-    url: process.env.DATABASE_URL ?? '',
+    url: process.env.TURSO_DATABASE_URL ?? process.env.DATABASE_URL ?? 'file:./.data/register.db',
+    authToken: process.env.TURSO_AUTH_TOKEN ?? process.env.DATABASE_AUTH_TOKEN,
   },
-  strict: true,
-  verbose: true,
 } satisfies Config;

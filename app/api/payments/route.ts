@@ -1,67 +1,45 @@
+import { NextResponse } from 'next/server';
 
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
-import { requireAuth, requireAdmin } from '@/lib/auth';
-import { z } from 'zod';
+import { savePayment } from '@/lib/actions';
+import { getPayments } from '@/lib/db/queries';
+import { PAYMENT_STATUS_META } from '@/lib/domain/types';
 
 export const dynamic = 'force-dynamic';
 
-// Schema for creating a payment
-const createPaymentSchema = z.object({
-    paymentNo: z.string().min(1, 'Payment number is required'),
-    description: z.string().min(1, 'Description is required'),
-    grossAmount: z.number().min(0),
-    advancePaymentRecovery: z.number().default(0),
-    retention: z.number().default(0),
-    vatRecovery: z.number().default(0),
-    vat: z.number().default(0),
-    netPayment: z.number(),
-    paymentStatus: z.string().default('Draft'),
-    submittedDate: z.string().optional().nullable().transform((val) => val ? new Date(val) : null),
-    invoiceDate: z.string().optional().nullable().transform((val) => val ? new Date(val) : null),
-    ffcLiveAction: z.string().optional().nullable(),
-    rsgLiveAction: z.string().optional().nullable(),
-    remarks: z.string().optional().nullable(),
-});
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const status = searchParams.get('status');
+  const outstanding = searchParams.get('outstanding') === 'true';
 
-// GET /api/payments - List all payments
-export async function GET(request: NextRequest) {
-    try {
-        await requireAuth();
+  let payments = await getPayments();
+  if (status) payments = payments.filter((payment) => payment.status === status);
+  if (outstanding) {
+    payments = payments.filter(
+      (payment) => payment.netCertified - (payment.received ?? 0) > 0.005,
+    );
+  }
 
-        const payments = await prisma.paymentApplication.findMany({
-            orderBy: { id: 'asc' }, // Or createdAt desc, but spreadsheet implies sequential ID order
-        });
-
-        return NextResponse.json({ data: payments });
-    } catch (error) {
-        console.error('GET /api/payments error:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-    }
+  return NextResponse.json({
+    count: payments.length,
+    payments: payments.map((payment) => ({
+      ...payment,
+      statusLabel: PAYMENT_STATUS_META[payment.status].label,
+      balanceDue: Math.round((payment.netCertified - (payment.received ?? 0)) * 100) / 100,
+    })),
+  });
 }
 
-// POST /api/payments - Create a new payment
-export async function POST(request: NextRequest) {
-    try {
-        await requireAdmin();
+export async function POST(request: Request) {
+  const body = await request.json().catch(() => null);
+  if (!body || typeof body !== 'object') {
+    return NextResponse.json({ ok: false, message: 'Expected a JSON body.' }, { status: 400 });
+  }
 
-        const body = await request.json();
-        const validationResult = createPaymentSchema.safeParse(body);
+  const formData = new FormData();
+  for (const [key, value] of Object.entries(body as Record<string, unknown>)) {
+    if (value !== null && value !== undefined) formData.set(key, String(value));
+  }
 
-        if (!validationResult.success) {
-            return NextResponse.json(
-                { error: 'Validation failed', details: validationResult.error.flatten() },
-                { status: 400 }
-            );
-        }
-
-        const payment = await prisma.paymentApplication.create({
-            data: validationResult.data,
-        });
-
-        return NextResponse.json({ data: payment }, { status: 201 });
-    } catch (error) {
-        console.error('POST /api/payments error:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-    }
+  const result = await savePayment(null, formData);
+  return NextResponse.json(result, { status: result.ok ? 201 : 422 });
 }

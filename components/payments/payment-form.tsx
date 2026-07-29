@@ -1,354 +1,291 @@
-
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Calculator, Save, CalendarIcon } from 'lucide-react';
-import { toast } from 'sonner';
-import { format } from 'date-fns';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
+import { Loader2, Save, Trash2 } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import * as React from 'react';
+import { toast } from 'sonner';
 
-const paymentSchema = z.object({
-    paymentNo: z.string().min(1, 'Payment No is required'),
-    description: z.string().min(1, 'Description is required'),
-    grossAmount: z.number().min(0),
-    advancePaymentRecovery: z.number().default(0),
-    retention: z.number().default(0),
-    vatRecovery: z.number().default(0),
-    vat: z.number().default(0),
-    netPayment: z.number(),
-    submittedDate: z.date().optional().nullable(),
-    invoiceDate: z.date().optional().nullable(),
-    paymentStatus: z.string().default('Draft'),
-    ffcLiveAction: z.string().optional(),
-    rsgLiveAction: z.string().optional(),
-    remarks: z.string().optional(),
-});
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Field, Input, Select, Textarea } from '@/components/ui/field';
+import { deletePayment, savePayment } from '@/lib/actions';
+import { money } from '@/lib/domain/money';
+import { PAYMENT_STATUSES, PAYMENT_STATUS_META, type Payment } from '@/lib/domain/types';
 
-type PaymentFormValues = z.infer<typeof paymentSchema>;
+const MONEY_FIELDS = [
+  { name: 'grossCertified', label: 'Gross certified', hint: 'work executed' },
+  { name: 'advanceRecovery', label: 'Advance payment recovery', hint: 'negative' },
+  { name: 'backCharge', label: 'Back charge', hint: 'negative' },
+  { name: 'retention', label: 'Retention', hint: 'negative, or positive on release' },
+  { name: 'vatOnAdvanceRecovery', label: 'VAT on advance recovery', hint: 'negative' },
+  { name: 'vat', label: 'VAT 15%', hint: '' },
+] as const;
 
-interface PaymentFormProps {
-    initialData?: any;
-    onSuccess?: () => void;
-    isDialog?: boolean;
-}
+export function PaymentForm({ payment, currency }: { payment?: Payment; currency: string }) {
+  const router = useRouter();
+  const [errors, setErrors] = React.useState<Record<string, string>>({});
+  const [saving, setSaving] = React.useState(false);
+  const [deleting, setDeleting] = React.useState(false);
 
-export function PaymentForm({ initialData, onSuccess, isDialog }: PaymentFormProps) {
-    const router = useRouter();
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [autoCalcEnabled, setAutoCalcEnabled] = useState(true);
+  // Live net-certified preview so the arithmetic is visible while typing.
+  const [amounts, setAmounts] = React.useState<Record<string, number>>(() =>
+    Object.fromEntries(
+      MONEY_FIELDS.map((field) => [field.name, (payment?.[field.name] as number) ?? 0]),
+    ),
+  );
+  const [overrideNet, setOverrideNet] = React.useState(false);
 
-    const form = useForm<PaymentFormValues>({
-        resolver: zodResolver(paymentSchema),
-        defaultValues: initialData || {
-            paymentNo: '',
-            description: '',
-            grossAmount: 0,
-            advancePaymentRecovery: 0,
-            retention: 0,
-            vatRecovery: 0,
-            vat: 0,
-            netPayment: 0,
-            submittedDate: undefined,
-            invoiceDate: undefined,
-            paymentStatus: 'Draft',
-            ffcLiveAction: '',
-            rsgLiveAction: '',
-            remarks: '',
-        },
-    });
+  const derivedNet = React.useMemo(
+    () =>
+      Math.round(
+        MONEY_FIELDS.reduce((sum, field) => sum + (amounts[field.name] || 0), 0) * 100,
+      ) / 100,
+    [amounts],
+  );
 
-    const { watch, setValue } = form;
-    const grossAmount = watch('grossAmount');
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSaving(true);
+    setErrors({});
+    const formData = new FormData(event.currentTarget);
+    if (!overrideNet) formData.delete('netCertified');
+    const result = await savePayment(payment?.id ?? null, formData);
+    setSaving(false);
 
-    const [rateScheme, setRateScheme] = useState<'initial' | 'revised'>('revised');
-
-    // Auto-calculation logic
-    useEffect(() => {
-        if (!autoCalcEnabled || initialData) return;
-
-        if (grossAmount > 0) {
-            // Rates based on scheme
-            const rates = rateScheme === 'initial'
-                ? { adv: 0.20, ret: 0.10 }
-                : { adv: 0.3209, ret: 0.05 };
-
-            const advRec = -(grossAmount * rates.adv);
-            const ret = -(grossAmount * rates.ret);
-            const vatRec = advRec * 0.15;
-            const vat = grossAmount * 0.15;
-
-            setValue('advancePaymentRecovery', parseFloat(advRec.toFixed(2)));
-            setValue('retention', parseFloat(ret.toFixed(2)));
-            setValue('vatRecovery', parseFloat(vatRec.toFixed(2)));
-            setValue('vat', parseFloat(vat.toFixed(2)));
-
-            const net = grossAmount + advRec + ret + vatRec + vat;
-            setValue('netPayment', parseFloat(net.toFixed(2)));
-        }
-    }, [grossAmount, autoCalcEnabled, setValue, initialData, rateScheme]);
-
-    // Re-calculate Net if any component changes manually
-    const advRec = watch('advancePaymentRecovery');
-    const ret = watch('retention');
-    const vatRec = watch('vatRecovery');
-    const vat = watch('vat');
-
-    useEffect(() => {
-        if (grossAmount !== undefined) {
-            const net = (Number(grossAmount) || 0) + (Number(advRec) || 0) + (Number(ret) || 0) + (Number(vatRec) || 0) + (Number(vat) || 0);
-            setValue('netPayment', parseFloat(net.toFixed(2)));
-        }
-    }, [grossAmount, advRec, ret, vatRec, vat, setValue]);
-
-
-    async function onSubmit(data: PaymentFormValues) {
-        setIsSubmitting(true);
-        try {
-            const url = initialData ? `/api/payments/${initialData.id}` : '/api/payments';
-            const method = initialData ? 'PUT' : 'POST';
-
-            const response = await fetch(url, {
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to save payment');
-            }
-
-            toast.success(initialData ? 'Payment updated' : 'Payment created');
-            router.refresh();
-            if (onSuccess) onSuccess();
-        } catch (error) {
-            toast.error('Something went wrong');
-            console.error(error);
-        } finally {
-            setIsSubmitting(false);
-        }
+    if (!result.ok) {
+      setErrors(result.errors ?? {});
+      toast.error(result.message ?? 'Could not save.');
+      return;
     }
+    toast.success(result.message ?? 'Saved.');
+    router.push(result.id ? `/payments/${result.id}` : '/payments');
+    router.refresh();
+  };
 
-    return (
-        <Card className={cn("w-full", isDialog && "border-0 shadow-none")}>
-            {!isDialog && (
-                <CardHeader>
-                    <CardTitle>Payment Application Details</CardTitle>
-                    <CardDescription>Enter the gross certified amount to auto-calculate deductions and net payment.</CardDescription>
-                </CardHeader>
-            )}
-            <CardContent>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label>Payment No / IPA Ref</Label>
-                            <Input {...form.register('paymentNo')} placeholder="e.g. IPA 15" />
-                            {form.formState.errors.paymentNo && <p className="text-red-500 text-xs">{form.formState.errors.paymentNo.message}</p>}
-                        </div>
+  const onDelete = async () => {
+    if (!payment) return;
+    setDeleting(true);
+    const result = await deletePayment(payment.id);
+    setDeleting(false);
+    if (!result.ok) {
+      toast.error(result.message ?? 'Could not delete.');
+      return;
+    }
+    toast.success(result.message ?? 'Deleted.');
+    router.push('/payments');
+    router.refresh();
+  };
 
-                        <div className="space-y-2">
-                            <Label>Description / Month</Label>
-                            <Input {...form.register('description')} placeholder="e.g. Jan 25th 2025 – Feb 25th 2025" />
-                            {form.formState.errors.description && <p className="text-red-500 text-xs">{form.formState.errors.description.message}</p>}
-                        </div>
-                    </div>
+  return (
+    <form onSubmit={onSubmit} className="space-y-4">
+      <div className="grid gap-4 lg:grid-cols-3">
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>Certificate</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4 sm:grid-cols-2">
+            <Field label="Reference" hint="e.g. IPA 31" error={errors.ref}>
+              <Input name="ref" required defaultValue={payment?.ref ?? ''} placeholder="IPA 00" />
+            </Field>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                            <Label className="text-blue-600 font-semibold">Gross Certified Amount</Label>
-                            <Input
-                                type="number"
-                                step="0.01"
-                                {...form.register('grossAmount', { valueAsNumber: true })}
-                                className="border-blue-200 focus:border-blue-500"
-                            />
-                        </div>
+            <Field label="Certificate type" error={errors.kind}>
+              <Select name="kind" defaultValue={payment?.kind ?? 'interim'}>
+                <option value="interim">Interim payment application</option>
+                <option value="advance">Advance payment</option>
+              </Select>
+            </Field>
 
-                        <div className="space-y-2">
-                            <Label>Adv. Payment Recovery</Label>
-                            <Input type="number" step="0.01" {...form.register('advancePaymentRecovery', { valueAsNumber: true })} />
-                            <p className="text-[10px] text-gray-500">Usually negative (e.g. -20% or -32.09%)</p>
-                        </div>
+            <Field
+              label="Claim period"
+              hint="e.g. Jun 25th 2026 – Jul 25th 2026"
+              error={errors.period}
+              className="sm:col-span-2"
+            >
+              <Input
+                name="period"
+                defaultValue={payment?.period ?? ''}
+                placeholder="Mon 00th YYYY – Mon 00th YYYY"
+              />
+            </Field>
 
-                        <div className="space-y-2">
-                            <Label>Retention</Label>
-                            <Input type="number" step="0.01" {...form.register('retention', { valueAsNumber: true })} />
-                            <p className="text-[10px] text-gray-500">Usually negative (e.g. -10% or -5%)</p>
-                        </div>
+            <Field label="Submitted" hint="YYYY-MM-DD" error={errors.submittedDate}>
+              <Input type="date" name="submittedDate" defaultValue={payment?.submittedDate ?? ''} />
+            </Field>
 
-                        <div className="space-y-2">
-                            <Label>VAT Recovery (Adv)</Label>
-                            <Input type="number" step="0.01" {...form.register('vatRecovery', { valueAsNumber: true })} />
-                            <p className="text-[10px] text-gray-500">15% of Adv Recovery</p>
-                        </div>
+            <Field label="Tax invoice" hint="YYYY-MM-DD" error={errors.taxInvoiceDate}>
+              <Input
+                type="date"
+                name="taxInvoiceDate"
+                defaultValue={payment?.taxInvoiceDate ?? ''}
+              />
+            </Field>
 
-                        <div className="space-y-2">
-                            <Label>VAT 15%</Label>
-                            <Input type="number" step="0.01" {...form.register('vat', { valueAsNumber: true })} />
-                        </div>
+            <Field label="Due" hint="YYYY-MM-DD" error={errors.dueDate}>
+              <Input type="date" name="dueDate" defaultValue={payment?.dueDate ?? ''} />
+            </Field>
 
-                        <div className="space-y-2">
-                            <Label className="text-green-600 font-bold">Net Payment Certified</Label>
-                            <Input
-                                type="number"
-                                step="0.01"
-                                {...form.register('netPayment', { valueAsNumber: true })}
-                                className="font-bold bg-green-50 border-green-200"
-                                readOnly
-                            />
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="flex flex-col space-y-2">
-                            <Label>Submitted Date (FFC to TRSDC)</Label>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        variant={"outline"}
-                                        className={cn(
-                                            "w-full justify-start text-left font-normal",
-                                            !watch('submittedDate') && "text-muted-foreground"
-                                        )}
-                                    >
-                                        <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {watch('submittedDate') ? format(watch('submittedDate')!, "PPP") : <span>Pick a date</span>}
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0" align="start">
-                                    <Calendar
-                                        mode="single"
-                                        selected={watch('submittedDate') || undefined}
-                                        onSelect={(date) => setValue('submittedDate', date)}
-                                        initialFocus
-                                    />
-                                </PopoverContent>
-                            </Popover>
-                        </div>
-
-                        <div className="flex flex-col space-y-2">
-                            <Label>Invoice Submitted Date</Label>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        variant={"outline"}
-                                        className={cn(
-                                            "w-full justify-start text-left font-normal",
-                                            !watch('invoiceDate') && "text-muted-foreground"
-                                        )}
-                                    >
-                                        <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {watch('invoiceDate') ? format(watch('invoiceDate')!, "PPP") : <span>Pick a date</span>}
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0" align="start">
-                                    <Calendar
-                                        mode="single"
-                                        selected={watch('invoiceDate') || undefined}
-                                        onSelect={(date) => setValue('invoiceDate', date)}
-                                        initialFocus
-                                    />
-                                </PopoverContent>
-                            </Popover>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                            <Label>Payment Status</Label>
-                            <select
-                                {...form.register('paymentStatus')}
-                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                                <option value="Draft">Draft</option>
-                                <option value="Submitted on ACONEX">Submitted on ACONEX</option>
-                                <option value="Paid">Paid</option>
-                                <option value="Received">Received</option>
-                            </select>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label>FFC Live Action</Label>
-                            <Input {...form.register('ffcLiveAction')} placeholder="e.g. Transaction Received" />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label>RSG Live Action</Label>
-                            <Input {...form.register('rsgLiveAction')} placeholder="e.g. Transaction Placed" />
-                        </div>
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label>Remarks</Label>
-                        <Input {...form.register('remarks')} placeholder="Additional remarks or notes" />
-                    </div>
-
-                    <div className="flex justify-end gap-2">
-                        {!initialData && (
-                            <div className="flex flex-col gap-2 mr-auto border p-2 rounded bg-gray-50">
-                                <span className="text-xs font-semibold text-gray-700">Auto-Calc Settings:</span>
-                                <div className="flex items-center gap-4">
-                                    <label className="flex items-center gap-2 cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="rateScheme"
-                                            value="initial"
-                                            checked={rateScheme === 'initial'}
-                                            onChange={() => setRateScheme('initial')}
-                                            className="text-rsg-blue"
-                                        />
-                                        <div className="flex flex-col">
-                                            <span className="text-xs text-gray-700">Initial (20% / 10%)</span>
-                                        </div>
-                                    </label>
-                                    <label className="flex items-center gap-2 cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="rateScheme"
-                                            value="revised"
-                                            checked={rateScheme === 'revised'}
-                                            onChange={() => setRateScheme('revised')}
-                                            className="text-rsg-blue"
-                                        />
-                                        <div className="flex flex-col">
-                                            <span className="text-xs text-gray-700">Revised (32.09% / 5%)</span>
-                                        </div>
-                                    </label>
-                                </div>
-                                <div className="flex items-center gap-2 mt-1">
-                                    <input
-                                        type="checkbox"
-                                        id="autoCalc"
-                                        checked={autoCalcEnabled}
-                                        onChange={(e) => setAutoCalcEnabled(e.target.checked)}
-                                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-3 w-3"
-                                    />
-                                    <Label htmlFor="autoCalc" className="cursor-pointer text-xs text-gray-500">Enable Auto-calculation</Label>
-                                </div>
-                            </div>
-                        )}
-                        <Button type="submit" disabled={isSubmitting} className="bg-rsg-blue hover:bg-rsg-navy">
-                            {isSubmitting ? 'Saving...' : (
-                                <>
-                                    <Save className="mr-2 h-4 w-4" />
-                                    Save Payment
-                                </>
-                            )}
-                        </Button>
-                    </div>
-                </form>
-            </CardContent>
+            <Field label="Collected" hint="YYYY-MM-DD" error={errors.collectedDate}>
+              <Input type="date" name="collectedDate" defaultValue={payment?.collectedDate ?? ''} />
+            </Field>
+          </CardContent>
         </Card>
-    );
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Status</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Field label="Certificate status" error={errors.status}>
+              <Select name="status" defaultValue={payment?.status ?? 'draft'}>
+                {PAYMENT_STATUSES.map((status) => (
+                  <option key={status} value={status}>
+                    {PAYMENT_STATUS_META[status].label}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+
+            <Field label="Payment note" hint="free text" error={errors.paymentNote}>
+              <Input
+                name="paymentNote"
+                defaultValue={payment?.paymentNote ?? ''}
+                placeholder="Tax invoice sent on…"
+              />
+            </Field>
+
+            <Field label={`Received (${currency})`} error={errors.received}>
+              <Input
+                type="number"
+                step="0.01"
+                name="received"
+                defaultValue={payment?.received ?? ''}
+                placeholder="Leave blank if not collected"
+              />
+            </Field>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Valuation ({currency})</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {MONEY_FIELDS.map((field) => (
+              <Field
+                key={field.name}
+                label={field.label}
+                hint={field.hint}
+                error={errors[field.name]}
+              >
+                <Input
+                  type="number"
+                  step="0.01"
+                  name={field.name}
+                  defaultValue={(payment?.[field.name] as number | undefined) ?? 0}
+                  onChange={(event) =>
+                    setAmounts((current) => ({
+                      ...current,
+                      [field.name]: Number(event.target.value) || 0,
+                    }))
+                  }
+                />
+              </Field>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-border bg-muted/50 px-4 py-3">
+            <div>
+              <p className="eyebrow">Net certified</p>
+              <p className="tnum text-lg font-semibold">{money(derivedNet)}</p>
+              <p className="text-2xs text-muted-foreground">
+                Gross + advance recovery + back charge + retention + VAT adjustments
+              </p>
+            </div>
+
+            <label className="flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                checked={overrideNet}
+                onChange={(event) => setOverrideNet(event.target.checked)}
+                className="size-3.5 accent-[hsl(var(--primary))]"
+              />
+              Override
+            </label>
+
+            {overrideNet ? (
+              <Input
+                type="number"
+                step="0.01"
+                name="netCertified"
+                defaultValue={payment?.netCertified ?? derivedNet}
+                className="max-w-[200px]"
+                aria-label="Net certified override"
+              />
+            ) : null}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Actions outstanding</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4 sm:grid-cols-2">
+          <Field label="Contractor action" error={errors.contractorAction}>
+            <Textarea name="contractorAction" defaultValue={payment?.contractorAction ?? ''} />
+          </Field>
+          <Field label="Employer action" error={errors.clientAction}>
+            <Textarea name="clientAction" defaultValue={payment?.clientAction ?? ''} />
+          </Field>
+        </CardContent>
+      </Card>
+
+      <div className="flex flex-wrap items-center gap-2">
+        <Button type="submit" disabled={saving}>
+          {saving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
+          {payment ? 'Save changes' : 'Add certificate'}
+        </Button>
+        <Button type="button" variant="outline" asChild>
+          <Link href={payment ? `/payments/${payment.id}` : '/payments'}>Cancel</Link>
+        </Button>
+
+        {payment ? (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button type="button" variant="ghost" className="ml-auto text-destructive">
+                <Trash2 className="size-4" /> Delete
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Delete {payment.ref}?</DialogTitle>
+                <DialogDescription>
+                  Removing a certificate changes work done, retention and cash position. The change
+                  is recorded in the activity log.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <Button type="button" variant="destructive" onClick={onDelete} disabled={deleting}>
+                  {deleting ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
+                  Delete permanently
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        ) : null}
+      </div>
+    </form>
+  );
 }
