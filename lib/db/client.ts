@@ -51,11 +51,36 @@ function localDatabaseFile(): { file: string; mode: StorageMode } {
   }
 }
 
+/** The schemes @libsql/client can actually open. */
+const LIBSQL_SCHEMES = ['libsql:', 'http:', 'https:', 'ws:', 'wss:', 'file:'];
+
+/**
+ * A DATABASE_URL left behind by a different application — a Postgres or MySQL
+ * connection string, say — is not something libSQL can open, and handing it over
+ * takes the whole app down at build time. Ignore anything it cannot speak and
+ * fall back to local storage instead.
+ */
+function usableLibsqlUrl(value: string | undefined, name: string): string | null {
+  if (!value) return null;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+
+  const scheme = trimmed.slice(0, trimmed.indexOf(':') + 1).toLowerCase();
+  if (!LIBSQL_SCHEMES.includes(scheme)) {
+    console.warn(
+      `[register] Ignoring ${name}: "${scheme || trimmed}" is not a libSQL URL. ` +
+        `Expected one of ${LIBSQL_SCHEMES.join(', ')}. Falling back to local storage.`,
+    );
+    return null;
+  }
+  return trimmed;
+}
+
 function resolveUrl(): { url: string; authToken?: string; mode: StorageMode } {
-  const turso = process.env.TURSO_DATABASE_URL;
+  const turso = usableLibsqlUrl(process.env.TURSO_DATABASE_URL, 'TURSO_DATABASE_URL');
   if (turso) return { url: turso, authToken: process.env.TURSO_AUTH_TOKEN, mode: 'remote' };
 
-  const generic = process.env.DATABASE_URL;
+  const generic = usableLibsqlUrl(process.env.DATABASE_URL, 'DATABASE_URL');
   if (generic) {
     return {
       url: generic,
