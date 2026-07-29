@@ -54,7 +54,13 @@ npm run db:reset     # delete the local database and reseed
 The register is a normal Next.js app. The only thing it needs in production is a
 database that persists across requests, because a serverless filesystem does not.
 
-Point it at a hosted libSQL (Turso) instance:
+Without one it still comes up — a serverless host mounts the deployment
+read-only, so the app falls back to the instance's temp directory and seeds
+itself there. That is enough to browse and demo, but the data is per-instance and
+lost on a cold start, and the **Data & contract** page says so plainly.
+
+For a register people actually rely on, point it at a hosted libSQL (Turso)
+instance:
 
 ```
 TURSO_DATABASE_URL=libsql://your-database.turso.io

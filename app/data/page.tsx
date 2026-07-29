@@ -1,4 +1,4 @@
-import { AlertTriangle, Database, Info } from 'lucide-react';
+import { AlertTriangle, Database, HardDrive, Info } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -6,11 +6,19 @@ import { ImportPanel } from '@/components/data/import-panel';
 import { ProjectForm } from '@/components/data/project-form';
 import { DefinitionRow, PageHeader, Section } from '@/components/register/page-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { storageMode } from '@/lib/db/client';
 import { getRegister } from '@/lib/db/queries';
 import { formatDate, money } from '@/lib/domain/money';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = { title: 'Data & contract' };
+
+const STORAGE_LABEL = {
+  remote: 'Hosted libSQL database — shared between instances and durable.',
+  local: 'Local database file beside the project — durable on this machine.',
+  ephemeral:
+    'Temporary storage. This host mounts the deployment read-only, so the register lives in the instance’s temp directory: edits are visible here but are not shared between instances and are lost when the instance restarts. Set TURSO_DATABASE_URL (and TURSO_AUTH_TOKEN) to make changes permanent.',
+} as const;
 
 export default async function DataPage() {
   const { project, variations, payments, asOf, issues, paymentPosition, variationPosition } =
@@ -23,6 +31,35 @@ export default async function DataPage() {
         title="Data & contract"
         description="Import the source workbook, export the register, and keep the contract particulars that drive every derived figure."
       />
+
+      <div
+        className={cn(
+          'flex items-start gap-2.5 rounded-lg border px-4 py-3',
+          storageMode === 'ephemeral'
+            ? 'border-warning/30 bg-warning/5'
+            : 'border-border bg-card shadow-card',
+        )}
+      >
+        <HardDrive
+          className={cn(
+            'mt-0.5 size-4 shrink-0',
+            storageMode === 'ephemeral' ? 'text-warning' : 'text-muted-foreground',
+          )}
+        />
+        <div className="min-w-0">
+          <p className="text-xs font-medium">
+            Storage ·{' '}
+            {storageMode === 'remote'
+              ? 'hosted'
+              : storageMode === 'local'
+                ? 'local file'
+                : 'temporary'}
+          </p>
+          <p className="text-2xs leading-relaxed text-muted-foreground">
+            {STORAGE_LABEL[storageMode]}
+          </p>
+        </div>
+      </div>
 
       <ImportPanel sourceWorkbook={project.sourceWorkbook} />
 

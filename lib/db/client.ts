@@ -1,6 +1,7 @@
 import { createClient, type Client } from '@libsql/client';
 import { drizzle, type LibSQLDatabase } from 'drizzle-orm/libsql';
-import { mkdirSync } from 'node:fs';
+import { accessSync, constants as fsConstants, mkdirSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 
 import * as schema from './schema';
@@ -11,56 +12,86 @@ import * as schema from './schema';
  * Resolution order:
  *   1. TURSO_DATABASE_URL (+ TURSO_AUTH_TOKEN) — hosted libSQL, for deployments.
  *   2. DATABASE_URL — any libsql:/http:/file: URL.
- *   3. file:./.data/register.db — the zero-configuration default, so
+ *   3. A local libSQL file — the zero-configuration default, so
  *      `npm install && npm run dev` gives a working, writable register.
  *
  * The schema is created and seeded on first touch, which keeps the app
  * self-contained: no migration step is required before the first page load.
  */
 
-const DEFAULT_FILE = 'file:./.data/register.db';
+export type StorageMode =
+  /** A hosted libSQL database — shared between instances and durable. */
+  | 'remote'
+  /** A file beside the project — durable on a normal server or a laptop. */
+  | 'local'
+  /** A file in the OS temp directory — per-instance and lost on cold start. */
+  | 'ephemeral';
 
-function resolveUrl(): { url: string; authToken?: string } {
+/**
+ * Picks a writable location for the local database. A serverless runtime mounts
+ * the deployment read-only and gives each instance its own `/tmp`, so falling
+ * back there keeps a preview deployment working — at the cost of the data being
+ * per-instance and lost on a cold start. Set TURSO_DATABASE_URL for real
+ * persistence; `storageMode` is surfaced in the UI so this is never a surprise.
+ */
+function localDatabaseFile(): { file: string; mode: StorageMode } {
+  const preferred = path.resolve('.data/register.db');
+  try {
+    mkdirSync(path.dirname(preferred), { recursive: true });
+    accessSync(path.dirname(preferred), fsConstants.W_OK);
+    return { file: preferred, mode: 'local' };
+  } catch {
+    const fallback = path.join(tmpdir(), 'hw2c05-register.db');
+    try {
+      mkdirSync(path.dirname(fallback), { recursive: true });
+    } catch {
+      // tmpdir() always exists; nothing useful to do if even that fails.
+    }
+    return { file: fallback, mode: 'ephemeral' };
+  }
+}
+
+function resolveUrl(): { url: string; authToken?: string; mode: StorageMode } {
   const turso = process.env.TURSO_DATABASE_URL;
-  if (turso) return { url: turso, authToken: process.env.TURSO_AUTH_TOKEN };
+  if (turso) return { url: turso, authToken: process.env.TURSO_AUTH_TOKEN, mode: 'remote' };
 
   const generic = process.env.DATABASE_URL;
-  if (generic) return { url: generic, authToken: process.env.DATABASE_AUTH_TOKEN };
+  if (generic) {
+    return {
+      url: generic,
+      authToken: process.env.DATABASE_AUTH_TOKEN,
+      mode: generic.startsWith('file:') ? 'local' : 'remote',
+    };
+  }
 
-  return { url: DEFAULT_FILE };
+  const { file, mode } = localDatabaseFile();
+  return { url: `file:${file}`, mode };
 }
 
 declare global {
-  var __registerDb: { client: Client; db: LibSQLDatabase<typeof schema> } | undefined;
+  var __registerDb:
+    | { client: Client; db: LibSQLDatabase<typeof schema>; mode: StorageMode }
+    | undefined;
   var __registerReady: Promise<void> | undefined;
 }
 
 function connect() {
-  const { url, authToken } = resolveUrl();
-
-  if (url.startsWith('file:')) {
-    const filePath = url.slice('file:'.length);
-    const dir = path.dirname(path.resolve(filePath));
-    try {
-      mkdirSync(dir, { recursive: true });
-    } catch {
-      // Read-only filesystem (e.g. a serverless bundle) — surfaced by the
-      // connection attempt below with a clearer message.
-    }
-  }
-
+  const { url, authToken, mode } = resolveUrl();
   const client = createClient({ url, authToken });
-  return { client, db: drizzle(client, { schema }) };
+  return { client, db: drizzle(client, { schema }), mode };
 }
 
 const connection = globalThis.__registerDb ?? connect();
-if (process.env.NODE_ENV !== 'production') globalThis.__registerDb = connection;
+// Reused across requests in every environment; a serverless instance would
+// otherwise open a fresh connection — and re-seed — on every invocation.
+globalThis.__registerDb = connection;
 
 export const client = connection.client;
 export const db = connection.db;
 export { schema };
 
-export const isRemoteDatabase = !resolveUrl().url.startsWith('file:');
+/** Where the register is stored — drives the warning shown on /data. */
+export const storageMode: StorageMode = connection.mode;
 
 const DDL = [
   `CREATE TABLE IF NOT EXISTS projects (
