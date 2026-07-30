@@ -1,85 +1,48 @@
+import { NextResponse } from 'next/server';
 
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
-import { requireAuth, requireAdmin } from '@/lib/auth';
-import { z } from 'zod';
+import { deletePayment, savePayment } from '@/lib/actions';
+import { getPayment } from '@/lib/db/queries';
+import { PAYMENT_STATUS_META } from '@/lib/domain/types';
 
 export const dynamic = 'force-dynamic';
 
-const updatePaymentSchema = z.object({
-    paymentNo: z.string().min(1).optional(),
-    description: z.string().min(1).optional(),
-    grossAmount: z.number().min(0).optional(),
-    advancePaymentRecovery: z.number().optional(),
-    retention: z.number().optional(),
-    vatRecovery: z.number().optional(),
-    vat: z.number().optional(),
-    netPayment: z.number().optional(),
-    paymentStatus: z.string().optional(),
-    submittedDate: z.string().optional().nullable().transform((val) => val ? new Date(val) : null),
-    invoiceDate: z.string().optional().nullable().transform((val) => val ? new Date(val) : null),
-    ffcLiveAction: z.string().optional().nullable(),
-    rsgLiveAction: z.string().optional().nullable(),
-    remarks: z.string().optional().nullable(),
-});
-
-interface RouteParams {
-    params: Promise<{ id: string }>;
+export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const payment = await getPayment(id);
+  if (!payment) {
+    return NextResponse.json({ ok: false, message: 'Not found' }, { status: 404 });
+  }
+  return NextResponse.json({
+    ...payment,
+    statusLabel: PAYMENT_STATUS_META[payment.status].label,
+    balanceDue: Math.round((payment.netCertified - (payment.received ?? 0)) * 100) / 100,
+  });
 }
 
-// PUT /api/payments/:id - Update payment
-export async function PUT(request: NextRequest, { params }: RouteParams) {
-    try {
-        await requireAdmin();
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const existing = await getPayment(id);
+  if (!existing) {
+    return NextResponse.json({ ok: false, message: 'Not found' }, { status: 404 });
+  }
 
-        const { id } = await params;
-        const paymentId = parseInt(id, 10);
+  const body = await request.json().catch(() => null);
+  if (!body || typeof body !== 'object') {
+    return NextResponse.json({ ok: false, message: 'Expected a JSON body.' }, { status: 400 });
+  }
 
-        if (isNaN(paymentId)) {
-            return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
-        }
+  const merged: Record<string, unknown> = { ...existing, ...(body as Record<string, unknown>) };
+  const formData = new FormData();
+  for (const [key, value] of Object.entries(merged)) {
+    if (value !== null && value !== undefined) formData.set(key, String(value));
+  }
 
-        const body = await request.json();
-        const validationResult = updatePaymentSchema.safeParse(body);
-
-        if (!validationResult.success) {
-            return NextResponse.json(
-                { error: 'Validation failed', details: validationResult.error.flatten() },
-                { status: 400 }
-            );
-        }
-
-        const payment = await prisma.paymentApplication.update({
-            where: { id: paymentId },
-            data: validationResult.data,
-        });
-
-        return NextResponse.json({ data: payment });
-    } catch (error) {
-        console.error('PUT /api/payments/:id error:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-    }
+  const result = await savePayment(id, formData);
+  return NextResponse.json(result, { status: result.ok ? 200 : 422 });
 }
 
-// DELETE /api/payments/:id - Delete payment
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
-    try {
-        await requireAdmin();
-
-        const { id } = await params;
-        const paymentId = parseInt(id, 10);
-
-        if (isNaN(paymentId)) {
-            return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
-        }
-
-        await prisma.paymentApplication.delete({
-            where: { id: paymentId },
-        });
-
-        return NextResponse.json({ message: 'Payment deleted' });
-    } catch (error) {
-        console.error('DELETE /api/payments/:id error:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-    }
+export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const result = await deletePayment(id);
+  return NextResponse.json(result, { status: result.ok ? 200 : 404 });
 }

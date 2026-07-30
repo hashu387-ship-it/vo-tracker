@@ -1,90 +1,109 @@
-import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata, Viewport } from 'next';
-import { DM_Sans, Newsreader, Hanken_Grotesk } from 'next/font/google';
-import { ThemeProvider } from '@/components/providers/theme-provider';
-import { QueryProvider } from '@/components/providers/query-provider';
-import { GuestModeProvider } from '@/components/providers/guest-mode-provider';
-import { AuthDialogProvider } from '@/components/auth/auth-dialog';
-import { Toaster } from '@/components/ui/toaster';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { PasswordDialog } from '@/components/ui/password-dialog';
-import { LiquidBackground } from '@/components/ui/liquid-background';
-import { Footer } from '@/components/layout/footer';
-import './globals.css';
+import * as React from 'react';
 
-const dmSans = DM_Sans({ subsets: ['latin'] });
-const newsreader = Newsreader({ subsets: ['latin'], weight: ['300', '400', '500'], variable: '--font-newsreader' });
-const hanken = Hanken_Grotesk({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-hanken' });
+import { Providers } from '@/app/providers';
+import { Sidebar } from '@/components/shell/sidebar';
+import { Topbar } from '@/components/shell/topbar';
+import type { PaletteEntry } from '@/components/shell/command-palette';
+import { getRegister } from '@/lib/db/queries';
+import { formatDate } from '@/lib/domain/money';
+import { PAYMENT_STATUS_META, VARIATION_STATUS_META } from '@/lib/domain/types';
+
+import './globals.css';
 
 export const metadata: Metadata = {
   title: {
-    default: 'VO Tracker · Commercial Intelligence Command Center',
-    template: '%s · VO Tracker',
+    default: 'HW2C05 Commercial Register',
+    template: '%s · HW2C05 Commercial Register',
   },
   description:
-    'A next-generation commercial command center for the HW2 MEP project — AI-assisted variation order tracking, payment register analytics, forecasting, and live KPIs.',
-  keywords: [
-    'variation orders',
-    'payment register',
-    'commercial management',
-    'construction',
-    'quantity surveying',
-    'RSG',
-    'First Fix',
-    'analytics dashboard',
-  ],
-  applicationName: 'VO Tracker',
-  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'VO Tracker' },
-  openGraph: {
-    title: 'VO Tracker · Commercial Intelligence',
-    description: 'AI-assisted variation order & payment intelligence for HW2 MEP.',
-    type: 'website',
-  },
+    'Variation order and payment register for R06-HW2C05, Shura West Hotel 02 MEP package — First Fix Contracting / Red Sea Global.',
 };
+
+/**
+ * The register is a live, multi-user database. Rendering on demand keeps every
+ * page truthful even when a change arrives over the API from another instance;
+ * with ~120 rows the render cost is negligible.
+ */
+export const dynamic = 'force-dynamic';
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f8fafc' },
-    { media: '(prefers-color-scheme: dark)', color: '#09090b' },
+    { media: '(prefers-color-scheme: light)', color: '#f7f5f0' },
+    { media: '(prefers-color-scheme: dark)', color: '#0b1a22' },
   ],
-  width: 'device-width',
-  initialScale: 1,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const { project, variations, payments, asOf, issues } = await getRegister();
+
+  const entries: PaletteEntry[] = [
+    ...variations.map((variation) => ({
+      id: variation.id,
+      href: `/variations/${variation.id}`,
+      title: `${variation.voNumber ?? `#${variation.serial}`} — ${variation.subject}`,
+      subtitle: [
+        variation.status ? VARIATION_STATUS_META[variation.status].label : 'No status',
+        variation.vorRef,
+        variation.submissionRef,
+      ]
+        .filter(Boolean)
+        .join(' · '),
+      group: 'Variation orders' as const,
+      keywords: [
+        variation.voNumber,
+        variation.subject,
+        variation.vorRef,
+        variation.dvoRef,
+        variation.dvoReference,
+        variation.submissionRef,
+        variation.responseRef,
+        variation.owner,
+        variation.status ? VARIATION_STATUS_META[variation.status].label : '',
+      ]
+        .filter(Boolean)
+        .join(' '),
+      value: variation.agreedValue ?? variation.proposalValue,
+    })),
+    ...payments.map((payment) => ({
+      id: payment.id,
+      href: `/payments/${payment.id}`,
+      title: `${payment.ref}${payment.period ? ` — ${payment.period}` : ''}`,
+      subtitle: PAYMENT_STATUS_META[payment.status].label,
+      group: 'Payment certificates' as const,
+      keywords: [payment.ref, payment.period, PAYMENT_STATUS_META[payment.status].label]
+        .filter(Boolean)
+        .join(' '),
+      value: payment.netCertified,
+    })),
+  ];
+
   return (
-    <ClerkProvider
-      signInFallbackRedirectUrl="/intelligence"
-      signUpFallbackRedirectUrl="/intelligence"
-      signInForceRedirectUrl="/intelligence"
-      signUpForceRedirectUrl="/intelligence"
-    >
-      <html lang="en" suppressHydrationWarning>
-        <body className={`${dmSans.className} ${newsreader.variable} ${hanken.variable} min-h-screen font-sans antialiased flex flex-col`}>
-          <LiquidBackground />
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <Providers>
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
           >
-            <QueryProvider>
-              <GuestModeProvider>
-                <AuthDialogProvider>
-                  <TooltipProvider>
-                    <div className="flex-1 flex flex-col">
-                      {children}
-                    </div>
-                    <Footer />
-                    <Toaster />
-                    <PasswordDialog />
-                  </TooltipProvider>
-                </AuthDialogProvider>
-              </GuestModeProvider>
-            </QueryProvider>
-          </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+            Skip to content
+          </a>
+          <div className="flex min-h-dvh">
+            <Sidebar contractor={project.contractor} asOf={formatDate(asOf)} />
+            <div className="flex min-w-0 flex-1 flex-col">
+              <Topbar
+                entries={entries}
+                contractor={project.contractor}
+                asOf={formatDate(asOf)}
+                issueCount={issues.length}
+              />
+              <main id="main" className="flex-1 px-4 py-5 lg:px-6 lg:py-6">
+                {children}
+              </main>
+            </div>
+          </div>
+        </Providers>
+      </body>
+    </html>
   );
 }
