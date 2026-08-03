@@ -86,7 +86,7 @@ export default async function CashflowPage() {
 
       <CertifiedVsCollected data={cashflow} />
 
-      <div className="grid gap-4 xl:grid-cols-2">
+      <div className="grid gap-[var(--grid-gap)] xl:grid-cols-2">
         <ForecastChart forecast={forecast} contractValue={project.revisedContractValue} />
         <AgeingChart data={ageing} />
       </div>
@@ -101,7 +101,7 @@ export default async function CashflowPage() {
         net={pos.netCertifiedTotal}
       />
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-[var(--grid-gap)] lg:grid-cols-3">
         <Section
           title="Outstanding certificates"
           description="Certified value awaiting transfer, oldest invoice first"
@@ -163,7 +163,7 @@ export default async function CashflowPage() {
 
         <Section title="Completion outlook" description="Straight-line from the recent run rate">
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               <DefinitionRow
                 label="Run rate"
                 hint={`Mean of the last ${forecast.basisCount} certificates`}

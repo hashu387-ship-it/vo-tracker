@@ -117,12 +117,12 @@ export default async function AnalyticsPage() {
         />
       </KpiGrid>
 
-      <div className="grid gap-4 xl:grid-cols-2">
+      <div className="grid gap-[var(--grid-gap)] xl:grid-cols-2">
         <VariationStatusChart data={vos.byStatus} />
 
         <Section title="Value by status" description="Agreed value carried by each status">
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               {vos.byStatus.map((row) => (
                 <DefinitionRow
                   key={row.status}
@@ -141,7 +141,7 @@ export default async function AnalyticsPage() {
         </Section>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-2">
+      <div className="grid gap-[var(--grid-gap)] xl:grid-cols-2">
         <Section title="Largest additions" description="The ten variations adding the most value">
           <Card>
             <CardContent className="p-0">
@@ -277,10 +277,10 @@ export default async function AnalyticsPage() {
         </Card>
       </Section>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-[var(--grid-gap)] lg:grid-cols-3">
         <Section title="By submission route" description="How each change was raised">
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               {byType.map((row) => (
                 <DefinitionRow
                   key={row.type}
@@ -295,7 +295,7 @@ export default async function AnalyticsPage() {
 
         <Section title="By year raised" description="Volume and value of change over time">
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               {years.map(([year, entry]) => (
                 <DefinitionRow
                   key={year}
@@ -310,7 +310,7 @@ export default async function AnalyticsPage() {
 
         <Section title="Workload" description="Who is named against each variation">
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               {owners.length === 0 ? (
                 <p className="py-4 text-sm text-muted-foreground">No owners recorded.</p>
               ) : (

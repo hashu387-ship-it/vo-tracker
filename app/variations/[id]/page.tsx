@@ -108,10 +108,10 @@ export default async function VariationDetailPage({
         </div>
       ) : null}
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-[var(--grid-gap)] lg:grid-cols-3">
         <Section title="Commercial position" className="lg:col-span-2">
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               <DefinitionRow
                 label="Cost proposal value"
                 hint={`Priced by ${project.contractor}`}
@@ -157,7 +157,7 @@ export default async function VariationDetailPage({
 
         <Section title="Record">
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               <DefinitionRow label="Submission type" value={variation.submissionType ?? '—'} />
               <DefinitionRow label="Raised in Aconex" value={formatDate(variation.aconexDate)} />
               <DefinitionRow label="Submitted" value={formatDate(variation.submissionDate)} />
@@ -171,10 +171,10 @@ export default async function VariationDetailPage({
         </Section>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-[var(--grid-gap)] lg:grid-cols-2">
         <Section title="References">
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               <DefinitionRow label="VOR" value={variation.vorRef ?? '—'} />
               <DefinitionRow label="DVO" value={variation.dvoRef ?? '—'} />
               <DefinitionRow label="DVO short ref" value={variation.dvoReference ?? '—'} />
@@ -204,7 +204,7 @@ export default async function VariationDetailPage({
 
         <Section title="Progress">
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               {timeline.length === 0 ? (
                 <p className="py-4 text-sm text-muted-foreground">
                   No dates or references recorded yet.
@@ -233,7 +233,7 @@ export default async function VariationDetailPage({
         </Section>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-[var(--grid-gap)] lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>{project.contractor} remarks</CardTitle>

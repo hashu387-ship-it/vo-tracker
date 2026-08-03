@@ -39,7 +39,28 @@
     --input: 40 14% 53%;
     --ring: 184 100% 31%;
 
-    --radius: 0.65rem;
+    /* Tighter corners than the previous 0.65rem. At a 12px card padding a
+       large radius eats the corner of the content box and reads soft; a
+       data-dense surface wants a crisper edge. */
+    --radius: 0.5rem;
+
+    /*
+     * ---- Density scale: "Data-Dense Dashboard" ----
+     *
+     * The six variables the ui-ux-pro-max design database specifies for this
+     * style, kept under their own names so the spec is auditable rather than
+     * scattered through utility classes. Everything that sets spacing on a
+     * data surface reads from here.
+     *
+     * The header and sidebar already matched the spec exactly; the card,
+     * gap and row values are what this redesign tightens.
+     */
+    --grid-gap: 8px;
+    --card-padding: 12px;
+    --font-size-small: 12px;
+    --table-row-height: 36px;
+    --sidebar-width: 240px;
+    --header-height: 56px;
 
     /* Status semantics — reserved. Always shipped with an icon + label. */
     --status-good: 130 34% 35%;
@@ -173,6 +194,57 @@
   }
 
   /*
+   * ---- The 12-column dashboard grid ----
+   *
+   * `repeat(12, 1fr)` is the spec's layout instruction, but a literal 12
+   * columns at 375px would give each child a ~24px track. So the grid only
+   * becomes 12 columns once there is room for it; below that it collapses to
+   * a single column and the spans below are inert.
+   *
+   * `minmax(0, 1fr)` rather than `1fr`: a bare `1fr` track is `min-width:
+   * auto`, so a child with `overflow-x: auto` cannot shrink below its content
+   * and pushes the page wide instead of scrolling inside itself. This is the
+   * same failure the earlier responsive pass fixed on cards — encoding it in
+   * the track definition stops it recurring.
+   */
+  .dash-grid {
+    display: grid;
+    gap: var(--grid-gap);
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 768px) {
+    .dash-grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+  }
+
+  /*
+   * Spans only bind once the grid actually has 12 tracks.
+   *
+   * Named `dash-col-*` rather than `col-*` so there is no ambiguity with
+   * Tailwind's own grid-column utilities. Always write these as literal
+   * strings — Tailwind purges unused rules from `@layer components`, so a
+   * class assembled at runtime (`` `dash-col-${n}` ``) would be dropped from
+   * the build even though it is valid CSS here.
+   */
+  @media (min-width: 768px) {
+    .dash-col-3 { grid-column: span 3 / span 3; }
+    .dash-col-4 { grid-column: span 4 / span 4; }
+    .dash-col-5 { grid-column: span 5 / span 5; }
+    .dash-col-6 { grid-column: span 6 / span 6; }
+    .dash-col-7 { grid-column: span 7 / span 7; }
+    .dash-col-8 { grid-column: span 8 / span 8; }
+    .dash-col-9 { grid-column: span 9 / span 9; }
+    .dash-col-12 { grid-column: span 12 / span 12; }
+  }
+
+  /* Padding for any data surface, from the density scale. */
+  .pad-dense {
+    padding: var(--card-padding);
+  }
+
+  /*
    * Horizontal scroll shell for wide tables and the status board.
    *
    * `relative` is load-bearing, not cosmetic: an absolutely positioned
@@ -226,10 +298,24 @@
       min-height: 44px;
     }
 
+    /*
+     * A checkbox is usually the smallest part of its own control — the label
+     * wrapping it is what people actually tap. So the label carries the 44px
+     * minimum, and the box itself only needs to clear WCAG 2.5.8's 24x24
+     * floor on its own.
+     *
+     * `:has()` degrades safely: where it is unsupported the label keeps its
+     * authored height and the box is still 24px.
+     */
     input[type='checkbox'],
     input[type='radio'] {
-      min-width: 20px;
-      min-height: 20px;
+      min-width: 24px;
+      min-height: 24px;
+    }
+
+    label:has(> input[type='checkbox']),
+    label:has(> input[type='radio']) {
+      min-height: 44px;
     }
   }
 }

@@ -55,7 +55,7 @@ export default async function CommandCentre() {
     .sort((a, b) => b.sequence - a.sequence)[0];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-[var(--grid-gap)]">
       <PageHeader
         eyebrow={`${project.code} · ${project.client}`}
         title="Command centre"
@@ -148,14 +148,14 @@ export default async function CommandCentre() {
       </KpiGrid>
 
       {/* ---- Charts ---- */}
-      <div className="grid gap-4 xl:grid-cols-3">
-        <CertifiedVsCollected data={cashflow} className="xl:col-span-2" />
+      <div className="dash-grid">
+        <CertifiedVsCollected data={cashflow} className="dash-col-8" />
 
-        <Card className="flex flex-col">
+        <Card className="dash-col-4 flex flex-col">
           <CardHeader>
             <CardTitle>Contract completion</CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-1 flex-col justify-between gap-5">
+          <CardContent className="flex flex-1 flex-col justify-between gap-4">
             <div className="flex justify-center pt-2">
               <ProgressRing
                 value={pos.percentComplete}
@@ -176,14 +176,14 @@ export default async function CommandCentre() {
         </Card>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-2">
-        <VariationStatusChart data={vos.byStatus} />
-        <AgeingChart data={ageing} />
+      <div className="dash-grid">
+        <VariationStatusChart data={vos.byStatus} className="dash-col-6" />
+        <AgeingChart data={ageing} className="dash-col-6" />
       </div>
 
       {/* ---- Action lists ---- */}
-      <div className="grid items-start gap-4 xl:grid-cols-3">
-        <Card className="xl:col-span-2">
+      <div className="dash-grid items-start">
+        <Card className="dash-col-8">
           <CardHeader className="flex-row flex-wrap items-center justify-between gap-2">
             <CardTitle className="flex items-center gap-2">
               <Wallet className="size-4 text-primary" />
@@ -224,7 +224,7 @@ export default async function CommandCentre() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="dash-col-4">
           <CardHeader className="flex-row flex-wrap items-center justify-between gap-2">
             <CardTitle className="flex items-center gap-2">
               <FileWarning className="size-4 text-serious" />
@@ -263,10 +263,14 @@ export default async function CommandCentre() {
       </div>
 
       {/* ---- Contract particulars ---- */}
-      <div className="grid gap-4 lg:grid-cols-3">
-        <Section title="Contract" description="As recorded in the payment register header">
+      <div className="dash-grid items-start">
+        <Section
+          className="dash-col-4"
+          title="Contract"
+          description="As recorded in the payment register header"
+        >
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               <DefinitionRow label="Project" value={project.code} />
               <DefinitionRow label="Contractor" value={project.contractor} />
               <DefinitionRow label="Employer" value={project.client} />
@@ -284,9 +288,13 @@ export default async function CommandCentre() {
           </Card>
         </Section>
 
-        <Section title="Securities" description="Advance payment recovery and retention">
+        <Section
+          className="dash-col-4"
+          title="Securities"
+          description="Advance payment recovery and retention"
+        >
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               <DefinitionRow
                 label="Advance payment"
                 hint={`${percent(project.advancePaymentPercent, 0)} of the original contract`}
@@ -306,11 +314,12 @@ export default async function CommandCentre() {
         </Section>
 
         <Section
+          className="dash-col-4"
           title="Latest certificate"
           description={latestCertificate ? latestCertificate.ref : 'No certificates yet'}
         >
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               {latestCertificate ? (
                 <>
                   <div className="mb-3 flex items-center justify-between gap-2">

@@ -44,8 +44,8 @@ export function KpiTile({
   const body = (
     <div
       className={cn(
-        'group relative flex h-full flex-col justify-between gap-3 rounded-lg border border-border bg-card p-4 shadow-card transition-shadow',
-        href && 'hover:shadow-lift',
+        'group relative flex h-full flex-col justify-between gap-2 rounded-lg border border-border bg-card p-[var(--card-padding)] shadow-card transition-shadow duration-200',
+        href && 'hover:border-primary/30 hover:shadow-lift',
         className,
       )}
     >
@@ -99,6 +99,13 @@ export function KpiGrid({
   className?: string;
 }) {
   return (
-    <div className={cn('grid gap-3 sm:grid-cols-2 xl:grid-cols-4', className)}>{children}</div>
+    <div
+      className={cn(
+        'grid gap-[var(--grid-gap)] sm:grid-cols-2 xl:grid-cols-4',
+        className,
+      )}
+    >
+      {children}
+    </div>
   );
 }

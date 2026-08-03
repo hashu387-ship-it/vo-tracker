@@ -25,7 +25,7 @@ export default async function DataPage() {
     await getRegister();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-[var(--grid-gap)]">
       <PageHeader
         eyebrow={`${project.code} · data management`}
         title="Data & contract"
@@ -65,10 +65,10 @@ export default async function DataPage() {
 
       <ProjectForm project={project} />
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-[var(--grid-gap)] lg:grid-cols-2">
         <Section id="quality" title="Data quality" description="Notes carried over from the source workbook">
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               {issues.length === 0 ? (
                 <p className="py-4 text-sm text-muted-foreground">
                   Nothing to flag — every certificate reconciles and every variation has a status.
@@ -119,7 +119,7 @@ export default async function DataPage() {
 
         <Section title="Register contents" description="What is currently loaded">
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               <DefinitionRow label="Source workbook" value={project.sourceWorkbook ?? '—'} />
               <DefinitionRow label="Data as of" value={formatDate(asOf)} />
               <DefinitionRow label="Variations" value={String(variations.length)} />

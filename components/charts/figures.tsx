@@ -195,14 +195,17 @@ export function CertifiedPerPeriod({ data }: { data: CashflowPoint[] }) {
 
 export function VariationStatusChart({
   data,
+  className,
 }: {
   data: Array<{ status: VariationStatus; label: string; count: number; value: number }>;
+  className?: string;
 }) {
   const theme = useChartTheme();
   const rows = [...data].sort((a, b) => b.count - a.count);
 
   return (
     <ChartFrame
+      className={className}
       title="Variations by status"
       subtitle="Where every submitted change currently sits"
       height={Math.max(200, rows.length * 38)}
@@ -246,13 +249,14 @@ export function VariationStatusChart({
 /* Ageing of outstanding receivables                                   */
 /* ------------------------------------------------------------------ */
 
-export function AgeingChart({ data }: { data: AgeingBucket[] }) {
+export function AgeingChart({ data, className }: { data: AgeingBucket[]; className?: string }) {
   const theme = useChartTheme();
   const tones = ['good', 'warning', 'serious', 'critical'];
   const populated = data.some((bucket) => bucket.count > 0);
 
   return (
     <ChartFrame
+      className={className}
       title="Ageing of uncollected certificates"
       subtitle="Certified value still outstanding, aged from the tax invoice date"
       height={230}
