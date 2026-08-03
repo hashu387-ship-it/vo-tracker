@@ -382,7 +382,7 @@ export function VariationTable({
                           type="button"
                           onClick={() => toggleSort(column.key as SortKey)}
                           className={cn(
-                            'inline-flex items-center gap-1 transition-colors hover:text-foreground',
+                            'inline-flex cursor-pointer items-center gap-1 transition-colors hover:text-foreground',
                             sort.key === column.key && 'text-foreground',
                           )}
                         >
