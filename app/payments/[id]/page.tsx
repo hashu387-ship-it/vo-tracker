@@ -100,10 +100,10 @@ export default async function PaymentDetailPage({ params }: { params: Promise<{ 
         )}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-[var(--grid-gap)] lg:grid-cols-3">
         <Section title="Valuation" className="lg:col-span-2">
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               {lines.map((line) => (
                 <DefinitionRow
                   key={line.label}
@@ -140,7 +140,7 @@ export default async function PaymentDetailPage({ params }: { params: Promise<{ 
 
         <Section title="Dates">
           <Card>
-            <CardContent className="pt-5">
+            <CardContent className="pt-[var(--card-padding)]">
               <DefinitionRow
                 label="Submitted"
                 hint={relativeDays(payment.submittedDate, asOf) ?? undefined}
@@ -167,7 +167,7 @@ export default async function PaymentDetailPage({ params }: { params: Promise<{ 
         </Section>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-[var(--grid-gap)] lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>{project.contractor} — next action</CardTitle>

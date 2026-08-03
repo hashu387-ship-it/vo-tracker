@@ -25,7 +25,12 @@ export function TBody({ className, ...props }: React.HTMLAttributes<HTMLTableSec
 export function TR({ className, ...props }: React.HTMLAttributes<HTMLTableRowElement>) {
   return (
     <tr
-      className={cn('border-b border-border transition-colors hover:bg-muted/40', className)}
+      className={cn(
+        // Row highlighting on hover is one of the style's named effects, and
+        // the 150ms transition matches the checklist's 150-300ms band.
+        'h-[var(--table-row-height)] border-b border-border transition-colors duration-150 hover:bg-muted/50',
+        className,
+      )}
       {...props}
     />
   );
@@ -55,7 +60,7 @@ export function TD({
 }: React.TdHTMLAttributes<HTMLTableCellElement> & { numeric?: boolean }) {
   return (
     <td
-      className={cn('px-3 py-2 align-middle', numeric && 'tnum text-right', className)}
+      className={cn('px-3 py-1.5 align-middle', numeric && 'tnum text-right', className)}
       {...props}
     />
   );
