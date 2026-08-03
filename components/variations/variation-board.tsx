@@ -97,7 +97,9 @@ export function VariationBoard({
         </Button>
       </div>
 
-      <div className="data-scroll pb-2">
+      {/* The scroller owns the horizontal overflow; min-w-0 stops the
+          min-w-max track inside it from widening the page instead. */}
+      <div className="data-scroll min-w-0 pb-2">
         <div className="flex min-w-max gap-3">
           {VARIATION_STATUSES.map((status) => {
             const meta = VARIATION_STATUS_META[status];
@@ -204,7 +206,7 @@ export function VariationBoard({
                             onChange={(event) =>
                               move(variation.id, event.target.value as VariationStatus)
                             }
-                            className="w-full cursor-pointer rounded border border-input bg-background px-1.5 py-1 text-2xs text-muted-foreground opacity-0 transition-opacity focus:opacity-100 group-hover:opacity-100"
+                            className="w-full cursor-pointer rounded border border-input bg-background px-1.5 py-1.5 text-2xs text-muted-foreground opacity-0 transition-opacity focus:opacity-100 group-hover:opacity-100 [@media(pointer:coarse)]:opacity-100"
                           >
                             {VARIATION_STATUSES.map((value) => (
                               <option key={value} value={value}>

@@ -44,7 +44,8 @@ export function ThemeToggle() {
             aria-pressed={active}
             title={option.label}
             className={cn(
-              'rounded p-1.5 text-muted-foreground transition-colors hover:text-foreground',
+              'cursor-pointer rounded p-1.5 text-muted-foreground transition-colors hover:text-foreground',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
               active && 'bg-muted text-foreground',
             )}
           >

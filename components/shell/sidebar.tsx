@@ -30,7 +30,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
                     onClick={onNavigate}
                     aria-current={active ? 'page' : undefined}
                     className={cn(
-                      'group flex items-center gap-2.5 rounded-md px-2 py-2 text-sm transition-colors',
+                      'group flex min-h-10 items-center gap-2.5 rounded-md px-2 py-2 text-sm transition-colors',
                       active
                         ? 'bg-lagoon-600/20 text-white'
                         : 'text-navy-100/80 hover:bg-white/5 hover:text-white',
@@ -109,7 +109,7 @@ export function MobileNav({ contractor, asOf }: { contractor: string; asOf: stri
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex size-9 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:text-foreground"
+        className="flex size-9 cursor-pointer items-center justify-center rounded-md border border-input text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         aria-label="Open navigation"
       >
         <Menu className="size-4" />
@@ -128,7 +128,7 @@ export function MobileNav({ contractor, asOf }: { contractor: string; asOf: stri
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="rounded-md p-2 text-navy-200 hover:bg-white/10 hover:text-white"
+                className="cursor-pointer rounded-md p-2 text-navy-200 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400"
                 aria-label="Close navigation"
               >
                 <X className="size-4" />
