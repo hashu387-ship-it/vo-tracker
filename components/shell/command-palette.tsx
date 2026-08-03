@@ -110,13 +110,14 @@ export function CommandPalette({ entries }: { entries: PaletteEntry[] }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="no-print flex h-9 w-full max-w-xs items-center gap-2 rounded-md border border-input bg-background px-3 text-sm text-muted-foreground transition-colors hover:border-ring hover:text-foreground"
+        className="no-print flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md border border-input bg-background text-sm text-muted-foreground transition-colors hover:border-ring hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-52 sm:justify-start sm:px-3 xl:w-72"
       >
         <Search className="size-3.5" />
-        <span className="flex-1 text-left">Search the register…</span>
+        <span className="hidden flex-1 text-left sm:inline">Search the register…</span>
         <kbd className="hidden rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-2xs sm:inline">
           ⌘K
         </kbd>
+        <span className="sr-only sm:hidden">Search the register</span>
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>

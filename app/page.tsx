@@ -184,7 +184,7 @@ export default async function CommandCentre() {
       {/* ---- Action lists ---- */}
       <div className="grid items-start gap-4 xl:grid-cols-3">
         <Card className="xl:col-span-2">
-          <CardHeader className="flex-row items-center justify-between">
+          <CardHeader className="flex-row flex-wrap items-center justify-between gap-2">
             <CardTitle className="flex items-center gap-2">
               <Wallet className="size-4 text-primary" />
               Certificates awaiting cash
@@ -204,16 +204,16 @@ export default async function CommandCentre() {
                   <li key={payment.id}>
                     <Link
                       href={`/payments/${payment.id}`}
-                      className="flex items-center gap-3 py-2.5 transition-colors hover:bg-muted/40"
+                      className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5 transition-colors hover:bg-muted/40"
                     >
-                      <div className="min-w-0 flex-1">
+                      <div className="min-w-0 flex-1 basis-40">
                         <p className="truncate text-sm font-medium">{payment.ref}</p>
                         <p className="truncate text-xs text-muted-foreground">
                           {payment.period ?? '—'}
                         </p>
                       </div>
                       <StatusChip status={payment.status} kind="payment" short />
-                      <span className="tnum w-32 shrink-0 text-right text-sm font-medium">
+                      <span className="tnum ml-auto shrink-0 text-right text-sm font-medium">
                         {money(payment.netCertified - (payment.received ?? 0))}
                       </span>
                     </Link>
@@ -225,7 +225,7 @@ export default async function CommandCentre() {
         </Card>
 
         <Card>
-          <CardHeader className="flex-row items-center justify-between">
+          <CardHeader className="flex-row flex-wrap items-center justify-between gap-2">
             <CardTitle className="flex items-center gap-2">
               <FileWarning className="size-4 text-serious" />
               Waiting on {project.contractor}

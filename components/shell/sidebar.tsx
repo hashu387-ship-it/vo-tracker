@@ -30,7 +30,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
                     onClick={onNavigate}
                     aria-current={active ? 'page' : undefined}
                     className={cn(
-                      'group flex items-center gap-2.5 rounded-md px-2 py-2 text-sm transition-colors',
+                      'group flex min-h-10 items-center gap-2.5 rounded-md px-2 py-2 text-sm transition-colors',
                       active
                         ? 'bg-lagoon-600/20 text-white'
                         : 'text-navy-100/80 hover:bg-white/5 hover:text-white',

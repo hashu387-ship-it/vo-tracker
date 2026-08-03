@@ -4,9 +4,6 @@
 
 @layer base {
   :root {
-    --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'Roboto Mono', monospace;
-
     /* ---- Light: Light Sand canvas, white cards, Deep Navy ink ---- */
     --canvas: 40 27% 96%; /* #F7F5F0 */
     --background: 0 0% 100%;
@@ -26,14 +23,20 @@
     --muted: 40 20% 94%;
     --muted-foreground: 199 15% 40%;
 
-    --accent: 36 45% 58%; /* Sand Gold #C5A065 */
-    --accent-foreground: 199 69% 12%;
+    /* Sand Gold. The brand tint #C5A065 sits at 2.5:1 on white — below the 3:1
+       WCAG 1.4.11 needs for a meaningful graphic — so the *token* is stepped down
+       to 48% (3.31:1) and the brand tint is kept for large decorative fills. */
+    --accent: 36 45% 48%;
+    --accent-tint: 36 45% 58%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 4 48% 47%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 40 14% 87%;
-    --input: 40 14% 84%;
+    /* Form-field boundaries are UI components: 3:1 against both adjoining
+       surfaces (card and canvas), not the softer rule dividers use. */
+    --input: 40 14% 53%;
     --ring: 184 100% 31%;
 
     --radius: 0.65rem;
@@ -79,13 +82,14 @@
     --muted-foreground: 199 12% 68%;
 
     --accent: 36 45% 58%;
+    --accent-tint: 36 45% 58%;
     --accent-foreground: 199 69% 10%;
 
     --destructive: 4 58% 60%;
     --destructive-foreground: 199 69% 10%;
 
     --border: 199 24% 21%;
-    --input: 199 24% 24%;
+    --input: 199 24% 41%;
     --ring: 184 60% 45%;
 
     --status-good: 130 34% 48%;
@@ -120,10 +124,19 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Tabular figures everywhere money is shown. */
+  body {
+    line-height: 1.6;
+  }
+
+  /*
+   * Money columns use the mono face and true tabular figures so digits align
+   * down a column and a 9-figure contract value stays scannable.
+   */
   .tnum {
+    font-family: var(--font-mono), ui-monospace, monospace;
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum';
+    letter-spacing: -0.01em;
   }
 
   ::selection {
@@ -159,13 +172,65 @@
     @apply text-2xs font-semibold uppercase tracking-[0.14em] text-muted-foreground;
   }
 
-  /* Sticky-header data table shell */
+  /*
+   * Horizontal scroll shell for wide tables and the status board.
+   *
+   * `relative` is load-bearing, not cosmetic: an absolutely positioned
+   * descendant is only clipped by an ancestor's overflow when that ancestor is
+   * its containing block. Tailwind's `.sr-only` is `position: absolute`, so
+   * without a positioned scroller those screen-reader labels resolve against
+   * the document and drag the *page* scrollbar out to the full content width —
+   * every board column was adding 300px of page-level horizontal scroll.
+   */
   .data-scroll {
-    @apply overflow-x-auto;
+    @apply relative overflow-x-auto;
   }
 
   .focus-ring {
     @apply outline-none ring-offset-2 ring-offset-background focus-visible:ring-2 focus-visible:ring-ring;
+  }
+
+  /*
+   * Touch sizing. The interface is laid out for a mouse at dashboard density;
+   * on a touch device those 24-32px controls are misses. Rather than inflate
+   * every control everywhere, coarse pointers get a 44px minimum:
+   *
+   *  - buttons gain a centred 44x44 hit area via a pseudo-element, so the
+   *    visual size and the surrounding layout are untouched;
+   *  - form controls get a real min-height, because ::before/::after do not
+   *    render on replaced elements like <select> and <input>.
+   */
+  @media (pointer: coarse) {
+    button,
+    [role='button'],
+    a[role='button'] {
+      position: relative;
+    }
+
+    button::after,
+    [role='button']::after,
+    a[role='button']::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: max(100%, 44px);
+      height: max(100%, 44px);
+      transform: translate(-50%, -50%);
+      pointer-events: auto;
+    }
+
+    select,
+    textarea,
+    input:not([type='checkbox']):not([type='radio']):not([type='hidden']) {
+      min-height: 44px;
+    }
+
+    input[type='checkbox'],
+    input[type='radio'] {
+      min-width: 20px;
+      min-height: 20px;
+    }
   }
 }
 

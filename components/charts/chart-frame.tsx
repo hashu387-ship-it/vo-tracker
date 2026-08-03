@@ -45,7 +45,10 @@ export function ChartFrame({
 
   return (
     <section
-      className={cn('flex flex-col rounded-lg border border-border bg-card shadow-card', className)}
+      className={cn(
+        'flex min-w-0 flex-col rounded-lg border border-border bg-card shadow-card',
+        className,
+      )}
     >
       <header className="flex flex-wrap items-start justify-between gap-3 px-5 pb-2 pt-4">
         <div className="min-w-0">
@@ -59,7 +62,8 @@ export function ChartFrame({
               onClick={() => setView('chart')}
               aria-pressed={view === 'chart'}
               className={cn(
-                'flex items-center gap-1.5 rounded px-2 py-1 text-2xs font-medium transition-colors',
+                'flex cursor-pointer items-center gap-1.5 rounded px-2 py-1 text-2xs font-medium transition-colors',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                 view === 'chart' ? 'bg-muted text-foreground' : 'text-muted-foreground hover:text-foreground',
               )}
             >
@@ -70,7 +74,8 @@ export function ChartFrame({
               onClick={() => setView('table')}
               aria-pressed={view === 'table'}
               className={cn(
-                'flex items-center gap-1.5 rounded px-2 py-1 text-2xs font-medium transition-colors',
+                'flex cursor-pointer items-center gap-1.5 rounded px-2 py-1 text-2xs font-medium transition-colors',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                 view === 'table' ? 'bg-muted text-foreground' : 'text-muted-foreground hover:text-foreground',
               )}
             >

@@ -45,7 +45,7 @@ export function Section({
   className?: string;
 }) {
   return (
-    <section id={id} className={cn('scroll-mt-20 space-y-3', className)}>
+    <section id={id} className={cn('min-w-0 scroll-mt-20 space-y-3', className)}>
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
           <h2 className="text-sm font-semibold tracking-tight">{title}</h2>

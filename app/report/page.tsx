@@ -120,6 +120,7 @@ export default async function ReportPage() {
 
       <div className="surface p-4">
         <h2 className="eyebrow mb-2">Variation status summary</h2>
+        <div className="data-scroll">
         <Table>
           <THead>
             <TR className="hover:bg-transparent">
@@ -151,11 +152,13 @@ export default async function ReportPage() {
             </TR>
           </TBody>
         </Table>
+        </div>
       </div>
 
       {outstanding.length > 0 ? (
         <div className="surface p-4">
           <h2 className="eyebrow mb-2">Certificates awaiting payment</h2>
+          <div className="data-scroll">
           <Table>
             <THead>
               <TR className="hover:bg-transparent">
@@ -190,11 +193,13 @@ export default async function ReportPage() {
               </TR>
             </TBody>
           </Table>
+          </div>
         </div>
       ) : null}
 
       <div className="surface p-4">
         <h2 className="eyebrow mb-2">Open variations by value</h2>
+        <div className="data-scroll">
         <Table>
           <THead>
             <TR className="hover:bg-transparent">
@@ -221,6 +226,7 @@ export default async function ReportPage() {
             ))}
           </TBody>
         </Table>
+        </div>
       </div>
 
       <div className="surface p-4">

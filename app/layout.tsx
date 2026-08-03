@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { Fira_Code, Fira_Sans } from 'next/font/google';
 import * as React from 'react';
 
 import { Providers } from '@/app/providers';
@@ -10,6 +11,31 @@ import { formatDate } from '@/lib/domain/money';
 import { PAYMENT_STATUS_META, VARIATION_STATUS_META } from '@/lib/domain/types';
 
 import './globals.css';
+
+/**
+ * Fira Sans for the interface and Fira Code for figures — the pairing the
+ * UI/UX design database recommends for dashboards and analytics. Both are
+ * self-hosted by next/font at build time, so there is no render-blocking
+ * request to a font CDN and no third-party origin to allow.
+ *
+ * Fira Code carries true tabular figures, which is what a register full of
+ * right-aligned money columns actually needs.
+ */
+const firaSans = Fira_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-sans',
+  display: 'swap',
+  fallback: ['ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+});
+
+const firaCode = Fira_Code({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-mono',
+  display: 'swap',
+  fallback: ['ui-monospace', 'SFMono-Regular', 'monospace'],
+});
 
 export const metadata: Metadata = {
   title: {
@@ -79,7 +105,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   ];
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${firaSans.variable} ${firaCode.variable}`}
+    >
       <body>
         <Providers>
           <a

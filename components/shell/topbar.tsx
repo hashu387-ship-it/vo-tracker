@@ -44,7 +44,7 @@ export function Topbar({
           </p>
         </div>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex min-w-0 items-center gap-2">
           <CommandPalette entries={entries} />
 
           {issueCount > 0 ? (
@@ -60,7 +60,7 @@ export function Topbar({
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon-sm" title="Export">
+              <Button variant="outline" size="icon-sm" className="shrink-0" title="Export">
                 <Download className="size-4" />
                 <span className="sr-only">Export</span>
               </Button>

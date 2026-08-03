@@ -45,6 +45,8 @@ const config: Config = {
         accent: {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))',
+          /* Brand tint — decorative fills only; below 3:1 on light surfaces. */
+          tint: 'hsl(var(--accent-tint))',
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
